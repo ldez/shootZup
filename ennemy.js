@@ -1,11 +1,13 @@
-function Ennemy() {
+function Ennemy(id, x, y) {
      
+	this.id = id;
+	 
     // Position de l'animation courante parmi les frames
     this.currentAnimationFrame = 0;
 	
 	// Positions
-	this.x;
-	this.y;
+	this.x = x;
+	this.y = y;
      
     // Taille en pixels d'une frame d'animation
     this.animationFrameWidth = 35;
@@ -39,10 +41,7 @@ Ennemy.prototype.action = function(path) {
 	return sequence;
 };
 
-
-
 Ennemy.prototype.FLY = 'FLY';
-Ennemy.prototype.BOOM = 'BOOM';
 
 Ennemy.prototype.paint = function(context) {
 

@@ -4,16 +4,17 @@ window.requestAnimationFrame = (function(){
           window.mozRequestAnimationFrame    || 
           function( callback ){ 
             window.setTimeout(callback, 1000 / 60); 
-          }; 
-})(); 
-  
+          };
+})();
+
 var resources = new Resources();
 var player1 = new SpaceshipRed();
 var physicsP1 = new Physics();
 var controlsP1 = new Keyboard();
 var background;
 var lasers = [];
-var ennemies = [];
+var ennemies = {};
+var ennemiesManager;
 
 var canvas = document.getElementById('game'); 
 var context2d = canvas.getContext('2d');
@@ -38,18 +39,10 @@ function startGame() {
     paintGame();
 	player1.startLoop(player1.FLY);
 	controlsP1.startDetection();
-	
-	var ennemy = new Ennemy();
-	ennemies.push(ennemy);
-	
-	var path = getPath({x: 0, y: 80}, {x: 400, y: 80});
-	ennemy.action(path)
-		.then(function(value) {
-			console.log('done');
-		});
-	
-	ennemy.startLoop(ennemy.FLY);
-	
+
+
+	ennemiesManager	= new EnnemiesManager();
+	ennemiesManager.start(ennemies);
 }
 
 function checkInput(control, physics) {
@@ -88,28 +81,6 @@ function moveLasers() {
 }
 
 
-function getPath(from, to) {
-	var coordinates = [];
-	var slope;
-	if (from.x == from.y)
-		slope = null;
-	slope = (to.y - from.y) / (to.x - from.x);
-	
-	
-	var intercept;
-	if (slope === null)
-		intercept = from.x;
-	intercept = from.y - slope*from.x;
-	
-	for (var x=from.x; x<=to.x; x++) {
-		var y = slope * x + intercept;
-		coordinates.push({x: x, y: y});
-	}
-	
-	return coordinates;
-}
-
-
 
 function paintGame() {
     
@@ -119,13 +90,11 @@ function paintGame() {
 	
 	checkInput(controlsP1, physicsP1);
 	
-	for (var i=0; i<ennemies.length; i++) {
+	for (var i in ennemies) {
 		ennemies[i].paint(context2d);
 	}
 	
 	player1.paint(context2d, physicsP1.x, physicsP1.y);
-	
-	
 	
 	for (var i=0; i<lasers.length; i++) {
 		lasers[i].draw(context2d);

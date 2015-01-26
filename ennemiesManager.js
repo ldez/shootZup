@@ -1,0 +1,114 @@
+function EnnemiesManager() {
+	
+	this.scenario = {
+		"groups" : [
+			{
+				"ships": 
+					[
+						[
+							{"id": 1, "type": 'new', "x": 0, "y": 80},
+							{"id": 1, "type": 'move', "x": 400, "y": 80},
+							{"id": 1, "type": 'leave'}
+						],
+						[
+							{"id": 2, "type": 'new', "x": 450, "y": 200},
+							{"id": 2, "type": 'move', "x": 0, "y": 300},
+							{"id": 2, "type": 'leave'}
+						]
+					]
+			},
+			{
+				"ships": 
+					[
+						[
+							{"id": 1, "type": 'new', "x": 0, "y": 200},
+							{"id": 1, "type": 'move', "x": 400, "y": 180},
+							{"id": 1, "type": 'leave'}
+						],
+						[
+							{"id": 2, "type": 'new', "x": 0, "y": 400},
+							{"id": 2, "type": 'move', "x": 400, "y": 320},
+							{"id": 2, "type": 'leave'}
+						]
+					]
+			}
+		]
+	};
+}
+
+EnnemiesManager.prototype.start = function(ennemies) {
+	
+	var groupSequence = Promise.resolve();
+	
+	this.scenario.groups.forEach(function(group) {
+		groupSequence = groupSequence.then(function() {
+			return this.startGroup(group, ennemies);
+		}.bind(this));
+	}.bind(this));
+	
+	return groupSequence;
+};
+
+
+EnnemiesManager.prototype.startGroup = function(group, ennemies) {
+	
+	var ships = [];
+	
+	group.ships.forEach(function(ship) {
+		ships.push(this.startShip(ship, ennemies));
+	}.bind(this));
+	
+	return Promise.all(ships);
+};
+
+
+EnnemiesManager.prototype.startShip = function(ship, ennemies) {
+	var sequence = Promise.resolve();
+	
+	ship.forEach(function(commands) {
+		if (commands.type === 'new') {
+			sequence = sequence.then(function() {
+				return new Promise(function(resolve, reject) {
+					var ennemy = new Ennemy(commands.id, commands.x, commands.y);
+					ennemies[commands.id] = ennemy;
+					ennemy.startLoop(ennemy.FLY);
+					resolve();
+				});
+			});
+		} else if (commands.type === 'move') {
+			sequence = sequence.then(function() {
+				var ennemy = ennemies[commands.id];
+				var path = this.getPath({x: ennemy.x, y: ennemy.y}, {x: commands.x, y: commands.y});
+				return ennemy.action(path);
+			}.bind(this));
+		} else if (commands.type === 'leave') {
+			sequence = sequence.then(function() {
+				return new Promise(function(resolve, reject) {
+					delete ennemies[commands.id];
+					resolve();
+				});
+			});
+		}
+	}.bind(this));
+	
+	return sequence;
+};
+
+
+EnnemiesManager.prototype.getPath = function(from, to) {
+	var coordinates = [];
+	
+	var dx = Math.abs(to.x - from.x), sx = from.x < to.x ? 1 : -1;
+	var dy = Math.abs(to.y - from.y), sy = from.y < to.y ? 1 : -1; 
+	var err = (dx>dy ? dx : -dy)/2;
+
+	while (true) {
+		coordinates.push({x: from.x, y: from.y});
+		if (from.x === to.x && from.y === to.y) break;
+		var e2 = err;
+		if (e2 > -dx) { err -= dy; from.x += sx; }
+		if (e2 < dy) { err += dx; from.y += sy; }
+	}
+	
+	return coordinates;
+}
