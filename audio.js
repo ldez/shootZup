@@ -49,31 +49,12 @@ Audio.prototype.loadSound = function(sound) {
 	return p;
 };
 
-Audio.prototype.stageTitle = function(callback) {
-	this.play(this.soundsList['title'], false, 0, 0, callback);
-};
-
 Audio.prototype.stageBgm = function() {
-	this.play(this.soundsList['stage'], true, 3.680, 45.195);
+	this.play(this.soundsList['stage'], false);
 };
 
-Audio.prototype.jump = function() {
-	this.play(this.soundsList['jump'], false);
-};
-
-Audio.prototype.ring = function() {
-	this.play(this.soundsList['ring'], false);
-};
-
-Audio.prototype.stop = function() {
-	
-	if (!this.playingSound) {
-		this.playingSound = true;
-		
-		this.play(this.soundsList['stop'], false, 0, 0, function(evt) {
-			this.playingSound = false;
-		}.bind(this));
-	}
+Audio.prototype.laser = function() {
+	this.play(this.soundsList['laser'], false);
 };
 
 Audio.prototype.play = function(sound, loop, loopStart, loopEnd, callback) {

@@ -27,6 +27,7 @@ Keyboard.prototype.startDetection = function() {
 		if (event.keyCode == this.SHOOT) {
 			this.controls[this.SHOOT] = true;
 		}
+
 	}.bind(this);
 	
 	
@@ -43,9 +44,7 @@ Keyboard.prototype.startDetection = function() {
 			this.controls[this.DOWN] = false;
 		}
 		
-		if (event.keyCode == this.SHOOT) {
-			this.controls[this.SHOOT] = false;
-		}
+		
 	}.bind(this);
 	
 };

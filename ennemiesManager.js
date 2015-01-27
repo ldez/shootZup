@@ -1,46 +1,28 @@
 function EnnemiesManager() {
 	
-	this.scenario = {
-		"groups" : [
-			{
-				"ships": 
-					[
-						[
-							{"id": 1, "type": 'new', "x": 0, "y": 80},
-							{"id": 1, "type": 'move', "x": 400, "y": 80},
-							{"id": 1, "type": 'leave'}
-						],
-						[
-							{"id": 2, "type": 'new', "x": 450, "y": 200},
-							{"id": 2, "type": 'move', "x": 0, "y": 300},
-							{"id": 2, "type": 'leave'}
-						]
-					]
-			},
-			{
-				"ships": 
-					[
-						[
-							{"id": 1, "type": 'new', "x": 0, "y": 200},
-							{"id": 1, "type": 'move', "x": 400, "y": 180},
-							{"id": 1, "type": 'leave'}
-						],
-						[
-							{"id": 2, "type": 'new', "x": 0, "y": 400},
-							{"id": 2, "type": 'move', "x": 400, "y": 320},
-							{"id": 2, "type": 'leave'}
-						]
-					]
-			}
-		]
-	};
 }
 
-EnnemiesManager.prototype.start = function(ennemies) {
+EnnemiesManager.prototype.loadScenario = function(file) {
+	var p = new Promise(function(resolve, reject) {
+
+		var xmlhttp = new XMLHttpRequest();
+		xmlhttp.open("GET", file, true);
+		
+		xmlhttp.onload = function(e) {
+			resolve(JSON.parse(xmlhttp.responseText));
+		};
+		
+		xmlhttp.send();
+	});
+	
+	return p;
+};
+
+EnnemiesManager.prototype.start = function(ennemies, scenario) {
 	
 	var groupSequence = Promise.resolve();
 	
-	this.scenario.groups.forEach(function(group) {
+	scenario.groups.forEach(function(group) {
 		groupSequence = groupSequence.then(function() {
 			return this.startGroup(group, ennemies);
 		}.bind(this));
@@ -78,13 +60,21 @@ EnnemiesManager.prototype.startShip = function(ship, ennemies) {
 		} else if (commands.type === 'move') {
 			sequence = sequence.then(function() {
 				var ennemy = ennemies[commands.id];
-				var path = this.getPath({x: ennemy.x, y: ennemy.y}, {x: commands.x, y: commands.y});
-				return ennemy.action(path);
+				if (ennemy) { // Si le vaisseau n'a pas explosé
+					var path = this.getPath({x: ennemy.x, y: ennemy.y}, {x: commands.x, y: commands.y});
+					return ennemy.action(path);
+				} else {
+					return new Promise(function(resolve, reject) {
+						resolve();
+					});					
+				}
 			}.bind(this));
 		} else if (commands.type === 'leave') {
 			sequence = sequence.then(function() {
 				return new Promise(function(resolve, reject) {
-					delete ennemies[commands.id];
+					if (ennemies[commands.id]) { // Si le vaisseau n'a pas explosé
+						delete ennemies[commands.id];
+					}
 					resolve();
 				});
 			});

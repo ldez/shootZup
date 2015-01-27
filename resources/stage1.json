@@ -1,0 +1,85 @@
+{
+	"groups" : [
+		{
+			"ships": 
+				[
+					[
+						{"id": 1, "type": "new", "x": 200, "y": -20},
+						{"id": 1, "type": "move", "x": 200, "y": 300},
+						{"id": 1, "type": "move", "x": -10, "y": 300},
+						{"id": 1, "type": "leave"}
+					],
+					[
+						{"id": 2, "type": "new", "x": 240, "y": -20},
+						{"id": 2, "type": "move", "x": 240, "y": 300},
+						{"id": 2, "type": "move", "x": 500, "y": 300},
+						{"id": 2, "type": "leave"}
+					],
+					[
+						{"id": 3, "type": "new", "x": 200, "y": -60},
+						{"id": 3, "type": "move", "x": 200, "y": 300},
+						{"id": 3, "type": "move", "x": -10, "y": 300},
+						{"id": 3, "type": "leave"}
+					],
+					[
+						{"id": 4, "type": "new", "x": 240, "y": -60},
+						{"id": 4, "type": "move", "x": 240, "y": 300},
+						{"id": 4, "type": "move", "x": 500, "y": 300},
+						{"id": 4, "type": "leave"}
+					],
+					[
+						{"id": 5, "type": "new", "x": 200, "y": -100},
+						{"id": 5, "type": "move", "x": 200, "y": 300},
+						{"id": 5, "type": "move", "x": -10, "y": 300},
+						{"id": 5, "type": "leave"}
+					],
+					[
+						{"id": 6, "type": "new", "x": 240, "y": -100},
+						{"id": 6, "type": "move", "x": 240, "y": 300},
+						{"id": 6, "type": "move", "x": 500, "y": 300},
+						{"id": 6, "type": "leave"}
+					]
+				]
+		},
+		{
+			"ships": 
+				[
+					[
+						{"id": 7, "type": "new", "x": 0, "y": 80},
+						{"id": 7, "type": "move", "x": 400, "y": 80},
+						{"id": 7, "type": "leave"}
+					],
+					[
+						{"id": 8, "type": "new", "x": 450, "y": 200},
+						{"id": 8, "type": "move", "x": 0, "y": 300},
+						{"id": 8, "type": "leave"}
+					]
+				]
+		},
+		{
+			"ships": 
+				[
+					[
+						{"id": 9, "type": "new", "x": 0, "y": 200},
+						{"id": 9, "type": "move", "x": 500, "y": 200},
+						{"id": 9, "type": "leave"}
+					],
+					[
+						{"id": 10, "type": "new", "x": 500, "y": 200},
+						{"id": 10, "type": "move", "x": 0, "y": 200},
+						{"id": 10, "type": "leave"}
+					],
+					[
+						{"id": 11, "type": "new", "x": -60, "y": 200},
+						{"id": 11, "type": "move", "x": 500, "y": 200},
+						{"id": 11, "type": "leave"}
+					],
+					[
+						{"id": 12, "type": "new", "x": 560, "y": 200},
+						{"id": 12, "type": "move", "x": 0, "y": 200},
+						{"id": 12, "type": "leave"}
+					]
+				]
+		}
+	]
+}

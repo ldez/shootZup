@@ -8,6 +8,9 @@ function Ennemy(id, x, y) {
 	// Positions
 	this.x = x;
 	this.y = y;
+	
+	// Energie du vaisseau
+	this.life = 3;
      
     // Taille en pixels d'une frame d'animation
     this.animationFrameWidth = 35;
@@ -18,7 +21,8 @@ function Ennemy(id, x, y) {
      
     this.currentState;
      
-    this.animations = { 'FLY' : {nbFrames : 6, animationFrameWidth: 35, speedRate: 15}
+    this.animations = { 
+		'FLY' : {nbFrames : 6, animationFrameWidth: 35, speedRate: 15}
     }
 }
 
