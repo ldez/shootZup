@@ -21,7 +21,7 @@ Bullet.prototype.action = function(path) {
 				setTimeout(function() {
 					this.x = coords.x;
 					this.y = coords.y;
-					resolve();
+					resolve(this);
 				}.bind(this), 5);
 			}.bind(this));
 		}.bind(this));

@@ -14,7 +14,7 @@ var controlsP1 = new Keyboard();
 var background;
 var lasers = [];
 var ennemies = {};
-var bullets = {};
+var bullets = [];
 var exploding = [];
 var ennemiesManager;
 var scoresP1 = 0;
@@ -62,6 +62,7 @@ function startGame() {
 		}, 3000);
 	});
 }
+
 
 function checkInput(control, physics) {
 	if (control.controls[control.SHOOT]) {
@@ -116,7 +117,7 @@ function paintGame() {
 		for (var i=0; i<exploding.length; i++) {
 			exploding[i].paint(context2d);
 		}
-		for (var i in bullets) {
+		for (var i=0; i<bullets.length; i++) {
 			bullets[i].paint(context2d);
 		}
 		

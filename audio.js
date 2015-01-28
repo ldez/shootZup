@@ -50,7 +50,7 @@ Audio.prototype.loadSound = function(sound) {
 };
 
 Audio.prototype.stageBgm = function() {
-	this.play(this.soundsList['stage'], false);
+	this.play(this.soundsList['stage'], true, 0, 0);
 };
 
 Audio.prototype.laser = function() {

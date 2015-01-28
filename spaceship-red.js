@@ -6,6 +6,9 @@ function SpaceshipRed() {
     // Taille en pixels d'une frame d'animation
     this.animationFrameWidth = 70;
     this.animationFrameHeight = 62;
+	
+	this.hitboxWidth = 45;
+    this.hitboxHeight = 45;
      
     // Position y de l'animation courante dans le sprite général.
     this.animationY = 0;

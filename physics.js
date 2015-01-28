@@ -83,10 +83,10 @@ Physics.prototype.detectCollisionOnEnnemies = function(ennemies, playersLasers, 
 }
 
 Physics.prototype.detectCollisionsOnPlayer = function(playerX, playerY, playerSprite, bullets) {
-	var minX = playerX - playerSprite.animationFrameWidth/2;
-	var maxX = playerX + playerSprite.animationFrameWidth/2;
-	var minY = playerY - playerSprite.animationFrameHeight/2;
-	var maxY = playerY + playerSprite.animationFrameHeight/2;
+	var minX = playerX - playerSprite.hitboxWidth/2;
+	var maxX = playerX + playerSprite.hitboxWidth/2;
+	var minY = playerY - playerSprite.hitboxHeight/2;
+	var maxY = playerY + playerSprite.hitboxHeight/2;
 	
 	var bulletsToDelete = [];
 	

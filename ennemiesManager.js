@@ -78,9 +78,9 @@ EnnemiesManager.prototype.startShip = function(ship, ennemies) {
 						var bullet = new Bullet(commands.id, ennemy.x, ennemy.y);
 						var path = this.getPath({x: bullet.x, y: bullet.y}, {x: commands.x, y: commands.y});
 						
-						bullets[commands.id] = bullet;
-						bullet.action(path).then(function() {
-							delete bullets[commands.id];
+						bullets.push(bullet);
+						bullet.action(path).then(function(value) {
+							bullets.splice(bullets.indexOf(value), 1);
 						}.bind(this));
 					}
 					resolve();

@@ -13,30 +13,35 @@
 					[
 						{"id": 2, "type": "new", "x": 240, "y": -20},
 						{"id": 2, "type": "move", "x": 240, "y": 300},
+						{"id": 2, "type": "shoot", "x": 240, "y": 640},
 						{"id": 2, "type": "move", "x": 500, "y": 300},
 						{"id": 2, "type": "leave"}
 					],
 					[
 						{"id": 3, "type": "new", "x": 200, "y": -60},
 						{"id": 3, "type": "move", "x": 200, "y": 300},
+						{"id": 3, "type": "shoot", "x": 200, "y": 640},
 						{"id": 3, "type": "move", "x": -10, "y": 300},
 						{"id": 3, "type": "leave"}
 					],
 					[
 						{"id": 4, "type": "new", "x": 240, "y": -60},
 						{"id": 4, "type": "move", "x": 240, "y": 300},
+						{"id": 4, "type": "shoot", "x": 240, "y": 640},
 						{"id": 4, "type": "move", "x": 500, "y": 300},
 						{"id": 4, "type": "leave"}
 					],
 					[
 						{"id": 5, "type": "new", "x": 200, "y": -100},
 						{"id": 5, "type": "move", "x": 200, "y": 300},
+						{"id": 5, "type": "shoot", "x": 200, "y": 640},
 						{"id": 5, "type": "move", "x": -10, "y": 300},
 						{"id": 5, "type": "leave"}
 					],
 					[
 						{"id": 6, "type": "new", "x": 240, "y": -100},
 						{"id": 6, "type": "move", "x": 240, "y": 300},
+						{"id": 6, "type": "shoot", "x": 240, "y": 640},
 						{"id": 6, "type": "move", "x": 500, "y": 300},
 						{"id": 6, "type": "leave"}
 					]
@@ -47,11 +52,13 @@
 				[
 					[
 						{"id": 7, "type": "new", "x": 0, "y": 80},
+						{"id": 7, "type": "shoot", "x": 300, "y": 640},
 						{"id": 7, "type": "move", "x": 400, "y": 80},
 						{"id": 7, "type": "leave"}
 					],
 					[
 						{"id": 8, "type": "new", "x": 450, "y": 200},
+						{"id": 8, "type": "shoot", "x": 180, "y": 640},
 						{"id": 8, "type": "move", "x": 0, "y": 300},
 						{"id": 8, "type": "leave"}
 					]
@@ -62,6 +69,11 @@
 				[
 					[
 						{"id": 9, "type": "new", "x": 0, "y": 200},
+						{"id": 9, "type": "shoot", "x": 50, "y": 640},
+						{"id": 9, "type": "shoot", "x": 150, "y": 640},
+						{"id": 9, "type": "shoot", "x": 250, "y": 640},
+						{"id": 9, "type": "shoot", "x": 350, "y": 640},
+						{"id": 9, "type": "shoot", "x": 450, "y": 640},
 						{"id": 9, "type": "move", "x": 500, "y": 200},
 						{"id": 9, "type": "leave"}
 					],
@@ -81,6 +93,67 @@
 						{"id": 12, "type": "leave"}
 					]
 				]
+		},
+		{
+			"ships": 
+				[
+					[
+						{"id": 13, "type": "new", "x": 0, "y": 200},
+						{"id": 13, "type": "move", "x": 500, "y": 200},
+						{"id": 13, "type": "leave"}
+					],
+					[
+						{"id": 14, "type": "new", "x": 500, "y": 200},
+						{"id": 14, "type": "shoot", "x": 50, "y": 640},
+						{"id": 14, "type": "shoot", "x": 150, "y": 640},
+						{"id": 14, "type": "shoot", "x": 250, "y": 640},
+						{"id": 14, "type": "shoot", "x": 350, "y": 640},
+						{"id": 14, "type": "shoot", "x": 450, "y": 640},
+						{"id": 14, "type": "move", "x": 0, "y": 200},
+						{"id": 14, "type": "leave"}
+					],
+					[
+						{"id": 15, "type": "new", "x": -60, "y": 200},
+						{"id": 15, "type": "move", "x": 500, "y": 200},
+						{"id": 15, "type": "leave"}
+					],
+					[
+						{"id": 16, "type": "new", "x": 560, "y": 200},
+						{"id": 16, "type": "move", "x": 0, "y": 200},
+						{"id": 16, "type": "leave"}
+					]
+				]
+		},
+		{
+			"ships": 
+				[
+					[
+						{"id": 1, "type": "new", "x": 200, "y": -20},
+						{"id": 1, "type": "move", "x": 200, "y": 100},
+						{"id": 1, "type": "shoot", "x": 50, "y": 640},
+						{"id": 1, "type": "shoot", "x": 150, "y": 640},
+						{"id": 1, "type": "shoot", "x": 250, "y": 640},
+						{"id": 1, "type": "shoot", "x": 350, "y": 640},
+						{"id": 1, "type": "shoot", "x": 450, "y": 640},
+						{"id": 1, "type": "shoot", "x": 550, "y": 640},
+						{"id": 1, "type": "move", "x": -20, "y": 300},
+						{"id": 1, "type": "leave"}
+					],
+					[
+						{"id": 2, "type": "new", "x": 240, "y": -20},
+						{"id": 2, "type": "move", "x": 240, "y": 100},
+						{"id": 2, "type": "shoot", "x": 50, "y": 640},
+						{"id": 2, "type": "shoot", "x": 150, "y": 640},
+						{"id": 2, "type": "shoot", "x": 250, "y": 640},
+						{"id": 2, "type": "shoot", "x": 350, "y": 640},
+						{"id": 2, "type": "shoot", "x": 450, "y": 640},
+						{"id": 2, "type": "shoot", "x": 550, "y": 640},
+						{"id": 2, "type": "move", "x": 240, "y": 100},
+						{"id": 2, "type": "move", "x": 500, "y": 300},
+						{"id": 2, "type": "leave"}
+					]
+				]
 		}
+		
 	]
 }
