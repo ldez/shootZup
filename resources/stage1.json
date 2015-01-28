@@ -6,6 +6,7 @@
 					[
 						{"id": 1, "type": "new", "x": 200, "y": -20},
 						{"id": 1, "type": "move", "x": 200, "y": 300},
+						{"id": 1, "type": "shoot", "x": 200, "y": 640},
 						{"id": 1, "type": "move", "x": -10, "y": 300},
 						{"id": 1, "type": "leave"}
 					],

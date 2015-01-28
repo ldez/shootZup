@@ -9,7 +9,14 @@ function Background() {
 							y: 0,
 							scrollValue: 0,
 							angle: 0,
-							rotateValue: 0.01};
+							rotateValue: 0.02};
+	
+	this.backgrounds[1] = {	background: resources.images['stars'], 
+							width: 480,
+							height: 1680,
+							scrollValue: 2,
+							rotateValue: 0,
+							scrolled: 0};
 }
 
 Background.prototype.paint = function(context) {
@@ -29,7 +36,16 @@ Background.prototype.paint = function(context) {
 			
 			this.backgrounds[i].angle += this.backgrounds[i].rotateValue;
 		} else {
-			context.drawImage(this.backgrounds[i].background, 0, this.backgrounds[i].y);
+			this.backgrounds[i].scrolled += this.backgrounds[i].scrollValue;
+			context.drawImage(this.backgrounds[i].background, 0, this.backgrounds[i].scrolled);
+			
+			if (this.backgrounds[i].scrolled > 0) {
+				context.drawImage(this.backgrounds[i].background, 0, -this.backgrounds[i].height + this.backgrounds[i].scrolled);
+			}
+			
+			if (this.backgrounds[i].scrolled > this.backgrounds[i].height) {
+				this.backgrounds[i].scrolled = 0;
+			}
 		}
 		
 		

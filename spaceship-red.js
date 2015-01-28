@@ -23,21 +23,23 @@ SpaceshipRed.prototype.FLY = 'FLY';
 
 SpaceshipRed.prototype.paint = function(context, x, y) {
 
-    
-    context.drawImage(  resources.images['spaceship-red'], 
-                        this.currentAnimationFrame*this.animationFrameWidth, 
-                        this.animationY, 
-                        this.animationFrameWidth, 
-                        this.animationFrameHeight, 
-                        x - (this.animationFrameWidth/2), // centrage de l'image par rapport à la position
-                        y - this.animationFrameHeight + (this.animationFrameHeight/2), // centrage de l'image par rapport à la position
-                        this.animationFrameWidth, 
-                        this.animationFrameHeight
-                    );
+    if (this.currentState == this.FLY) {
+		context.drawImage(  resources.images['spaceship-red'], 
+					this.currentAnimationFrame*this.animationFrameWidth, 
+					this.animationY, 
+					this.animationFrameWidth, 
+					this.animationFrameHeight, 
+					x - (this.animationFrameWidth/2), // centrage de l'image par rapport à la position
+					y - this.animationFrameHeight + (this.animationFrameHeight/2), // centrage de l'image par rapport à la position
+					this.animationFrameWidth, 
+					this.animationFrameHeight
+				);
+	}
 };
 
 SpaceshipRed.prototype.clearCurrentAnimation = function() {
     this.currentAnimationFrame = 0;
+	this.currentState = null;
     clearTimeout(this.animationLoop);
 };
 

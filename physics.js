@@ -65,8 +65,8 @@ Physics.prototype.detectCollisionOnEnnemies = function(ennemies, playersLasers, 
 		for (var i=0; i<lasersToDelete.length; i++) {
 			var laserIndex = playersLasers.indexOf(lasersToDelete[i]);
 			playersLasers.splice(laserIndex, 1);
-		}	
-	}
+		 }	
+	   }
 	
 	for (var i=0; i<ennemiesToDelete.length; i++) {
 		delete ennemies[ennemiesToDelete[i].id];
@@ -80,4 +80,37 @@ Physics.prototype.detectCollisionOnEnnemies = function(ennemies, playersLasers, 
 	}	
 	
 	return score;
+}
+
+Physics.prototype.detectCollisionsOnPlayer = function(playerX, playerY, playerSprite, bullets) {
+	var minX = playerX - playerSprite.animationFrameWidth/2;
+	var maxX = playerX + playerSprite.animationFrameWidth/2;
+	var minY = playerY - playerSprite.animationFrameHeight/2;
+	var maxY = playerY + playerSprite.animationFrameHeight/2;
+	
+	var bulletsToDelete = [];
+	
+	for (var i in bullets) {
+		var bullet = bullets[i];
+		var bulletMinX = bullet.x;
+		var bulletMaxX = bullet.x + bullet.animationFrameWidth;
+		var bulletMinY = bullet.y - bullet.animationFrameHeight;
+		var bulletMaxY = bullet.y;
+		
+		// collisions basées sur boites englobantes
+		if (minX < bulletMaxX &&
+			maxX > bulletMinX &&
+			minY < bulletMaxY &&
+			maxY > bulletMinY) {
+
+			bulletsToDelete.push(bullet);
+		}
+	}
+	
+	if (bulletsToDelete.length > 0) {
+		for (var i=0; i<bulletsToDelete.length; i++) {
+			delete bullets[bulletsToDelete[i].id];
+		}
+		return true;
+	}
 }

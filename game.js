@@ -14,16 +14,19 @@ var controlsP1 = new Keyboard();
 var background;
 var lasers = [];
 var ennemies = {};
+var bullets = {};
 var exploding = [];
 var ennemiesManager;
 var scoresP1 = 0;
 var audio = new Audio();
+var gameState;
+
 
 var canvas = document.getElementById('game'); 
 var context2d = canvas.getContext('2d');
 
 
-audio.loadSounds([  /*{title: 'stage', url: 'resources/Artificial_Intelligence-Stand_Alone.mp3'},*/
+audio.loadSounds([  {title: 'stage', url: 'resources/loop.mp3'},
 					{title: 'laser', url: 'resources/science_fiction_laser_005.mp3'}
 ]).then(function(value) {
 	return resources.loadSprites(
@@ -32,25 +35,31 @@ audio.loadSounds([  /*{title: 'stage', url: 'resources/Artificial_Intelligence-S
 			{title: 'spaceship-green', url: 'resources/spaceship-green.png'},
 			{title: 'boom', url: 'resources/explosion.png'},
 			{title: 'sky', url: 'resources/sky.jpg'},
-			{title: 'stars', url: 'resources/stars.png'}
+			{title: 'bullet', url: 'resources/bullet.png'},
+			{title: 'galaxy', url: 'resources/galaxy3.jpg'},
+			{title: 'stars', url: 'resources/stars2.png'}
 		]
 	)
 }).then(function(value) {
-		startGame();
+	startGame();
 });
 	
 
 function startGame() {
 	background = new Background();
-	//audio.stageBgm();
+	audio.stageBgm();
+	gameState = GameState.PLAYING;
     paintGame();
 	player1.startLoop(player1.FLY);
 	controlsP1.startDetection();
 
-
 	ennemiesManager	= new EnnemiesManager();
 	ennemiesManager.loadScenario('resources/stage1.json').then(function(scenario) {
-		ennemiesManager.start(ennemies, scenario);
+		return ennemiesManager.start(ennemies, scenario);
+	}).then(function() {
+		setTimeout(function() {
+			gameState = GameState.FINISHED;
+		}, 3000);
 	});
 }
 
@@ -93,39 +102,71 @@ function moveLasers() {
 }
 
 
-
 function paintGame() {
     
-	canvas.width = canvas.width;
+	//canvas.width = canvas.width;
 	background.paint(context2d);
-	checkInput(controlsP1, physicsP1);
 	
+	if (gameState == GameState.PLAYING) {
+		checkInput(controlsP1, physicsP1);
+		
+		for (var i in ennemies) {
+			ennemies[i].paint(context2d);
+		}
+		for (var i=0; i<exploding.length; i++) {
+			exploding[i].paint(context2d);
+		}
+		for (var i in bullets) {
+			bullets[i].paint(context2d);
+		}
+		
+		player1.paint(context2d, physicsP1.x, physicsP1.y);
+		
+		for (var i=0; i<lasers.length; i++) {
+			lasers[i].paint(context2d);
+		}
+		
+		paintScores(context2d, scoresP1);
+		scoresP1 += physicsP1.detectCollisionOnEnnemies(ennemies, lasers, exploding);
+		
+		if (physicsP1.detectCollisionsOnPlayer(physicsP1.x, physicsP1.y, player1, bullets)) {
+			gameState = GameState.DEATH;
+			player1.clearCurrentAnimation();
+			
+			var explosion = new Explosion(physicsP1.x, physicsP1.y);
+			exploding.push(explosion);
+			explosion.startOnce(explosion.BOOM, function() {
+				exploding.splice(exploding.indexOf(explosion), 1);
+				
+				setTimeout(function() {
+					gameState = GameState.FINISHED;
+				}, 3000);
+			});
+		}
+		
+		moveLasers();
 	
-	
-	for (var i in ennemies) {
-		ennemies[i].paint(context2d);
+	} else if (gameState == GameState.DEATH) {
+		for (var i=0; i<exploding.length; i++) {
+			exploding[i].paint(context2d);
+		}
+	} else {
+		paintEndScreen(context2d, scoresP1);
 	}
-	for (var i=0; i<exploding.length; i++) {
-		exploding[i].paint(context2d);
-	}
 	
-	player1.paint(context2d, physicsP1.x, physicsP1.y);
-	
-	for (var i=0; i<lasers.length; i++) {
-		lasers[i].paint(context2d);
-	}
-	
-	paintScores(context2d, scoresP1);
-	scoresP1 += physicsP1.detectCollisionOnEnnemies(ennemies, lasers, exploding);
-	
-	moveLasers();
-
-    window.requestAnimationFrame(paintGame); 
+    window.requestAnimationFrame(paintGame);
 }
 
-
 function paintScores(context, score) {
-	context.fillStyle = "blue";
+	context.fillStyle = "red";
 	context.font = "bold 16px lcd";
 	context.fillText("score " + score, 10, 25);
+}
+
+function paintEndScreen(context, score) {
+	context.fillStyle = "red";
+	context.font = "bold 24px lcd";
+	var text = "score " + score;
+	var width = context.measureText(text).width
+	context.fillText(text, (canvas.width/2) - (width / 2), canvas.height/2);
 }

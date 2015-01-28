@@ -69,6 +69,24 @@ EnnemiesManager.prototype.startShip = function(ship, ennemies) {
 					});					
 				}
 			}.bind(this));
+			
+		} else if (commands.type === 'shoot') {
+			sequence = sequence.then(function() {
+				return new Promise(function(resolve, reject) {
+					var ennemy = ennemies[commands.id];
+					if (ennemy) { // Si le vaisseau n'a pas explosé
+						var bullet = new Bullet(commands.id, ennemy.x, ennemy.y);
+						var path = this.getPath({x: bullet.x, y: bullet.y}, {x: commands.x, y: commands.y});
+						
+						bullets[commands.id] = bullet;
+						bullet.action(path).then(function() {
+							delete bullets[commands.id];
+						}.bind(this));
+					}
+					resolve();
+				}.bind(this));
+			}.bind(this));
+			
 		} else if (commands.type === 'leave') {
 			sequence = sequence.then(function() {
 				return new Promise(function(resolve, reject) {
