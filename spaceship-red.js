@@ -18,8 +18,9 @@ function SpaceshipRed() {
      
     this.currentState;
      
-    this.animations = { 'FLY' : {nbFrames : 32, animationFrameWidth: 70, animationY: 0, speedRate: 15}
-                        }
+    this.animations = { 
+		'FLY' : {nbFrames : 32, animationFrameWidth: 70, animationY: 0, speedRate: 15}
+    }
 }
  
 SpaceshipRed.prototype.FLY = 'FLY';

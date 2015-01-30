@@ -1,7 +1,7 @@
 function Ennemy(id, x, y) {
      
 	this.id = id;
-	 
+	
     // Position de l'animation courante parmi les frames
     this.currentAnimationFrame = 0;
 	
@@ -15,7 +15,7 @@ function Ennemy(id, x, y) {
     // Taille en pixels d'une frame d'animation
     this.animationFrameWidth = 35;
     this.animationFrameHeight = 37;
-     
+    
     // Sert à controler la boucle d'animation
     this.animationLoop;
      

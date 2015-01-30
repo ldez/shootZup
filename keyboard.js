@@ -2,11 +2,12 @@ function Keyboard() {
 	this.startDetection();
 	this.controls = [];
 	
-	this.SHOOT = '32';
-	this.LEFT = '37';
-	this.UP = '38';
-	this.RIGHT = '39';
-	this.DOWN = '40';
+	this.SHOOT = 32;
+	this.LEFT = 37;
+	this.UP = 38;
+	this.RIGHT = 39;
+	this.DOWN = 40;
+	this.START = 13;
 }
 
 Keyboard.prototype.startDetection = function() {
@@ -27,6 +28,10 @@ Keyboard.prototype.startDetection = function() {
 		if (event.keyCode == this.SHOOT) {
 			this.controls[this.SHOOT] = true;
 		}
+		
+		if (event.keyCode == this.START) {
+			this.controls[this.START] = true;
+		}
 
 	}.bind(this);
 	
@@ -44,6 +49,9 @@ Keyboard.prototype.startDetection = function() {
 			this.controls[this.DOWN] = false;
 		}
 		
+		if (event.keyCode == this.START) {
+			this.controls[this.START] = false;
+		}
 		
 	}.bind(this);
 	

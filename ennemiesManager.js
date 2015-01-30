@@ -1,6 +1,5 @@
 function EnnemiesManager() {
-	
-}
+};
 
 EnnemiesManager.prototype.loadScenario = function(file) {
 	var p = new Promise(function(resolve, reject) {
@@ -37,7 +36,9 @@ EnnemiesManager.prototype.startGroup = function(group, ennemies) {
 	var ships = [];
 	
 	group.ships.forEach(function(ship) {
-		ships.push(this.startShip(ship, ennemies));
+		if (gameState == GameState.PLAYING) {
+			ships.push(this.startShip(ship, ennemies));
+		}		
 	}.bind(this));
 	
 	return Promise.all(ships);
@@ -66,7 +67,7 @@ EnnemiesManager.prototype.startShip = function(ship, ennemies) {
 				} else {
 					return new Promise(function(resolve, reject) {
 						resolve();
-					});					
+					});
 				}
 			}.bind(this));
 			

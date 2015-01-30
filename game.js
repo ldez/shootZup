@@ -11,26 +11,29 @@ var resources = new Resources();
 var player1 = new SpaceshipRed();
 var physicsP1 = new Physics();
 var controlsP1 = new Keyboard();
+var ennemiesManager = new EnnemiesManager();;
 var background;
 var lasers = [];
 var ennemies = {};
 var bullets = [];
 var exploding = [];
-var ennemiesManager;
-var scoresP1 = 0;
+var scoresP1;
 var audio = new Audio();
 var gameState;
-
+var scenario;
 
 var canvas = document.getElementById('game'); 
 var context2d = canvas.getContext('2d');
 
-
-audio.loadSounds([  {title: 'stage', url: 'resources/loop.mp3'},
-					{title: 'laser', url: 'resources/science_fiction_laser_005.mp3'}
-]).then(function(value) {
+audio.loadSounds(
+	[  
+		{title: 'stage', url: 'resources/loop.mp3'},
+		{title: 'laser', url: 'resources/science_fiction_laser_005.mp3'}
+	])
+.then(function(value) {
 	return resources.loadSprites(
-		[	{title: 'spaceship-red', url: 'resources/spaceship-red.png'},
+		[
+			{title: 'spaceship-red', url: 'resources/spaceship-red.png'},
 			{title: 'laser', url: 'resources/laser.png'},
 			{title: 'spaceship-green', url: 'resources/spaceship-green.png'},
 			{title: 'boom', url: 'resources/explosion.png'},
@@ -41,22 +44,23 @@ audio.loadSounds([  {title: 'stage', url: 'resources/loop.mp3'},
 		]
 	)
 }).then(function(value) {
-	startGame();
-});
-	
-
-function startGame() {
 	background = new Background();
 	audio.stageBgm();
-	gameState = GameState.PLAYING;
-    paintGame();
-	player1.startLoop(player1.FLY);
+	return ennemiesManager.loadScenario('resources/stage1.json');
+}).then(function(value) {
+	scenario = value;
 	controlsP1.startDetection();
+	
+	paintGame();
+	startGame();
+});
 
-	ennemiesManager	= new EnnemiesManager();
-	ennemiesManager.loadScenario('resources/stage1.json').then(function(scenario) {
-		return ennemiesManager.start(ennemies, scenario);
-	}).then(function() {
+function startGame() {
+	scoresP1 = 0;
+	gameState = GameState.PLAYING;
+	player1.startLoop(player1.FLY);
+	
+	ennemiesManager.start(ennemies, scenario).then(function(sequence) {
 		setTimeout(function() {
 			gameState = GameState.FINISHED;
 		}, 3000);
@@ -64,7 +68,7 @@ function startGame() {
 }
 
 
-function checkInput(control, physics) {
+function checkInputInGame(control, physics) {
 	if (control.controls[control.SHOOT]) {
 		// création de 2 lasers
 		lasers.push(new Laser(physicsP1.x - 10, physicsP1.y - 50));
@@ -87,10 +91,16 @@ function checkInput(control, physics) {
 	}
 }
 
+
+function checkInputMenu(control) {
+	if (gameState == GameState.FINISHED && control.controls[control.START]) {
+		startGame();
+	}
+}
+
 function moveLasers() {
 	
 	var newArray = [];
-	
 	for(var i=0; i<lasers.length; i++) {
 		lasers[i].move();
 		
@@ -105,11 +115,10 @@ function moveLasers() {
 
 function paintGame() {
     
-	//canvas.width = canvas.width;
 	background.paint(context2d);
 	
 	if (gameState == GameState.PLAYING) {
-		checkInput(controlsP1, physicsP1);
+		checkInputInGame(controlsP1, physicsP1);
 		
 		for (var i in ennemies) {
 			ennemies[i].paint(context2d);
@@ -141,6 +150,7 @@ function paintGame() {
 				
 				setTimeout(function() {
 					gameState = GameState.FINISHED;
+					sequence = null;
 				}, 3000);
 			});
 		}
@@ -152,6 +162,7 @@ function paintGame() {
 			exploding[i].paint(context2d);
 		}
 	} else {
+		checkInputMenu(controlsP1);
 		paintEndScreen(context2d, scoresP1);
 	}
 	
@@ -168,6 +179,10 @@ function paintEndScreen(context, score) {
 	context.fillStyle = "red";
 	context.font = "bold 24px lcd";
 	var text = "score " + score;
-	var width = context.measureText(text).width
+	var width = context.measureText(text).width;
 	context.fillText(text, (canvas.width/2) - (width / 2), canvas.height/2);
+	
+	var text2 = "Press ENTER to restart";
+	var width2 = context.measureText(text2).width;
+	context.fillText(text2, (canvas.width/2) - (width2 / 2), canvas.height/2 + 30);
 }
