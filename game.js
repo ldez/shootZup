@@ -12,11 +12,11 @@ var player1 = new SpaceshipRed();
 var physicsP1 = new Physics();
 var controlsP1 = new Keyboard();
 var ennemiesManager = new EnnemiesManager();;
-var background;
 var lasers = [];
 var ennemies = {};
 var bullets = [];
 var exploding = [];
+var background;
 var scoresP1;
 var audio = new Audio();
 var gameState;
@@ -140,19 +140,7 @@ function paintGame() {
 		scoresP1 += physicsP1.detectCollisionOnEnnemies(ennemies, lasers, exploding);
 		
 		if (physicsP1.detectCollisionsOnPlayer(physicsP1.x, physicsP1.y, player1, bullets)) {
-			gameState = GameState.DEATH;
-			player1.clearCurrentAnimation();
-			
-			var explosion = new Explosion(physicsP1.x, physicsP1.y);
-			exploding.push(explosion);
-			explosion.startOnce(explosion.BOOM, function() {
-				exploding.splice(exploding.indexOf(explosion), 1);
-				
-				setTimeout(function() {
-					gameState = GameState.FINISHED;
-					sequence = null;
-				}, 3000);
-			});
+			destroyPlayer(physicsP1);
 		}
 		
 		moveLasers();
@@ -167,6 +155,21 @@ function paintGame() {
 	}
 	
     window.requestAnimationFrame(paintGame);
+}
+
+function destroyPlayer(physics) {
+	gameState = GameState.DEATH;
+	player1.clearCurrentAnimation();
+	
+	var explosion = new Explosion(physics.x, physics.y);
+	exploding.push(explosion);
+	explosion.startOnce(explosion.BOOM, function() {
+		exploding.splice(exploding.indexOf(explosion), 1);
+		
+		setTimeout(function() {
+			gameState = GameState.FINISHED;
+		}, 3000);
+	});
 }
 
 function paintScores(context, score) {

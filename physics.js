@@ -65,8 +65,8 @@ Physics.prototype.detectCollisionOnEnnemies = function(ennemies, playersLasers, 
 		for (var i=0; i<lasersToDelete.length; i++) {
 			var laserIndex = playersLasers.indexOf(lasersToDelete[i]);
 			playersLasers.splice(laserIndex, 1);
-		 }	
-	   }
+		}	
+	}
 	
 	for (var i=0; i<ennemiesToDelete.length; i++) {
 		delete ennemies[ennemiesToDelete[i].id];

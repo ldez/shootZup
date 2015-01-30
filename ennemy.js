@@ -71,9 +71,9 @@ Ennemy.prototype.startLoop = function(animation) {
         this.clearCurrentAnimation();
         this.animationY = this.animations[animation].animationY;
         this.animationFrameWidth = this.animations[animation].animationFrameWidth;
-         
+        
         this.currentState = animation;
-         
+        
         this.animationLoop = setTimeout(function() {
             this.animLoop(animation);
         }.bind(this), this.animations[animation].speedRate);

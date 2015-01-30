@@ -1,5 +1,5 @@
 function SpaceshipRed() {
-     
+    
     // Position de l'animation courante parmi les frames
     this.currentAnimationFrame = 0;
      
@@ -15,14 +15,14 @@ function SpaceshipRed() {
      
     // Sert à controler la boucle d'animation
     this.animationLoop;
-     
+    
     this.currentState;
-     
+    
     this.animations = { 
 		'FLY' : {nbFrames : 32, animationFrameWidth: 70, animationY: 0, speedRate: 15}
     }
 }
- 
+
 SpaceshipRed.prototype.FLY = 'FLY';
 
 SpaceshipRed.prototype.paint = function(context, x, y) {
@@ -60,7 +60,7 @@ SpaceshipRed.prototype.startLoop = function(animation) {
         }.bind(this), this.animations[animation].speedRate);
     }
 };
- 
+
 SpaceshipRed.prototype.animLoop = function(animation) {
     this.currentAnimationFrame += 1;
     if (this.currentAnimationFrame == this.animations[animation].nbFrames) {
