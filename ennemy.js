@@ -15,16 +15,12 @@ function Ennemy(id, x, y) {
     // Taille en pixels d'une frame d'animation
     this.animationFrameWidth = 35;
     this.animationFrameHeight = 37;
-    
-    // Sert à controler la boucle d'animation
-    this.animationLoop;
-     
-    this.currentState;
      
     this.animations = { 
 		'FLY' : {nbFrames : 6, animationFrameWidth: 35, speedRate: 15}
     }
 }
+Ennemy.prototype = new Sprite();
 
 Ennemy.prototype.action = function(path) {
 	
@@ -59,34 +55,4 @@ Ennemy.prototype.paint = function(context) {
                         this.animationFrameWidth, 
                         this.animationFrameHeight
                     );
-};
-
-Ennemy.prototype.clearCurrentAnimation = function() {
-    this.currentAnimationFrame = 0;
-    clearTimeout(this.animationLoop);
-};
-
-Ennemy.prototype.startLoop = function(animation) {
-    if(this.currentState != animation) {
-        this.clearCurrentAnimation();
-        this.animationY = this.animations[animation].animationY;
-        this.animationFrameWidth = this.animations[animation].animationFrameWidth;
-        
-        this.currentState = animation;
-        
-        this.animationLoop = setTimeout(function() {
-            this.animLoop(animation);
-        }.bind(this), this.animations[animation].speedRate);
-    }
-};
-
-Ennemy.prototype.animLoop = function(animation) {
-    this.currentAnimationFrame += 1;
-    if (this.currentAnimationFrame == this.animations[animation].nbFrames) {
-        this.currentAnimationFrame = 0;
-    }
-     
-    this.animationLoop = setTimeout(function() {
-        this.animLoop(animation);
-    }.bind(this), this.animations[animation].speedRate);
 };

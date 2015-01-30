@@ -20,6 +20,7 @@ function Explosion(x, y) {
 		'BOOM' : {nbFrames : 16}
     }
 }
+Explosion.prototype = new Sprite();
 
 Explosion.prototype.BOOM = 'BOOM';
 
@@ -37,10 +38,6 @@ Explosion.prototype.paint = function(context) {
                     );
 };
 
-Explosion.prototype.clearCurrentAnimation = function() {
-    this.currentAnimationFrame = 0;
-    clearTimeout(this.animationLoop);
-};
 
 Explosion.prototype.startOnce = function(animation, callback) {
     if (this.currentState != animation) {
