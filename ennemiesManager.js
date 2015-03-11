@@ -104,7 +104,7 @@ EnnemiesManager.prototype.startShip = function(ship, ennemies) {
 };
 
 
-EnnemiesManager.prototype.getPath = function(from, to) {
+EnnemiesManager.prototype.getPath = function(from, to) { // Bresenham algo
 	var coordinates = [];
 	
 	var dx = Math.abs(to.x - from.x), sx = from.x < to.x ? 1 : -1;
