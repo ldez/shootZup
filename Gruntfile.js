@@ -5,7 +5,7 @@ module.exports = function (grunt) {
     grunt.initConfig({
         connect: {
             options: {
-				base: '.',
+				base: './src',
                 port: 9000,
                 // Change this to '0.0.0.0' to access the server from outside.
                 hostname: 'localhost',
