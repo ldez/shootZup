@@ -55,8 +55,6 @@
                 }
             }
 
-
-
             this.backgrounds[i].y += this.backgrounds[i].scrollValue;
         }
     };

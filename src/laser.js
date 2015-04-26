@@ -14,7 +14,6 @@
         this.canvasHeight = 640;
     }
 
-
     Laser.prototype.paint = function (context) {
         context.drawImage(this.resources.images['laser'], this.x, this.y - this.frameHeight);
     };

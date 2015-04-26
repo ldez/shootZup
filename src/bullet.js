@@ -4,6 +4,7 @@
     function Bullet(id, x, y, resources) {
 
         this.resources = resources;
+
         this.id = id;
 
         // Positions
@@ -21,7 +22,7 @@
 
         path.forEach(function (coords) {
             sequence = sequence.then(function () {
-                return new Promise(function (resolve, reject) {
+                return new Promise(function (resolve) {
                     setTimeout(function () {
                         this.x = coords.x;
                         this.y = coords.y;
