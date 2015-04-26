@@ -12,11 +12,11 @@
      * @param {Object} ennemiesManager  Gestionnaire des ennemies
      * @param {Object} lasersManager    Gestionnaire des lasers
      * @param {Object} background       Gestionnaire du fond du jeu
-     * @param {Object} player1          Vaisseau du joueur 1
+     * @param {Object} playerFactory    Factory de vaisseau
      * @param {Object} physicsP1        Moteur de physique du joueur 1
      * @param {Object} controlsP1       Gestionnaire des touches du clavier du joueur 1
      */
-    function Game(canvas, context2d, gameState, resources, explosionManager, ennemiesManager, lasersManager, background, player1, physicsP1, controlsP1) {
+    function Game(canvas, context2d, gameState, resources, explosionManager, ennemiesManager, lasersManager, background, playerFactory, physicsP1, controlsP1) {
         this.canvas = canvas;
         this.context2d = context2d;
         this.gameState = gameState;
@@ -26,9 +26,10 @@
         this.scenario = {};
         this.ennemiesManager = ennemiesManager;
 
+        this.playerFactory = playerFactory;
         this.lasersManager = lasersManager;
         this.scoresP1 = 0;
-        this.player1 = player1;
+        this.player1 = playerFactory.create();
         this.physicsP1 = physicsP1;
         this.controlsP1 = controlsP1;
     }
@@ -67,7 +68,7 @@
             // création de 2 lasers
             this.lasersManager.shoot(physics);
 
-            // empèche le tire continue
+            // empêche le tire continue
             control.actions.SHOOT = false;
         }
 
@@ -95,6 +96,7 @@
     Game.prototype.checkInputMenu = function (control, physics) {
         if (this.gameState.isFinished() && control.actions.START) {
             physics.reset();
+            this.player1 = this.playerFactory.create();
             this.ennemiesManager.reset();
             this.startGame(this.scenario);
         }

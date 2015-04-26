@@ -46,7 +46,7 @@
         START : 13,
     };
     var controlsP1 = new Keyboard(keysP1);
-    var player1 = new SpaceshipRed(resources);
+    var playerFactory = new PlayerFactory(resources);
     var physicsP1 = new Physics(resources);
     var lasersManager = new LasersManager(audio, resources);
 
@@ -69,7 +69,7 @@
     }).then(function (scenario) {
         controlsP1.startDetection();
 
-        var game = new Game(canvas, context2d, gameState, resources, explosionManager, ennemiesManager, lasersManager, background, player1, physicsP1, controlsP1);
+        var game = new Game(canvas, context2d, gameState, resources, explosionManager, ennemiesManager, lasersManager, background, playerFactory, physicsP1, controlsP1);
 
         game.paintGame();
         game.startGame(scenario);
