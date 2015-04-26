@@ -69,70 +69,87 @@
         return Promise.all(ships);
     };
 
+    EnnemiesManager.prototype.commandNew = function (commands) {
+        return new Promise(function (resolve) {
+            var ennemy = new Ennemy(commands.id, commands.x, commands.y, this.resources);
+            this.ennemies[commands.id] = ennemy;
+            ennemy.startLoop(ennemy.FLY);
+            resolve();
+        }.bind(this));
+    };
+
+    EnnemiesManager.prototype.commandMove = function (commands) {
+        var ennemy = this.ennemies[commands.id];
+        // Si le vaisseau n'a pas explosé
+        if (ennemy) {
+            var path = this.getPath({
+                x: ennemy.x,
+                y: ennemy.y
+            }, {
+                x: commands.x,
+                y: commands.y
+            });
+            return ennemy.action(path);
+        } else {
+            return new Promise(function (resolve) {
+                resolve();
+            });
+        }
+    };
+
+    EnnemiesManager.prototype.commandShoot = function (commands) {
+        return new Promise(function (resolve) {
+            var ennemy = this.ennemies[commands.id];
+            // Si le vaisseau n'a pas explosé
+            if (ennemy) {
+                var bullet = new Bullet(commands.id, ennemy.x, ennemy.y, this.resources);
+                var path = this.getPath({
+                    x: bullet.x,
+                    y: bullet.y
+                }, {
+                    x: commands.x,
+                    y: commands.y
+                });
+
+                this.bullets.push(bullet);
+                bullet.action(path).then(function (value) {
+                    this.bullets.splice(this.bullets.indexOf(value), 1);
+                }.bind(this));
+            }
+            resolve();
+        }.bind(this));
+    };
+
+    EnnemiesManager.prototype.commandLeave = function (commands) {
+        return new Promise(function (resolve) {
+            var ennemy = this.ennemies[commands.id];
+            if (ennemy) { // Si le vaisseau n'a pas explosé
+                delete this.ennemies[commands.id];
+            }
+            resolve();
+        }.bind(this));
+    };
+
     EnnemiesManager.prototype.startShip = function (ship) {
         var sequence = Promise.resolve();
 
         ship.forEach(function (commands) {
             if (commands.type === 'new') {
                 sequence = sequence.then(function () {
-                    return new Promise(function (resolve) {
-                        var ennemy = new Ennemy(commands.id, commands.x, commands.y, this.resources);
-                        this.ennemies[commands.id] = ennemy;
-                        ennemy.startLoop(ennemy.FLY);
-                        resolve();
-                    }.bind(this));
+                    return this.commandNew(commands);
                 }.bind(this));
             } else if (commands.type === 'move') {
                 sequence = sequence.then(function () {
-                    var ennemy = this.ennemies[commands.id];
-                    if (ennemy) { // Si le vaisseau n'a pas explosé
-                        var path = this.getPath({
-                            x: ennemy.x,
-                            y: ennemy.y
-                        }, {
-                            x: commands.x,
-                            y: commands.y
-                        });
-                        return ennemy.action(path);
-                    } else {
-                        return new Promise(function (resolve) {
-                            resolve();
-                        });
-                    }
+                    return this.commandMove(commands);
                 }.bind(this));
-
             } else if (commands.type === 'shoot') {
                 sequence = sequence.then(function () {
-                    return new Promise(function (resolve) {
-                        var ennemy = this.ennemies[commands.id];
-                        if (ennemy) { // Si le vaisseau n'a pas explosé
-                            var bullet = new Bullet(commands.id, ennemy.x, ennemy.y, this.resources);
-                            var path = this.getPath({
-                                x: bullet.x,
-                                y: bullet.y
-                            }, {
-                                x: commands.x,
-                                y: commands.y
-                            });
-
-                            this.bullets.push(bullet);
-                            bullet.action(path).then(function (value) {
-                                this.bullets.splice(this.bullets.indexOf(value), 1);
-                            }.bind(this));
-                        }
-                        resolve();
-                    }.bind(this));
+                    return this.commandShoot(commands);
                 }.bind(this));
 
             } else if (commands.type === 'leave') {
                 sequence = sequence.then(function () {
-                    return new Promise(function (resolve) {
-                        var ennemy = this.ennemies[commands.id];
-                        if (ennemy) { // Si le vaisseau n'a pas explosé
-                            delete this.ennemies[commands.id];
-                        }
-                        resolve();
-                    }.bind(this));
+                    return this.commandLeave(commands);
                 }.bind(this));
             }
         }.bind(this));
