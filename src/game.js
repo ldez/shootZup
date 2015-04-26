@@ -7,7 +7,25 @@ window.requestAnimationFrame = (function () {
         };
 })();
 
-var resources = new Resources();
+var sprites = [
+    {title: 'spaceship-red', url: 'resources/image/spaceship-red.png'},
+    {title: 'laser', url: 'resources/image/laser.png'},
+    {title: 'spaceship-green', url: 'resources/image/spaceship-green.png'},
+    {title: 'boom', url: 'resources/image/explosion.png'},
+    {title: 'sky', url: 'resources/image/sky.jpg'},
+    {title: 'bullet', url: 'resources/image/bullet.png'},
+    {title: 'galaxy', url: 'resources/image/galaxy3.jpg'},
+    {title: 'stars', url: 'resources/image/stars2.png'}
+];
+
+var resources = new Resources(sprites);
+
+var sounds = [
+    {title: 'stage', url: 'resources/audio/loop.mp3'},
+    {title: 'laser', url: 'resources/audio/science_fiction_laser_005.mp3'}
+];
+
+var audio = new Audio(sounds);
 var player1 = new SpaceshipRed(resources);
 var physicsP1 = new Physics(resources);
 var controlsP1 = new Keyboard();
@@ -18,41 +36,26 @@ var bullets = [];
 var exploding = [];
 var background;
 var scoresP1;
-var audio = new Audio();
 var gameState;
 var scenario;
 
 var canvas = document.getElementById('game');
 var context2d = canvas.getContext('2d');
 
-audio.loadSounds(
-	[
-		{title: 'stage', url: 'resources/loop.mp3'},
-		{title: 'laser', url: 'resources/science_fiction_laser_005.mp3'}
-	])
-.then(function(value) {
-	return resources.loadSprites(
-		[
-			{title: 'spaceship-red', url: 'resources/spaceship-red.png'},
-			{title: 'laser', url: 'resources/laser.png'},
-			{title: 'spaceship-green', url: 'resources/spaceship-green.png'},
-			{title: 'boom', url: 'resources/explosion.png'},
-			{title: 'sky', url: 'resources/sky.jpg'},
-			{title: 'bullet', url: 'resources/bullet.png'},
-			{title: 'galaxy', url: 'resources/galaxy3.jpg'},
-			{title: 'stars', url: 'resources/stars2.png'}
-		]
-	)
-}).then(function(value) {
-	background = new Background(resources);
-	audio.stageBgm();
-	return ennemiesManager.loadScenario('resources/stage1.json');
-}).then(function(value) {
-	scenario = value;
-	controlsP1.startDetection();
 
-	paintGame();
-	startGame();
+audio.load().then(function () {
+    return resources.load();
+}).then(function () {
+    background = new Background(resources);
+}).then(function () {
+    audio.stageBgm();
+    return ennemiesManager.loadScenario('resources/stage1.json');
+}).then(function (value) {
+    scenario = value;
+    controlsP1.startDetection();
+
+    paintGame();
+    startGame();
 });
 
 function startGame() {
@@ -71,7 +74,7 @@ function startGame() {
 function checkInputInGame(control, physics) {
     if (control.controls[control.SHOOT]) {
         // création de 2 lasers
-        lasers.push(new Laser(physicsP1.x - 10, physicsP1.y - 50,resources));
+        lasers.push(new Laser(physicsP1.x - 10, physicsP1.y - 50, resources));
         lasers.push(new Laser(physicsP1.x + 10, physicsP1.y - 50, resources));
         audio.laser();
 

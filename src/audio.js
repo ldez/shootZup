@@ -1,7 +1,8 @@
 (function (window) {
     'use strict';
 
-    function Audio() {
+    function Audio(sounds) {
+        this.sounds = sounds;
         this.soundsList = {};
         this.loadCount = 0;
         this.playingSound = false;
@@ -9,7 +10,6 @@
         try {
             window.AudioContext = window.AudioContext || window.webkitAudioContext;
             this.context = new window.AudioContext();
-
         } catch (e) {
             window.alert('API Audio non supportée.');
         }
@@ -27,28 +27,38 @@
     Audio.prototype.loadSound = function (sound) {
 
         var p = new Promise(function (resolve, reject) {
-            var request = new XMLHttpRequest();
-            request.open('GET', sound.url, true);
-            request.responseType = 'arraybuffer';
 
-            request.onload = function () {
-                this.context.decodeAudioData(
-                    request.response,
-                    function (buffer) {
-                        this.soundsList[sound.title] = buffer;
-                        resolve(sound);
-                    }.bind(this),
-                    function (error) {
-                        console.error('decodeAudioData error', error);
-                        reject(sound);
-                    }
-                );
-            }.bind(this);
+            if (this.soundsList[sound.title]) {
+                resolve(sound);
+            } else {
+                var request = new XMLHttpRequest();
+                request.open('GET', sound.url, true);
+                request.responseType = 'arraybuffer';
 
-            request.send();
+                request.onload = function () {
+                    this.context.decodeAudioData(
+                        request.response,
+                        function (buffer) {
+                            this.soundsList[sound.title] = buffer;
+                            resolve(sound);
+                        }.bind(this),
+                        function (error) {
+                            console.error('decodeAudioData error', error);
+                            reject(sound);
+                        }
+                    );
+                }.bind(this);
+
+                request.send();
+            }
+
         }.bind(this));
 
         return p;
+    };
+
+    Audio.prototype.load = function () {
+        return this.loadSounds(this.sounds);
     };
 
     Audio.prototype.stageBgm = function () {
