@@ -1,78 +1,131 @@
-(function () {
+(function (window) {
     'use strict';
 
-    window.requestAnimationFrame = (function () {
-        // La fonction d'origine que tous les navigateurs finiront par utiliser.
-        return window.requestAnimationFrame ||
-            // Pour Chrome et Safari.
-            window.webkitRequestAnimationFrame ||
-            // Pour Firefox.
-            window.mozRequestAnimationFrame ||
-            // Pour Opera.
-            window.ORequestAnimationFrame ||
-            // Pour Internet Explorer.
-            window.msRequestAnimationFrame ||
-            function (callback) {
-                window.setTimeout(callback, 1000 / 60);
-            };
-    })();
+    function Game(canvas, context2d, gameState, resources, explosionManager, ennemiesManager, lasersManager, background, player1, physicsP1, controlsP1) {
+        this.canvas = canvas;
+        this.context2d = context2d;
+        this.gameState = gameState;
+        this.background = background;
+        this.resources = resources;
+        this.explosionManager = explosionManager;
+        this.scenario = {};
+        this.ennemiesManager = ennemiesManager;
 
-    var sprites = [
-        {title: 'spaceship-red', url: 'resources/image/spaceship-red.png'},
-        {title: 'laser', url: 'resources/image/laser.png'},
-        {title: 'spaceship-green', url: 'resources/image/spaceship-green.png'},
-        {title: 'boom', url: 'resources/image/explosion.png'},
-        {title: 'sky', url: 'resources/image/sky.jpg'},
-        {title: 'bullet', url: 'resources/image/bullet.png'},
-        {title: 'galaxy', url: 'resources/image/galaxy3.jpg'},
-        {title: 'stars', url: 'resources/image/stars2.png'}
-    ];
-    var resources = new Resources(sprites);
+        this.exploding = [];
 
-    var sounds = [
-        {title: 'stage', url: 'resources/audio/loop.mp3'},
-        {title: 'laser', url: 'resources/audio/science_fiction_laser_005.mp3'}
-    ];
-    var audio = new Audio(sounds);
+        this.lasersManager = lasersManager;
+        this.scoresP1 = 0;
+        this.player1 = player1;
+        this.physicsP1 = physicsP1;
+        this.controlsP1 = controlsP1;
+    }
 
-    var gameState = new GameState();
+    Game.prototype.startGame = function (scenario) {
+        this.scenario = scenario;
+        this.scoresP1 = 0;
+        this.gameState.play();
+        this.player1.startLoop(this.player1.FLY);
 
-    var keysP1 = {
-        SHOOT : 32,
-        LEFT : 37,
-        UP : 38,
-        RIGHT : 39,
-        DOWN : 40,
-        START : 13,
+        this.ennemiesManager.start(scenario).then(function (sequence) {
+            setTimeout(function () {
+                this.gameState.finished();
+            }.bind(this), 3000);
+        }.bind(this));
     };
-    var controlsP1 = new Keyboard(keysP1);
-    var player1 = new SpaceshipRed(resources);
-    var physicsP1 = new Physics(resources);
-    var lasersManager = new LasersManager(audio, resources);
 
-    var explosionManager = new ExplosionManager(resources);
+    Game.prototype.checkInputInGame = function (control, physics, player) {
+        if (control.actions.SHOOT) {
+            // création de 2 lasers
+            this.lasersManager.shoot(physics);
 
-    var ennemiesManager = new EnnemiesManager(gameState, resources);
+            control.actions.SHOOT = false;
+        }
 
-    var background;
+        if (control.actions.LEFT && physics.canMoveLeft(player)) {
+            physics.x -= 10;
+        } else if (control.actions.RIGHT && physics.canMoveRight(player)) {
+            physics.x += 10;
+        }
 
-    var canvas = document.getElementById('game');
-    var context2d = canvas.getContext('2d');
+        if (control.actions.UP && physics.canMoveUp(player)) {
+            physics.y -= 10;
+        } else if (control.actions.DOWN && physics.canMoveDown(player)) {
+            physics.y += 10;
+        }
+    };
+
+    Game.prototype.checkInputMenu = function (control) {
+        if (this.gameState.isFinished() && control.actions.START) {
+            this.startGame(this.scenario);
+        }
+    };
+
+    Game.prototype.paintGame = function () {
+
+        this.background.paint(this.context2d);
+
+        if (this.gameState.isPlaying()) {
+            this.checkInputInGame(this.controlsP1, this.physicsP1, this.player1);
+
+            this.ennemiesManager.paintEnnemies(this.context2d);
+
+            this.explosionManager.paint(this.context2d);
+
+            this.ennemiesManager.paintBullets(this.context2d);
+
+            this.player1.paint(this.context2d, this.physicsP1.x, this.physicsP1.y);
+
+            this.lasersManager.paint(this.context2d);
+
+            this.paintScores(this.context2d, this.scoresP1);
+            this.scoresP1 += this.physicsP1.detectCollisionOnEnnemies(this.ennemiesManager.ennemies, this.lasersManager.lasers, this.exploding);
+
+            if (this.physicsP1.detectCollisionsOnPlayer(this.physicsP1.x, this.physicsP1.y, this.player1, this.ennemiesManager.bullets)) {
+                this.destroyPlayer(this.physicsP1);
+            }
+
+            this.lasersManager.move();
+
+        } else if (this.gameState.isDead()) {
+            this.explosionManager.paint(this.context2d);
+        } else {
+            this.checkInputMenu(this.controlsP1);
+            this.paintEndScreen(this.context2d, this.scoresP1);
+        }
+
+        window.requestAnimationFrame(this.paintGame.bind(this));
+    };
 
 
-    audio.load().then(function () {
-        return resources.load();
-    }).then(function () {
-        background = new Background(resources);
-        audio.stageBgm();
-        return ennemiesManager.loadScenario('resources/stage1.json');
-    }).then(function (scenario) {
-        controlsP1.startDetection();
+    Game.prototype.destroyPlayer = function (physics) {
+        this.gameState.death();
+        this.player1.clearCurrentAnimation();
 
-        var game = new Game(canvas, context2d, gameState, resources, explosionManager, ennemiesManager, lasersManager, background, player1, physicsP1, controlsP1);
+        this.explosionManager.plaverExploded(physics, function () {
+            setTimeout(function () {
+                this.gameState.finished();
+            }.bind(this), 3000);
+        }.bind(this));
+    };
 
-        game.paintGame();
-        game.startGame(scenario);
-    });
+    Game.prototype.paintScores = function (context, score) {
+        context.fillStyle = "red";
+        context.font = "bold 16px lcd";
+        context.fillText("score " + score, 10, 25);
+    };
 
-})();
+    Game.prototype.paintEndScreen = function (context, score) {
+        context.fillStyle = "red";
+        context.font = "bold 24px lcd";
+        var text = "score " + score;
+        var width = context.measureText(text).width;
+        context.fillText(text, (this.canvas.width / 2) - (width / 2), this.canvas.height / 2);
+
+        var text2 = "Press ENTER to restart";
+        var width2 = context.measureText(text2).width;
+        context.fillText(text2, (this.canvas.width / 2) - (width2 / 2), this.canvas.height / 2 + 30);
+    };
+
+    window.Game = Game;
+
+})(window);
