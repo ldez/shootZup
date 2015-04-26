@@ -29,14 +29,14 @@ var audio = new Audio(sounds);
 var player1 = new SpaceshipRed(resources);
 var physicsP1 = new Physics(resources);
 var controlsP1 = new Keyboard();
-var ennemiesManager = new EnnemiesManager(resources);
+var gameState = new GameState();
+var ennemiesManager = new EnnemiesManager(gameState, resources);
 var lasers = [];
 var ennemies = {};
 var bullets = [];
 var exploding = [];
 var background;
 var scoresP1;
-var gameState;
 var scenario;
 
 var canvas = document.getElementById('game');
@@ -60,12 +60,12 @@ audio.load().then(function () {
 
 function startGame() {
     scoresP1 = 0;
-    gameState = GameState.PLAYING;
+    gameState.play();
     player1.startLoop(player1.FLY);
 
     ennemiesManager.start(ennemies, scenario).then(function (sequence) {
         setTimeout(function () {
-            gameState = GameState.FINISHED;
+            gameState.finished();
         }, 3000);
     });
 }
@@ -96,7 +96,7 @@ function checkInputInGame(control, physics) {
 
 
 function checkInputMenu(control) {
-    if (gameState == GameState.FINISHED && control.controls[control.START]) {
+    if (gameState.isFinished() && control.controls[control.START]) {
         startGame();
     }
 }
@@ -120,7 +120,7 @@ function paintGame() {
 
     background.paint(context2d);
 
-    if (gameState == GameState.PLAYING) {
+    if (gameState.isPlaying()) {
         checkInputInGame(controlsP1, physicsP1);
 
         for (var i in ennemies) {
@@ -148,7 +148,7 @@ function paintGame() {
 
         moveLasers();
 
-    } else if (gameState == GameState.DEATH) {
+    } else if (gameState.isDead()) {
         for (var i = 0; i < exploding.length; i++) {
             exploding[i].paint(context2d);
         }
@@ -161,7 +161,7 @@ function paintGame() {
 }
 
 function destroyPlayer(physics) {
-    gameState = GameState.DEATH;
+    gameState.death();
     player1.clearCurrentAnimation();
 
     var explosion = new Explosion(physics.x, physics.y, resources);
@@ -170,7 +170,7 @@ function destroyPlayer(physics) {
         exploding.splice(exploding.indexOf(explosion), 1);
 
         setTimeout(function () {
-            gameState = GameState.FINISHED;
+            gameState.finished();
         }, 3000);
     });
 }

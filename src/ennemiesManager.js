@@ -1,8 +1,9 @@
 (function (window) {
     'use strict';
 
-    function EnnemiesManager(resources) {
+    function EnnemiesManager(gameState, resources) {
         this.resources = resources;
+        this.gameState = gameState;
     }
 
     EnnemiesManager.prototype.loadScenario = function (file) {
@@ -40,7 +41,7 @@
         var ships = [];
 
         group.ships.forEach(function (ship) {
-            if (gameState === GameState.PLAYING) {
+            if (this.gameState.isPlaying()) {
                 ships.push(this.startShip(ship, ennemies));
             }
         }.bind(this));
