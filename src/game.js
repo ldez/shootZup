@@ -26,8 +26,6 @@
         this.scenario = {};
         this.ennemiesManager = ennemiesManager;
 
-        this.exploding = [];
-
         this.lasersManager = lasersManager;
         this.scoresP1 = 0;
         this.player1 = player1;
@@ -69,6 +67,7 @@
             // création de 2 lasers
             this.lasersManager.shoot(physics);
 
+            // empèche le tire continue
             control.actions.SHOOT = false;
         }
 
@@ -131,8 +130,9 @@
 
             // affichage du score
             this.paintScores(this.context2d, this.scoresP1);
-            // calcul du nouveau score
-            this.scoresP1 += this.physicsP1.detectCollisionOnEnnemies(this.ennemiesManager.ennemies, this.lasersManager.lasers, this.exploding);
+
+            // calcul du nouveau score - detection des collision entre les lasers et les ennemies
+            this.scoresP1 += this.physicsP1.detectCollisionOnEnnemies(this.ennemiesManager.ennemies, this.lasersManager.lasers, this.explosionManager.exploding);
 
             // detection des collisions avec le vaisseau du joueur
             if (this.physicsP1.detectCollisionsOnPlayer(this.physicsP1.x, this.physicsP1.y, this.player1, this.ennemiesManager.bullets)) {
@@ -148,7 +148,9 @@
 
             // affichage de explosion du vaisseau
             this.explosionManager.paint(this.context2d);
-        } else {
+        }
+        // si le jeu est fini
+        else {
             // relancement du jeu sur action du joueur
             this.checkInputMenu(this.controlsP1, this.physicsP1);
 
