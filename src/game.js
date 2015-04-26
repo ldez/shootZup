@@ -32,6 +32,8 @@
         this.player1 = playerFactory.create();
         this.physicsP1 = physicsP1;
         this.controlsP1 = controlsP1;
+
+        this.duration = 3000;
     }
 
     /**
@@ -48,9 +50,11 @@
         // lance de scenario des ennemies
         this.ennemiesManager.start(scenario).then(function (sequence) {
             // définit la durée maximale du jeu.
-            setTimeout(function () {
-                this.gameState.finished();
-            }.bind(this), 3000);
+            if (!this.gameState.isGameOver()) {
+                setTimeout(function () {
+                    this.gameState.finished();
+                }.bind(this), this.duration);
+            }
         }.bind(this));
     };
 
@@ -146,7 +150,7 @@
 
         }
         // si le joueur est mort
-        else if (this.gameState.isDead()) {
+        else if (this.gameState.isGameOver()) {
 
             // affichage de explosion du vaisseau
             this.explosionManager.paint(this.context2d);
@@ -163,7 +167,6 @@
         window.requestAnimationFrame(this.paintGame.bind(this));
     };
 
-
     /**
      * Destruction d'un joueur
      *
@@ -171,14 +174,14 @@
      */
     Game.prototype.destroyPlayer = function (physics, player) {
         // Change l'état du jeu
-        this.gameState.death();
+        this.gameState.gameOver();
         player.clearCurrentAnimation();
 
         // création de l'explosion du vaisseau du joueur
         this.explosionManager.plaverExploded(physics, function () {
             setTimeout(function () {
                 this.gameState.finished();
-            }.bind(this), 3000);
+            }.bind(this), 1000);
         }.bind(this));
     };
 

@@ -7,7 +7,7 @@
 
     GameState.prototype.LOADING = 0;
     GameState.prototype.PLAYING = 1;
-    GameState.prototype.DEATH = 2;
+    GameState.prototype.GAMEOVER = 2;
     GameState.prototype.FINISHED = 3;
 
     GameState.prototype.play = function () {
@@ -17,12 +17,12 @@
         return this.current === this.PLAYING;
     };
 
-    GameState.prototype.death = function () {
-        this.current = this.DEATH;
+    GameState.prototype.gameOver = function () {
+        this.current = this.GAMEOVER;
     };
 
-    GameState.prototype.isDead = function () {
-        return this.current === this.DEATH;
+    GameState.prototype.isGameOver = function () {
+        return this.current === this.GAMEOVER;
     };
 
     GameState.prototype.finished = function () {

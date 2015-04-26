@@ -48,9 +48,14 @@
         var groupSequence = Promise.resolve();
 
         scenario.groups.forEach(function (group) {
-            groupSequence = groupSequence.then(function () {
-                return this.startGroup(group);
-            }.bind(this));
+            if (this.gameState.isGameOver()) {
+                // arrete de gérer les groupes d'ennemies si le joueur est mort
+                groupSequence = Promise.resolve();
+            } else {
+                groupSequence = groupSequence.then(function () {
+                    return this.startGroup(group);
+                }.bind(this));
+            }
         }.bind(this));
 
         return groupSequence;
