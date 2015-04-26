@@ -1,64 +1,47 @@
-(function (window) {
+(function (window, document) {
     'use strict';
 
-    function Keyboard() {
+    function Keyboard(keys) {
         this.startDetection();
-        this.controls = [];
-
-        this.SHOOT = 32;
-        this.LEFT = 37;
-        this.UP = 38;
-        this.RIGHT = 39;
-        this.DOWN = 40;
-        this.START = 13;
+        this.keys = keys;
+        this.actions = {};
     }
 
     Keyboard.prototype.startDetection = function () {
 
         document.onkeydown = function (event) {
-            if (event.keyCode === this.LEFT) {
-                this.controls[this.LEFT] = true;
-            } else if (event.keyCode === this.RIGHT) {
-                this.controls[this.RIGHT] = true;
-            }
-
-            if (event.keyCode === this.UP) {
-                this.controls[this.UP] = true;
-            } else if (event.keyCode === this.DOWN) {
-                this.controls[this.DOWN] = true;
-            }
-
-            if (event.keyCode === this.SHOOT) {
-                this.controls[this.SHOOT] = true;
-            }
-
-            if (event.keyCode === this.START) {
-                this.controls[this.START] = true;
-            }
-
+            this.keyControl(event, true);
         }.bind(this);
 
         document.onkeyup = function (event) {
-            if (event.keyCode === this.LEFT) {
-                this.controls[this.LEFT] = false;
-            } else if (event.keyCode === this.RIGHT) {
-                this.controls[this.RIGHT] = false;
-            }
-
-            if (event.keyCode === this.UP) {
-                this.controls[this.UP] = false;
-            } else if (event.keyCode === this.DOWN) {
-                this.controls[this.DOWN] = false;
-            }
-
-            if (event.keyCode === this.START) {
-                this.controls[this.START] = false;
-            }
-
+            this.keyControl(event, false);
         }.bind(this);
 
     };
 
+    Keyboard.prototype.keyControl = function (event, state) {
+
+        if (event.keyCode === this.keys.LEFT) {
+            this.actions.LEFT = state;
+        } else if (event.keyCode === this.keys.RIGHT) {
+            this.actions.RIGHT = state;
+        }
+
+        if (event.keyCode === this.keys.UP) {
+            this.actions.UP = state;
+        } else if (event.keyCode === this.keys.DOWN) {
+            this.actions.DOWN = state;
+        }
+
+        if (event.keyCode === this.keys.SHOOT) {
+            this.actions.SHOOT = state;
+        }
+
+        if (event.keyCode === this.keys.START) {
+            this.actions.START = state;
+        }
+    };
+
     window.Keyboard = Keyboard;
 
-})(window);
+})(window, document);

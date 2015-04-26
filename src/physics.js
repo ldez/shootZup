@@ -38,8 +38,8 @@
         var score = 0;
 
         for (var id in ennemies) {
-            var ennemy = ennemies[id];
             if (ennemies.hasOwnProperty(id)) {
+                var ennemy = ennemies[id];
                 var minX = ennemy.x - ennemy.animationFrameWidth / 2;
                 var maxX = ennemy.x + ennemy.animationFrameWidth / 2;
                 var minY = ennemy.y - ennemy.animationFrameHeight / 2;

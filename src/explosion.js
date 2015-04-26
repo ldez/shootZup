@@ -15,11 +15,6 @@
         this.animationFrameWidth = 44;
         this.animationFrameHeight = 46;
 
-        // Sert à controler la boucle d'animation
-        this.animationLoop;
-
-        this.currentState;
-
         this.animations = {
             'BOOM': {
                 nbFrames: 16
@@ -31,7 +26,6 @@
     Explosion.prototype.BOOM = 'BOOM';
 
     Explosion.prototype.paint = function (context) {
-
         context.drawImage(this.resources.images['boom'],
             this.currentAnimationFrame * this.animationFrameWidth, 0,
             this.animationFrameWidth, this.animationFrameHeight,
