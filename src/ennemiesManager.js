@@ -22,6 +22,11 @@
         });
     };
 
+    EnnemiesManager.prototype.reset = function () {
+        this.bullets.splice(0, this.bullets.length);
+        this.ennemies = {};
+    };
+
     EnnemiesManager.prototype.loadScenario = function (file) {
         var p = new Promise(function (resolve) {
 

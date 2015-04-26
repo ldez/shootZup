@@ -11,9 +11,14 @@
         this.moveSize = 10;
 
         // Positions du vaisseau.
-        this.x = 200;
+        this.x = this.canvasWidth / 2;
         this.y = 600;
     }
+
+    Physics.prototype.reset = function () {
+        this.x = this.canvasWidth / 2;
+        this.y = 600;
+    };
 
     Physics.prototype.canMoveLeft = function (spaceship) {
         return this.x >= 0 + this.moveSize + (spaceship.animationFrameWidth / 2);

@@ -54,8 +54,10 @@
         }
     };
 
-    Game.prototype.checkInputMenu = function (control) {
+    Game.prototype.checkInputMenu = function (control, physics) {
         if (this.gameState.isFinished() && control.actions.START) {
+            physics.reset();
+            this.ennemiesManager.reset();
             this.startGame(this.scenario);
         }
     };
@@ -89,7 +91,7 @@
         } else if (this.gameState.isDead()) {
             this.explosionManager.paint(this.context2d);
         } else {
-            this.checkInputMenu(this.controlsP1);
+            this.checkInputMenu(this.controlsP1, this.physicsP1);
             this.paintEndScreen(this.context2d, this.scoresP1);
         }
 
