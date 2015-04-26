@@ -52,18 +52,35 @@
     var canvas = document.getElementById('game');
     var context2d = canvas.getContext('2d');
 
+    // préchargement des sons
     audio.load().then(function () {
+
+        // préchargement des images
         return resources.load();
+
     }).then(function () {
+
+        // contruction du fond
         background = new Background(resources);
+
+        // démarrage de la musique de fond
         audio.stageBgm();
+
+        // contruction du scénario des ennemies
         return ennemiesManager.loadScenario('resources/stage1.json');
+
     }).then(function (scenario) {
+
+        // démarrage de gestion des controles utilisateurs
         controlsP1.startDetection();
 
+        // Création du jeux
         var game = new Game(canvas, context2d, gameState, resources, explosionManager, ennemiesManager, lasersManager, background, playerFactory, physicsP1, controlsP1);
 
+        // affichage du jeux
         game.paintGame();
+
+        // démarrage du jeux
         game.startGame(scenario);
     });
 
