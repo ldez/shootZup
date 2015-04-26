@@ -6,11 +6,11 @@
         this.currentAnimationFrame = 0;
 
         // Sert à controler la boucle d'animation
-        this.animationLoop;
+        this.animationLoop = null;
 
         this.animations = {};
 
-        this.currentState;
+        this.currentState = '';
     }
 
     Sprite.prototype.clearCurrentAnimation = function () {
