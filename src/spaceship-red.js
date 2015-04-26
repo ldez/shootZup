@@ -34,14 +34,11 @@
 
         if (this.currentState === this.FLY) {
             context.drawImage(this.resources.images['spaceship-red'],
-                this.currentAnimationFrame * this.animationFrameWidth,
-                this.animationY,
-                this.animationFrameWidth,
-                this.animationFrameHeight,
-                x - (this.animationFrameWidth / 2), // centrage de l'image par rapport à la position
-                y - this.animationFrameHeight + (this.animationFrameHeight / 2), // centrage de l'image par rapport à la position
-                this.animationFrameWidth,
-                this.animationFrameHeight
+                this.currentAnimationFrame * this.animationFrameWidth, this.animationY,
+                this.animationFrameWidth, this.animationFrameHeight,
+                // centrage de l'image par rapport à la position
+                x - (this.animationFrameWidth / 2), y - this.animationFrameHeight + (this.animationFrameHeight / 2),
+                this.animationFrameWidth, this.animationFrameHeight
             );
         }
     };

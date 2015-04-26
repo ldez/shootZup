@@ -33,14 +33,11 @@
     Explosion.prototype.paint = function (context) {
 
         context.drawImage(this.resources.images['boom'],
-            this.currentAnimationFrame * this.animationFrameWidth,
-            0,
-            this.animationFrameWidth,
-            this.animationFrameHeight,
-            this.x - (this.animationFrameWidth / 2), // centrage de l'image par rapport à la position
-            this.y - this.animationFrameHeight + (this.animationFrameHeight / 2), // centrage de l'image par rapport à la position
-            this.animationFrameWidth,
-            this.animationFrameHeight
+            this.currentAnimationFrame * this.animationFrameWidth, 0,
+            this.animationFrameWidth, this.animationFrameHeight,
+            // centrage de l'image par rapport à la position
+            this.x - (this.animationFrameWidth / 2), this.y - this.animationFrameHeight + (this.animationFrameHeight / 2),
+            this.animationFrameWidth, this.animationFrameHeight
         );
     };
 

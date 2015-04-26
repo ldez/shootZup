@@ -38,14 +38,11 @@
     Bullet.prototype.paint = function (context) {
 
         context.drawImage(this.resources.images['bullet'],
-            0,
-            0,
-            this.animationFrameWidth,
-            this.animationFrameHeight,
-            this.x - (this.animationFrameWidth / 2), // centrage de l'image par rapport à la position
-            this.y - this.animationFrameHeight + (this.animationFrameHeight / 2), // centrage de l'image par rapport à la position
-            this.animationFrameWidth,
-            this.animationFrameHeight
+            0, 0,
+            this.animationFrameWidth, this.animationFrameHeight,
+            // centrage de l'image par rapport à la position
+            this.x - (this.animationFrameWidth / 2), this.y - this.animationFrameHeight + (this.animationFrameHeight / 2),
+            this.animationFrameWidth, this.animationFrameHeight
         );
     };
 
