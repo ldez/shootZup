@@ -27,6 +27,10 @@
         });
     };
 
+    LasersManager.prototype.reset = function () {
+        this.lasers.splice(0, this.lasers.length);
+    };
+
     window.LasersManager = LasersManager;
 
 })(window);

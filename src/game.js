@@ -99,6 +99,7 @@
      */
     Game.prototype.checkInputMenu = function (control, physics) {
         if (this.gameState.isFinished() && control.actions.START) {
+            this.lasersManager.reset();
             physics.reset();
             this.player1 = this.playerFactory.create();
             this.ennemiesManager.reset();
