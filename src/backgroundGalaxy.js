@@ -1,6 +1,11 @@
 (function (window) {
     'use strict';
 
+    /**
+     * Fond d'écran en rotation sur lui même
+     *
+     * @param {Object} resources Gestionnaire d'images
+     */
     function Background(resources) {
 
         this.canvasHeight = 640;
