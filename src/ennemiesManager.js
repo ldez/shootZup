@@ -127,7 +127,8 @@
             } else if (commands.type === 'leave') {
                 sequence = sequence.then(function () {
                     return new Promise(function (resolve) {
-                        if (this.ennemies[commands.id]) { // Si le vaisseau n'a pas explosé
+                        var ennemy = this.ennemies[commands.id];
+                        if (ennemy) { // Si le vaisseau n'a pas explosé
                             delete this.ennemies[commands.id];
                         }
                         resolve();

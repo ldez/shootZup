@@ -2,14 +2,14 @@
     'use strict';
 
     function Audio(sounds) {
-        this.sounds = sounds;
+        this.sounds = sounds || {};
         this.soundsList = {};
         this.loadCount = 0;
         this.playingSound = false;
 
         try {
             window.AudioContext = window.AudioContext || window.webkitAudioContext;
-            this.context = new window.AudioContext();
+            this.audioContext = new window.AudioContext();
         } catch (e) {
             window.alert('API Audio non supportée.');
         }
@@ -36,7 +36,7 @@
                 request.responseType = 'arraybuffer';
 
                 request.onload = function () {
-                    this.context.decodeAudioData(
+                    this.audioContext.decodeAudioData(
                         request.response,
                         function (buffer) {
                             this.soundsList[sound.title] = buffer;
@@ -70,7 +70,7 @@
     };
 
     Audio.prototype.play = function (sound, loop, loopStart, loopEnd, callback) {
-        var source = this.context.createBufferSource();
+        var source = this.audioContext.createBufferSource();
         source.buffer = sound;
         source.loop = loop;
         if (loop) {
@@ -82,7 +82,7 @@
             source.onended = callback;
         }
 
-        source.connect(this.context.destination);
+        source.connect(this.audioContext.destination);
         source.start(0);
     };
 
