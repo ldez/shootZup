@@ -7,7 +7,7 @@
         this.backgrounds = [];
 
         this.backgrounds[0] = {
-            background: resources.images['galaxy'],
+            background: resources.images.galaxy,
             width: 1600,
             height: 1151,
             y: 0,
@@ -17,7 +17,7 @@
         };
 
         this.backgrounds[1] = {
-            background: resources.images['stars'],
+            background: resources.images.stars,
             width: 480,
             height: 1680,
             scrollValue: 2,

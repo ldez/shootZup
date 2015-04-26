@@ -15,7 +15,7 @@
     }
 
     Laser.prototype.paint = function (context) {
-        context.drawImage(this.resources.images['laser'], this.x, this.y - this.frameHeight);
+        context.drawImage(this.resources.images.laser, this.x, this.y - this.frameHeight);
     };
 
     Laser.prototype.move = function () {

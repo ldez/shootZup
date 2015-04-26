@@ -21,12 +21,13 @@
             }
         };
     }
+
     Explosion.prototype = new Sprite();
 
     Explosion.prototype.BOOM = 'BOOM';
 
     Explosion.prototype.paint = function (context) {
-        context.drawImage(this.resources.images['boom'],
+        context.drawImage(this.resources.images.boom,
             this.currentAnimationFrame * this.animationFrameWidth, 0,
             this.animationFrameWidth, this.animationFrameHeight,
             // centrage de l'image par rapport à la position
