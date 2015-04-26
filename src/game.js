@@ -2,16 +2,16 @@
     'use strict';
 
     /**
-     * Jeu
+     * Jeux
      *
-     * @param {Object} canvas           Canvas du jeu
+     * @param {Object} canvas           Canvas du jeux
      * @param {Object} context2d        Context 2D du canvas
-     * @param {Object} gameState        Gestionnaire de l'état d'éxécution du jeu
+     * @param {Object} gameState        Gestionnaire de l'état d'éxécution du jeux
      * @param {Object} resources        Gestionnaire des images
      * @param {Object} explosionManager Gestionnaire des explosions
      * @param {Object} ennemiesManager  Gestionnaire des ennemies
      * @param {Object} lasersManager    Gestionnaire des lasers
-     * @param {Object} background       Gestionnaire du fond du jeu
+     * @param {Object} background       Gestionnaire du fond du jeux
      * @param {Object} playerFactory    Factory de vaisseau
      * @param {Object} physicsP1        Moteur de physique du joueur 1
      * @param {Object} controlsP1       Gestionnaire des touches du clavier du joueur 1
@@ -37,7 +37,7 @@
     }
 
     /**
-     * Démarage du jeu
+     * Démarage du jeux
      *
      * @param {Object} scenario Scénario à lancer
      */
@@ -49,7 +49,7 @@
 
         // lance de scenario des ennemies
         this.ennemiesManager.start(scenario).then(function (sequence) {
-            // définit la durée maximale du jeu.
+            // définit la durée maximale du jeux.
             if (!this.gameState.isGameOver()) {
                 setTimeout(function () {
                     this.gameState.finished();
@@ -92,7 +92,7 @@
     };
 
     /**
-     * Gestion du relancement du jeu
+     * Gestion du relancement du jeux
      *
      * @param {Object} control Gestionnaire des touches du clavier
      * @param {Object} physics Moteur de physique
@@ -108,14 +108,14 @@
     };
 
     /**
-     * Affichage des éléments du jeu
+     * Affichage des éléments du jeux
      */
     Game.prototype.paintGame = function () {
 
-        // affichage du fond du jeu
+        // affichage du fond du jeux
         this.background.paint(this.context2d);
 
-        // Si le jeu est en cours
+        // Si le jeux est en cours
         if (this.gameState.isPlaying()) {
             // gestion des touches et des actions associées
             this.checkInputInGame(this.controlsP1, this.physicsP1, this.player1);
@@ -156,9 +156,9 @@
             // affichage de explosion du vaisseau
             this.explosionManager.paint(this.context2d);
         }
-        // si le jeu est fini
+        // si le jeux est fini
         else {
-            // relancement du jeu sur action du joueur
+            // relancement du jeux sur action du joueur
             this.checkInputMenu(this.controlsP1, this.physicsP1);
 
             // affichage de l'écran de fin
@@ -174,7 +174,7 @@
      * @param {Object} physics Moteur de physique
      */
     Game.prototype.destroyPlayer = function (physics, player) {
-        // Change l'état du jeu
+        // Change l'état du jeux
         this.gameState.gameOver();
         player.clearCurrentAnimation();
 
