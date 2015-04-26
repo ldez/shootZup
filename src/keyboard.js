@@ -1,11 +1,22 @@
 (function (window, document) {
     'use strict';
 
-    function Keyboard(keys) {
+    function Keyboard(mapping) {
         this.startDetection();
-        this.keys = keys;
+        this.keys = mapping || this.defaultMapping;
         this.actions = {};
     }
+
+    Keyboard.prototype.defaultMapping = {
+        // Space
+        SHOOT : 32,
+        LEFT : 37,
+        UP : 38,
+        RIGHT : 39,
+        DOWN : 40,
+        // Enter
+        START : 13,
+    };
 
     Keyboard.prototype.startDetection = function () {
 

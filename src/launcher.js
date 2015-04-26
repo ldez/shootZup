@@ -37,15 +37,8 @@
 
     var gameState = new GameState();
 
-    var keysP1 = {
-        SHOOT : 32,
-        LEFT : 37,
-        UP : 38,
-        RIGHT : 39,
-        DOWN : 40,
-        START : 13,
-    };
-    var controlsP1 = new Keyboard(keysP1);
+    var controlsP1 = new Keyboard();
+
     var playerFactory = new PlayerFactory(resources);
     var physicsP1 = new Physics(resources);
     var lasersManager = new LasersManager(audio, resources);
@@ -58,7 +51,6 @@
 
     var canvas = document.getElementById('game');
     var context2d = canvas.getContext('2d');
-
 
     audio.load().then(function () {
         return resources.load();
