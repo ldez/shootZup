@@ -37,40 +37,43 @@
         var lasersToDelete = [];
         var score = 0;
 
-        for (var i in ennemies) {
-            var ennemy = ennemies[i];
-            var minX = ennemy.x - ennemy.animationFrameWidth / 2;
-            var maxX = ennemy.x + ennemy.animationFrameWidth / 2;
-            var minY = ennemy.y - ennemy.animationFrameHeight / 2;
-            var maxY = ennemy.y + ennemy.animationFrameHeight / 2;
+        for (var id in ennemies) {
+            var ennemy = ennemies[id];
+            if (ennemies.hasOwnProperty(id)) {
+                var minX = ennemy.x - ennemy.animationFrameWidth / 2;
+                var maxX = ennemy.x + ennemy.animationFrameWidth / 2;
+                var minY = ennemy.y - ennemy.animationFrameHeight / 2;
+                var maxY = ennemy.y + ennemy.animationFrameHeight / 2;
 
-            for (var j = 0; j < playersLasers.length; j++) {
-                var laser = playersLasers[j];
-                var laserMinX = laser.x;
-                var laserMaxX = laser.x + laser.frameWidth;
-                var laserMinY = laser.y - laser.frameHeight;
-                var laserMaxY = laser.y;
+                for (var j = 0; j < playersLasers.length; j++) {
+                    var laser = playersLasers[j];
+                    var laserMinX = laser.x;
+                    var laserMaxX = laser.x + laser.frameWidth;
+                    var laserMinY = laser.y - laser.frameHeight;
+                    var laserMaxY = laser.y;
 
-                // collisions basées sur boites englobantes
-                if (minX < laserMaxX &&
-                    maxX > laserMinX &&
-                    minY < laserMaxY &&
-                    maxY > laserMinY) {
+                    // collisions basées sur boites englobantes
+                    if (minX < laserMaxX &&
+                        maxX > laserMinX &&
+                        minY < laserMaxY &&
+                        maxY > laserMinY) {
 
-                    ennemy.life--;
-                    if (ennemy.life <= 0 && ennemiesToDelete.indexOf(ennemy) === -1) {
-                        // Pour éviter de supprimer 2 fois le même (2 lasers peuvent être en même temps en collision sur un vaisseau)
-                        ennemiesToDelete.push(ennemy);
+                        ennemy.life--;
+                        if (ennemy.life <= 0 && ennemiesToDelete.indexOf(ennemy) === -1) {
+                            // Pour éviter de supprimer 2 fois le même (2 lasers peuvent être en même temps en collision sur un vaisseau)
+                            ennemiesToDelete.push(ennemy);
+                        }
+
+                        lasersToDelete.push(laser);
                     }
+                }
 
-                    lasersToDelete.push(laser);
+                for (var i = 0; i < lasersToDelete.length; i++) {
+                    var laserIndex = playersLasers.indexOf(lasersToDelete[i]);
+                    playersLasers.splice(laserIndex, 1);
                 }
             }
 
-            for (var i = 0; i < lasersToDelete.length; i++) {
-                var laserIndex = playersLasers.indexOf(lasersToDelete[i]);
-                playersLasers.splice(laserIndex, 1);
-            }
         }
 
         for (var i = 0; i < ennemiesToDelete.length; i++) {
@@ -95,8 +98,7 @@
 
         var bulletsToDelete = [];
 
-        for (var i in bullets) {
-            var bullet = bullets[i];
+        bullets.forEach(function (bullet) {
             var bulletMinX = bullet.x;
             var bulletMaxX = bullet.x + bullet.animationFrameWidth;
             var bulletMinY = bullet.y - bullet.animationFrameHeight;
@@ -110,7 +112,7 @@
 
                 bulletsToDelete.push(bullet);
             }
-        }
+        });
 
         if (bulletsToDelete.length > 0) {
             for (var i = 0; i < bulletsToDelete.length; i++) {

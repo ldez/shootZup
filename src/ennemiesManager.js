@@ -4,7 +4,23 @@
     function EnnemiesManager(gameState, resources) {
         this.resources = resources;
         this.gameState = gameState;
+        this.bullets = [];
+        this.ennemies = {};
     }
+
+    EnnemiesManager.prototype.paintEnnemies = function (context) {
+        for (var id in this.ennemies) {
+            if (this.ennemies.hasOwnProperty(id)) {
+                this.ennemies[id].paint(context);
+            }
+        }
+    };
+
+    EnnemiesManager.prototype.paintBullets = function (context) {
+        this.bullets.forEach(function (bullet) {
+            bullet.paint(context);
+        });
+    };
 
     EnnemiesManager.prototype.loadScenario = function (file) {
         var p = new Promise(function (resolve) {
@@ -22,52 +38,48 @@
         return p;
     };
 
-    EnnemiesManager.prototype.start = function (ennemies, scenario) {
+    EnnemiesManager.prototype.start = function (scenario) {
 
         var groupSequence = Promise.resolve();
 
         scenario.groups.forEach(function (group) {
             groupSequence = groupSequence.then(function () {
-                return this.startGroup(group, ennemies);
+                return this.startGroup(group);
             }.bind(this));
         }.bind(this));
 
         return groupSequence;
     };
 
-
-    EnnemiesManager.prototype.startGroup = function (group, ennemies) {
+    EnnemiesManager.prototype.startGroup = function (group) {
 
         var ships = [];
 
         group.ships.forEach(function (ship) {
             if (this.gameState.isPlaying()) {
-                ships.push(this.startShip(ship, ennemies));
+                ships.push(this.startShip(ship));
             }
         }.bind(this));
 
         return Promise.all(ships);
     };
 
-
-    EnnemiesManager.prototype.startShip = function (ship, ennemies) {
+    EnnemiesManager.prototype.startShip = function (ship) {
         var sequence = Promise.resolve();
 
         ship.forEach(function (commands) {
             if (commands.type === 'new') {
-                // TODO temporraire pourrri a revoir
-                var resources = this.resources;
                 sequence = sequence.then(function () {
                     return new Promise(function (resolve) {
-                        var ennemy = new Ennemy(commands.id, commands.x, commands.y, resources);
-                        ennemies[commands.id] = ennemy;
+                        var ennemy = new Ennemy(commands.id, commands.x, commands.y, this.resources);
+                        this.ennemies[commands.id] = ennemy;
                         ennemy.startLoop(ennemy.FLY);
                         resolve();
-                    });
-                });
+                    }.bind(this));
+                }.bind(this));
             } else if (commands.type === 'move') {
                 sequence = sequence.then(function () {
-                    var ennemy = ennemies[commands.id];
+                    var ennemy = this.ennemies[commands.id];
                     if (ennemy) { // Si le vaisseau n'a pas explosé
                         var path = this.getPath({
                             x: ennemy.x,
@@ -87,7 +99,7 @@
             } else if (commands.type === 'shoot') {
                 sequence = sequence.then(function () {
                     return new Promise(function (resolve) {
-                        var ennemy = ennemies[commands.id];
+                        var ennemy = this.ennemies[commands.id];
                         if (ennemy) { // Si le vaisseau n'a pas explosé
                             var bullet = new Bullet(commands.id, ennemy.x, ennemy.y, this.resources);
                             var path = this.getPath({
@@ -98,9 +110,9 @@
                                 y: commands.y
                             });
 
-                            bullets.push(bullet);
+                            this.bullets.push(bullet);
                             bullet.action(path).then(function (value) {
-                                bullets.splice(bullets.indexOf(value), 1);
+                                this.bullets.splice(this.bullets.indexOf(value), 1);
                             }.bind(this));
                         }
                         resolve();
@@ -109,19 +121,18 @@
 
             } else if (commands.type === 'leave') {
                 sequence = sequence.then(function () {
-                    return new Promise(function (resolve, reject) {
-                        if (ennemies[commands.id]) { // Si le vaisseau n'a pas explosé
-                            delete ennemies[commands.id];
+                    return new Promise(function (resolve) {
+                        if (this.ennemies[commands.id]) { // Si le vaisseau n'a pas explosé
+                            delete this.ennemies[commands.id];
                         }
                         resolve();
-                    });
-                });
+                    }.bind(this));
+                }.bind(this));
             }
         }.bind(this));
 
         return sequence;
     };
-
 
     EnnemiesManager.prototype.getPath = function (from, to) { // Bresenham algo
         var coordinates = [];
