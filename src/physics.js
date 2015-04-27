@@ -1,9 +1,14 @@
 (function (window) {
     'use strict';
 
-    function Physics(resources) {
+    /**
+     * Moteur de physique
+     *
+     * @param {Object} explosionManager Gestionnaire d'explosion
+     */
+    function Physics(explosionManager) {
 
-        this.resources = resources;
+        this.explosionManager = explosionManager;
 
         this.canvasWidth = 480;
         this.canvasHeight = 640;
@@ -36,7 +41,7 @@
         return this.y <= this.canvasHeight - this.moveSize - (spaceship.animationFrameHeight / 2);
     };
 
-    Physics.prototype.detectCollisionOnEnnemies = function (ennemies, playersLasers, exploding) {
+    Physics.prototype.detectCollisionOnEnnemies = function (ennemies, playersLasers) {
 
         var ennemiesToDelete = [];
         var lasersToDelete = [];
@@ -82,14 +87,11 @@
         }
 
         for (var i = 0; i < ennemiesToDelete.length; i++) {
-            delete ennemies[ennemiesToDelete[i].id];
+            var ennemieToDelete = ennemiesToDelete[i];
+            delete ennemies[ennemieToDelete.id];
             score += 10;
 
-            var explosion = new Explosion(ennemiesToDelete[i].x, ennemiesToDelete[i].y, this.resources);
-            exploding.push(explosion);
-            explosion.startOnce(explosion.BOOM, function () {
-                exploding.splice(exploding.indexOf(explosion), 1);
-            });
+            this.explosionManager.exploded(ennemieToDelete.x, ennemieToDelete.y);
         }
 
         return score;

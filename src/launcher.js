@@ -39,11 +39,11 @@
 
     var controlsP1 = new Keyboard();
 
-    var playerFactory = new PlayerFactory(resources);
-    var physicsP1 = new Physics(resources);
-    var lasersManager = new LasersManager(audio, resources);
-
     var explosionManager = new ExplosionManager(resources);
+
+    var playerFactory = new PlayerFactory(resources);
+    var physicsP1 = new Physics(explosionManager);
+    var lasersManager = new LasersManager(audio, resources);
 
     var ennemiesManager = new EnnemiesManager(gameState, resources);
 
@@ -75,7 +75,7 @@
         controlsP1.startDetection();
 
         // Création du jeux
-        var game = new Game(canvas, context2d, gameState, resources, explosionManager, ennemiesManager, lasersManager, background, playerFactory, physicsP1, controlsP1);
+        var game = new Game(canvas, context2d, gameState, explosionManager, ennemiesManager, lasersManager, background, playerFactory, physicsP1, controlsP1);
 
         // affichage du jeux
         game.paintGame();

@@ -12,15 +12,16 @@
         });
     };
 
-    ExplosionManager.prototype.plaverExploded = function (physics, callback) {
-        var explosion = new Explosion(physics.x, physics.y, this.resources);
+    ExplosionManager.prototype.exploded = function (x, y, beforeExploded) {
+        var explosion = new Explosion(x, y, this.resources);
 
         this.exploding.push(explosion);
 
         explosion.startOnce(explosion.BOOM, function () {
             this.exploding.splice(this.exploding.indexOf(explosion), 1);
-
-            callback();
+            if (beforeExploded && typeof (beforeExploded) === 'function') {
+                beforeExploded();
+            }
         }.bind(this));
     };
 

@@ -7,7 +7,6 @@
      * @param {Object} canvas           Canvas du jeux
      * @param {Object} context2d        Context 2D du canvas
      * @param {Object} gameState        Gestionnaire de l'état d'éxécution du jeux
-     * @param {Object} resources        Gestionnaire des images
      * @param {Object} explosionManager Gestionnaire des explosions
      * @param {Object} ennemiesManager  Gestionnaire des ennemies
      * @param {Object} lasersManager    Gestionnaire des lasers
@@ -16,12 +15,11 @@
      * @param {Object} physicsP1        Moteur de physique du joueur 1
      * @param {Object} controlsP1       Gestionnaire des touches du clavier du joueur 1
      */
-    function Game(canvas, context2d, gameState, resources, explosionManager, ennemiesManager, lasersManager, background, playerFactory, physicsP1, controlsP1) {
+    function Game(canvas, context2d, gameState, explosionManager, ennemiesManager, lasersManager, background, playerFactory, physicsP1, controlsP1) {
         this.canvas = canvas;
         this.context2d = context2d;
         this.gameState = gameState;
         this.background = background;
-        this.resources = resources;
         this.explosionManager = explosionManager;
         this.scenario = {};
         this.ennemiesManager = ennemiesManager;
@@ -139,7 +137,7 @@
             this.paintScores(this.context2d, this.scoresP1);
 
             // calcul du nouveau score - detection des collision entre les lasers et les ennemies
-            this.scoresP1 += this.physicsP1.detectCollisionOnEnnemies(this.ennemiesManager.ennemies, this.lasersManager.lasers, this.explosionManager.exploding);
+            this.scoresP1 += this.physicsP1.detectCollisionOnEnnemies(this.ennemiesManager.ennemies, this.lasersManager.lasers);
 
             // detection des collisions avec le vaisseau du joueur
             if (this.physicsP1.detectCollisionsOnPlayer(this.physicsP1.x, this.physicsP1.y, this.player1, this.ennemiesManager.bullets)) {
@@ -179,7 +177,7 @@
         player.clearCurrentAnimation();
 
         // création de l'explosion du vaisseau du joueur
-        this.explosionManager.plaverExploded(physics, function () {
+        this.explosionManager.exploded(physics.x, physics.y, function () {
             setTimeout(function () {
                 this.gameState.finished();
             }.bind(this), 1000);
