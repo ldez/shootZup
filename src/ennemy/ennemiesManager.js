@@ -21,6 +21,12 @@
 
     EnnemiesManager.prototype.reset = function () {
         this.bulletsManager.reset();
+
+        for (var id in this.ennemies) {
+            if (this.ennemies.hasOwnProperty(id)) {
+                this.ennemies[id].clearCurrentAnimation();
+            }
+        }
         this.ennemies = {};
     };
 
@@ -47,15 +53,17 @@
 
         var groupSequence = Promise.resolve();
 
-        scenario.groups.forEach(function (group) {
-            if (this.gameState.isGameOver()) {
-                // arrete de gérer les groupes d'ennemies si le joueur est mort
-                groupSequence = Promise.resolve();
-            } else {
+        scenario.groups.every(function (group) {
+
+            var playing = this.gameState.isPlaying();
+            if (playing) {
                 groupSequence = groupSequence.then(function () {
                     return this.startGroup(group);
                 }.bind(this));
             }
+            // stop when game is not playing
+            return playing;
+
         }.bind(this));
 
         return groupSequence;
@@ -65,13 +73,43 @@
 
         var ships = [];
 
-        group.ships.forEach(function (ship) {
-            if (this.gameState.isPlaying()) {
+        group.ships.every(function (ship) {
+
+            var playing = this.gameState.isPlaying();
+            if (playing) {
                 ships.push(this.startShip(ship));
             }
+            // stop when game is not playing
+            return playing;
+
         }.bind(this));
 
         return Promise.all(ships);
+    };
+
+    EnnemiesManager.prototype.startShip = function (ship) {
+        var sequence = Promise.resolve();
+
+        ship.forEach(function (commands) {
+
+            sequence = sequence.then(function () {
+                switch (commands.type) {
+                case 'new':
+                    return this.commandNew(commands);
+                case 'move':
+                    return this.commandMove(commands);
+                case 'shoot':
+                    return this.commandShoot(commands);
+                case 'leave':
+                    return this.commandLeave(commands);
+                default:
+                    throw new Error('Invalid Ennemy ship command');
+                }
+            }.bind(this));
+
+        }.bind(this));
+
+        return sequence;
     };
 
     EnnemiesManager.prototype.commandNew = function (commands) {
@@ -120,41 +158,6 @@
             }
             resolve();
         }.bind(this));
-    };
-
-    EnnemiesManager.prototype.startShip = function (ship) {
-        var sequence = Promise.resolve();
-
-        ship.forEach(function (commands) {
-
-            switch (commands.type) {
-            case 'new':
-                sequence = sequence.then(function () {
-                    return this.commandNew(commands);
-                }.bind(this));
-                break;
-            case 'move':
-                sequence = sequence.then(function () {
-                    return this.commandMove(commands);
-                }.bind(this));
-                break;
-            case 'shoot':
-                sequence = sequence.then(function () {
-                    return this.commandShoot(commands);
-                }.bind(this));
-                break;
-            case 'leave':
-                sequence = sequence.then(function () {
-                    return this.commandLeave(commands);
-                }.bind(this));
-                break;
-            default:
-                throw new Error('Invalid Ennemy ship command');
-            }
-
-        }.bind(this));
-
-        return sequence;
     };
 
     window.EnnemiesManager = EnnemiesManager;
