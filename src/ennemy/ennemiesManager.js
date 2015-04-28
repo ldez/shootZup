@@ -126,24 +126,32 @@
         var sequence = Promise.resolve();
 
         ship.forEach(function (commands) {
-            if (commands.type === 'new') {
+
+            switch (commands.type) {
+            case 'new':
                 sequence = sequence.then(function () {
                     return this.commandNew(commands);
                 }.bind(this));
-            } else if (commands.type === 'move') {
+                break;
+            case 'move':
                 sequence = sequence.then(function () {
                     return this.commandMove(commands);
                 }.bind(this));
-            } else if (commands.type === 'shoot') {
+                break;
+            case 'shoot':
                 sequence = sequence.then(function () {
                     return this.commandShoot(commands);
                 }.bind(this));
-
-            } else if (commands.type === 'leave') {
+                break;
+            case 'leave':
                 sequence = sequence.then(function () {
                     return this.commandLeave(commands);
                 }.bind(this));
+                break;
+            default:
+                throw new Error('Invalid Ennemy ship command');
             }
+
         }.bind(this));
 
         return sequence;
