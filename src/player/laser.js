@@ -8,18 +8,20 @@
         this.x = x;
         this.y = y;
 
-        this.frameWidth = 3;
-        this.frameHeight = 32;
+        this.frameSize = {
+            width: 3,
+            height: 32
+        };
 
         this.canvasHeight = 640;
     }
 
     Laser.prototype.paint = function (context) {
-        context.drawImage(this.resources.images.laser, this.x, this.y - this.frameHeight);
+        context.drawImage(this.resources.images.laser, this.x, this.y - this.frameSize.height);
     };
 
     Laser.prototype.move = function () {
-        this.y -= this.frameHeight + 10;
+        this.y -= this.frameSize.height + 10;
     };
 
     Laser.prototype.isOutOfBounds = function () {
@@ -27,7 +29,7 @@
     };
 
     Laser.prototype.hitbox = function () {
-        return new RectangleRightHitBox(this, this.frameWidth, this.frameHeight);
+        return new RectangleRightHitBox(this, this.frameSize.width, this.frameSize.height);
     };
 
     window.Laser = Laser;

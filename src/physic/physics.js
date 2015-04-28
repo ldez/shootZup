@@ -17,7 +17,7 @@
     }
 
     Physics.prototype.canMoveLeft = function (spaceship) {
-        return spaceship.x >= 0 + this.moveSize + (spaceship.animationFrameWidth / 2);
+        return spaceship.x >= 0 + this.moveSize + (spaceship.frameSize.width / 2);
     };
 
     Physics.prototype.moveLeft = function (spaceship) {
@@ -27,7 +27,7 @@
     };
 
     Physics.prototype.canMoveRight = function (spaceship) {
-        return spaceship.x <= this.canvasWidth - this.moveSize - (spaceship.animationFrameWidth / 2);
+        return spaceship.x <= this.canvasWidth - this.moveSize - (spaceship.frameSize.width / 2);
     };
 
     Physics.prototype.moveRight = function (spaceship) {
@@ -37,7 +37,7 @@
     };
 
     Physics.prototype.canMoveUp = function (spaceship) {
-        return spaceship.y >= 0 + this.moveSize + (spaceship.animationFrameHeight / 2);
+        return spaceship.y >= 0 + this.moveSize + (spaceship.frameSize.height / 2);
     };
 
     Physics.prototype.moveUp = function (spaceship) {
@@ -47,7 +47,7 @@
     };
 
     Physics.prototype.canMoveDown = function (spaceship) {
-        return spaceship.y <= this.canvasHeight - this.moveSize - (spaceship.animationFrameHeight / 2);
+        return spaceship.y <= this.canvasHeight - this.moveSize - (spaceship.frameSize.height / 2);
     };
 
     Physics.prototype.moveDown = function (spaceship) {
@@ -90,13 +90,7 @@
 
         }
 
-        // TODO factoriser
-        for (var i = 0; i < ennemiesToDelete.length; i++) {
-            var ennemieToDelete = ennemiesToDelete[i];
-            delete ennemies[ennemieToDelete.id];
-
-            this.explosionManager.exploded(ennemieToDelete.x, ennemieToDelete.y);
-        }
+        this.ennemyDeath(ennemies, ennemiesToDelete);
 
         return score + 10 * ennemiesToDelete.length;
     };
@@ -135,15 +129,18 @@
                 }
             }
 
-            // TODO factoriser
-            for (var i = 0; i < ennemiesToDelete.length; i++) {
-                var ennemieToDelete = ennemiesToDelete[i];
-                delete ennemies[ennemieToDelete.id];
-                this.explosionManager.exploded(ennemieToDelete.x, ennemieToDelete.y);
-            }
+            this.ennemyDeath(ennemies, ennemiesToDelete);
         }
 
         return collision;
+    };
+
+    Physics.prototype.ennemyDeath = function (ennemies, ennemiesToDelete) {
+        for (var i = 0; i < ennemiesToDelete.length; i++) {
+            var ennemieToDelete = ennemiesToDelete[i];
+            delete ennemies[ennemieToDelete.id];
+            this.explosionManager.exploded(ennemieToDelete.x, ennemieToDelete.y);
+        }
     };
 
     window.Physics = Physics;

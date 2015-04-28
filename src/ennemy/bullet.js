@@ -12,8 +12,10 @@
         this.y = y;
 
         // Taille en pixels d'une frame d'animation
-        this.animationFrameWidth = 6;
-        this.animationFrameHeight = 6;
+        this.frameSize = {
+            width: 6,
+            height: 6
+        };
     }
 
     Bullet.prototype.action = function (path) {
@@ -39,15 +41,15 @@
 
         context.drawImage(this.resources.images.bullet,
             0, 0,
-            this.animationFrameWidth, this.animationFrameHeight,
+            this.frameSize.width, this.frameSize.height,
             // centrage de l'image par rapport à la position
-            this.x - (this.animationFrameWidth / 2), this.y - this.animationFrameHeight + (this.animationFrameHeight / 2),
-            this.animationFrameWidth, this.animationFrameHeight
+            this.x - (this.frameSize.width / 2), this.y - this.frameSize.height + (this.frameSize.height / 2),
+            this.frameSize.width, this.frameSize.height
         );
     };
 
     Bullet.prototype.hitbox = function () {
-        return new RectangleRightHitBox(this, this.animationFrameWidth, this.animationFrameHeight);
+        return new RectangleRightHitBox(this, this.frameSize.width, this.frameSize.height);
     };
 
     window.Bullet = Bullet;

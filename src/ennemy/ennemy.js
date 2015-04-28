@@ -2,35 +2,35 @@
     'use strict';
 
     function Ennemy(id, x, y, resources) {
-
         this.resources = resources;
 
         this.id = id;
-
-        // Position de l'animation courante parmi les frames
-        this.currentAnimationFrame = 0;
-
-        // Positions
-        this.x = x;
-        this.y = y;
 
         // Energie du vaisseau
         this.life = 3;
 
         // Taille en pixels d'une frame d'animation
-        this.animationFrameWidth = 35;
-        this.animationFrameHeight = 37;
-
-        this.animations = {
-            'FLY': {
+        var frameSize = {
+                width: 35,
+                height: 37
+            },
+            // Taille en pixels de la hitbox
+            hitboxSize = {
+                width: frameSize.width,
+                height: frameSize.height
+            },
+            // paramètre de l'animation
+            fly = {
                 nbFrames: 6,
                 animationFrameWidth: 35,
+                animationY: 0,
                 speedRate: 15
-            }
-        };
+            };
+
+        Spaceship.call(this, x, y, 'spaceship-green', frameSize, hitboxSize, fly, resources);
     }
 
-    Ennemy.prototype = new Sprite();
+    Ennemy.prototype = Object.create(Spaceship.prototype);
 
     Ennemy.prototype.action = function (path) {
 
@@ -49,23 +49,6 @@
         }.bind(this));
 
         return sequence;
-    };
-
-    Ennemy.prototype.FLY = 'FLY';
-
-    Ennemy.prototype.paint = function (context) {
-
-        context.drawImage(this.resources.images['spaceship-green'],
-            this.currentAnimationFrame * this.animationFrameWidth, 0,
-            this.animationFrameWidth, this.animationFrameHeight,
-            // centrage de l'image par rapport à la position
-            this.x - (this.animationFrameWidth / 2), this.y - this.animationFrameHeight + (this.animationFrameHeight / 2),
-            this.animationFrameWidth, this.animationFrameHeight
-        );
-    };
-
-    Ennemy.prototype.hitbox = function () {
-        return new RectangleHitBox(this, this.animationFrameWidth / 2, this.animationFrameHeight / 2);
     };
 
     window.Ennemy = Ennemy;

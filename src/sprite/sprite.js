@@ -1,14 +1,26 @@
 (function (window) {
     'use strict';
 
-    function Sprite() {
+    function Sprite(x, y, frameSize, animations) {
+
         // Position de l'animation courante parmi les frames
         this.currentAnimationFrame = 0;
 
+        // Taille en pixels d'une frame d'animation
+        this.frameSize = frameSize;
+
+        // Positions
+        this.x = x;
+        this.y = y;
+
+        // Description de l'animation
+        this.animations = animations;
+
+        // Position y de l'animation courante dans le sprite général.
+        this.animationY = 0;
+
         // Sert à controler la boucle d'animation
         this.animationLoop = null;
-
-        this.animations = {};
 
         this.currentState = '';
     }
@@ -22,7 +34,7 @@
         if (this.currentState !== animation) {
             this.clearCurrentAnimation();
             this.animationY = this.animations[animation].animationY;
-            this.animationFrameWidth = this.animations[animation].animationFrameWidth;
+            this.frameSize.width = this.animations[animation].animationFrameWidth;
 
             this.currentState = animation;
 

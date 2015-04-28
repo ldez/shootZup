@@ -1,12 +1,12 @@
 (function (window) {
     'use strict';
 
-    function SpaceshipRed(x, y, resources) {
+    function SpaceshipBlue(x, y, resources) {
 
         // Taille en pixels d'une frame d'animation
         var frameSize = {
-                width: 70,
-                height: 62
+                width: 55,
+                height: 60
             },
             // Taille en pixels de la hitbox
             hitboxSize = {
@@ -15,17 +15,17 @@
             },
             // paramètre de l'animation
             fly = {
-                nbFrames: 32,
-                animationFrameWidth: 70,
+                nbFrames: 12,
+                animationFrameWidth: 55,
                 animationY: 0,
                 speedRate: 15
             };
 
-        Spaceship.call(this, x, y, 'spaceship-red', frameSize, hitboxSize, fly, resources);
+        Spaceship.call(this, x, y, 'spaceship-blue', frameSize, hitboxSize, fly, resources);
     }
 
-    SpaceshipRed.prototype = Object.create(Spaceship.prototype);
+    SpaceshipBlue.prototype = Object.create(Spaceship.prototype);
 
-    window.SpaceshipRed = SpaceshipRed;
+    window.SpaceshipBlue = SpaceshipBlue;
 
 })(window);

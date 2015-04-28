@@ -19,6 +19,8 @@
 
     var sprites = [
         {title: 'spaceship-red', url: 'resources/image/spaceship-red.png'},
+        {title: 'spaceship-blue', url: 'resources/image/spaceship-blue-1.png'},
+        {title: 'spaceship-green-full', url: 'resources/image/spaceship-green-full.png'},
         {title: 'laser', url: 'resources/image/laser.png'},
         {title: 'spaceship-green', url: 'resources/image/spaceship-green.png'},
         {title: 'boom', url: 'resources/image/explosion.png'},
@@ -46,8 +48,8 @@
     var ennemiesManager = new EnnemiesManager(gameState, resources, pathManager, bulletsManager);
 
     var physics = new Physics(explosionManager);
-    var playerFactory = new PlayerFactory(resources, physics);
     var lasersManager = new LasersManager(audio, resources);
+    var playerFactory = new PlayerFactory(resources, physics);
 
     var background;
 
