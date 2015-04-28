@@ -5,12 +5,10 @@
      * Moteur de physique
      *
      * @param {Object} explosionManager Gestionnaire d'explosions
-     * @param {Object} bulletsManager   Gestionnaire des bullets
      */
-    function Physics(explosionManager, bulletsManager) {
+    function Physics(explosionManager) {
 
         this.explosionManager = explosionManager;
-        this.bulletsManager = bulletsManager;
 
         this.canvasWidth = 480;
         this.canvasHeight = 640;
@@ -92,23 +90,24 @@
 
         }
 
+        // TODO factoriser
         for (var i = 0; i < ennemiesToDelete.length; i++) {
             var ennemieToDelete = ennemiesToDelete[i];
             delete ennemies[ennemieToDelete.id];
-            score += 10;
 
             this.explosionManager.exploded(ennemieToDelete.x, ennemieToDelete.y);
         }
 
-        return score;
+        return score + 10 * ennemiesToDelete.length;
     };
 
-    Physics.prototype.detectCollisionsOnPlayer = function (player) {
+    Physics.prototype.detectCollisionsOnPlayer = function (player, bullets, ennemies) {
 
-        var bulletsToDelete = [];
         var collision = false;
 
-        this.bulletsManager.bullets.forEach(function (bullet) {
+        // collision avec les bullets
+        var bulletsToDelete = [];
+        bullets.forEach(function (bullet) {
 
             // collisions basées sur boites englobantes
             if (player.hitbox().collision(bullet.hitbox())) {
@@ -119,7 +118,29 @@
         });
 
         for (var i = 0; i < bulletsToDelete.length; i++) {
-            delete this.bulletsManager.bullets[bulletsToDelete[i].id];
+            delete bullets[bulletsToDelete[i].id];
+        }
+
+        // collision avec les ennemies
+        if (!collision) {
+
+            var ennemiesToDelete = [];
+            for (var id in ennemies) {
+                if (ennemies.hasOwnProperty(id)) {
+                    var ennemy = ennemies[id];
+                    if (player.hitbox().collision(ennemy.hitbox())) {
+                        collision = true;
+                        ennemiesToDelete.push(ennemy);
+                    }
+                }
+            }
+
+            // TODO factoriser
+            for (var i = 0; i < ennemiesToDelete.length; i++) {
+                var ennemieToDelete = ennemiesToDelete[i];
+                delete ennemies[ennemieToDelete.id];
+                this.explosionManager.exploded(ennemieToDelete.x, ennemieToDelete.y);
+            }
         }
 
         return collision;

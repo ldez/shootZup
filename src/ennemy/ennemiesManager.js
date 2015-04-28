@@ -6,6 +6,8 @@
         this.gameState = gameState;
         this.pathManager = pathManager;
         this.bulletsManager = bulletsManager;
+
+        // TODO voir comment utiliser un array plutôt qu'un objet sinon map ?
         this.ennemies = {};
     }
 

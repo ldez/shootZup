@@ -45,8 +45,8 @@
     var bulletsManager = new BulletsManager(resources, pathManager);
     var ennemiesManager = new EnnemiesManager(gameState, resources, pathManager, bulletsManager);
 
-    var physicsP1 = new Physics(explosionManager, bulletsManager);
-    var playerFactory = new PlayerFactory(resources, physicsP1);
+    var physics = new Physics(explosionManager);
+    var playerFactory = new PlayerFactory(resources, physics);
     var lasersManager = new LasersManager(audio, resources);
 
     var background;
@@ -77,7 +77,7 @@
         controlsP1.startDetection();
 
         // Création du jeux
-        var game = new Game(canvas, context2d, gameState, explosionManager, bulletsManager, ennemiesManager, lasersManager, background, playerFactory, physicsP1, controlsP1);
+        var game = new Game(canvas, context2d, gameState, explosionManager, bulletsManager, ennemiesManager, lasersManager, background, playerFactory, physics, controlsP1);
 
         // affichage du jeux
         game.paintGame();

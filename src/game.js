@@ -13,10 +13,10 @@
      * @param {Object} lasersManager    Gestionnaire des lasers
      * @param {Object} background       Gestionnaire du fond du jeux
      * @param {Object} playerFactory    Factory de vaisseau
-     * @param {Object} physicsP1        Moteur de physique du joueur 1
+     * @param {Object} physics          Moteur de physique
      * @param {Object} controlsP1       Gestionnaire des touches du clavier du joueur 1
      */
-    function Game(canvas, context2d, gameState, explosionManager, bulletsManager, ennemiesManager, lasersManager, background, playerFactory, physicsP1, controlsP1) {
+    function Game(canvas, context2d, gameState, explosionManager, bulletsManager, ennemiesManager, lasersManager, background, playerFactory, physics, controlsP1) {
         this.canvas = canvas;
         this.context2d = context2d;
         this.gameState = gameState;
@@ -30,7 +30,7 @@
         this.lasersManager = lasersManager;
         this.scoresP1 = 0;
         this.player1 = playerFactory.create();
-        this.physicsP1 = physicsP1;
+        this.physics = physics;
         this.controlsP1 = controlsP1;
 
         this.duration = 3000;
@@ -48,7 +48,7 @@
         this.player1.startLoop(this.player1.FLY);
 
         // lance de scenario des ennemies
-        this.ennemiesManager.start(scenario).then(function (sequence) {
+        this.ennemiesManager.start(scenario).then(function () {
             // définit la durée maximale du jeux.
             if (!this.gameState.isGameOver()) {
                 setTimeout(function () {
@@ -116,7 +116,7 @@
         // Si le jeux est en cours
         if (this.gameState.isPlaying()) {
             // gestion des touches et des actions associées
-            this.checkInputInGame(this.controlsP1, this.physicsP1, this.player1);
+            this.checkInputInGame(this.controlsP1, this.physics, this.player1);
 
             // affichage des ennemies
             this.ennemiesManager.paint(this.context2d);
@@ -137,10 +137,10 @@
             this.paintScores(this.context2d, this.scoresP1);
 
             // calcul du nouveau score - detection des collision entre les lasers et les ennemies
-            this.scoresP1 += this.physicsP1.detectCollisionOnEnnemies(this.ennemiesManager.ennemies, this.lasersManager.lasers);
+            this.scoresP1 += this.physics.detectCollisionOnEnnemies(this.ennemiesManager.ennemies, this.lasersManager.lasers);
 
             // detection des collisions avec le vaisseau du joueur
-            if (this.physicsP1.detectCollisionsOnPlayer(this.player1)) {
+            if (this.physics.detectCollisionsOnPlayer(this.player1, this.bulletsManager.bullets, this.ennemiesManager.ennemies)) {
                 this.destroyPlayer(this.player1);
             }
 
