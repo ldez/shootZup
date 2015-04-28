@@ -19,10 +19,10 @@
 
     var sprites = [
         {title: 'spaceship-red', url: 'resources/image/spaceship-red.png'},
-        {title: 'spaceship-blue', url: 'resources/image/spaceship-blue-1.png'},
-        {title: 'spaceship-green-full', url: 'resources/image/spaceship-green-full.png'},
-        {title: 'laser', url: 'resources/image/laser.png'},
+        {title: 'spaceship-blue', url: 'resources/image/spaceship-blue.png'},
+        {title: 'spaceship-green-large', url: 'resources/image/spaceship-green-large.png'},
         {title: 'spaceship-green', url: 'resources/image/spaceship-green.png'},
+        {title: 'laser', url: 'resources/image/laser.png'},
         {title: 'boom', url: 'resources/image/explosion.png'},
         {title: 'sky', url: 'resources/image/sky.jpg'},
         {title: 'bullet', url: 'resources/image/bullet.png'},

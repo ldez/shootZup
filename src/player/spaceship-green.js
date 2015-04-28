@@ -21,7 +21,7 @@
                 speedRate: 15
             };
 
-        Spaceship.call(this, x, y, 'spaceship-green-full', frameSize, hitboxSize, fly, resources);
+        Spaceship.call(this, x, y, 'spaceship-green-large', frameSize, hitboxSize, fly, resources);
     }
 
     SpaceshipGreen.prototype = Object.create(Spaceship.prototype);

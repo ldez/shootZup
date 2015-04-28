@@ -14,6 +14,8 @@
                 }
             };
 
+        this.duration = 50;
+
         Sprite.call(this, x, y, frameSize, animations);
     }
 
@@ -38,7 +40,7 @@
 
             this.animationLoop = setTimeout(function () {
                 this.animOnce(animation, callback);
-            }.bind(this), 50);
+            }.bind(this), this.duration);
         }
     };
 
@@ -48,7 +50,7 @@
         if (this.currentAnimationFrame !== this.animations[animation].nbFrames) {
             this.animationLoop = setTimeout(function () {
                 this.animOnce(animation, callback);
-            }.bind(this), 50);
+            }.bind(this), this.duration);
         } else {
             callback();
         }
