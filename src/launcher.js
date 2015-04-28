@@ -39,13 +39,15 @@
 
     var controlsP1 = new Keyboard();
 
+    var pathManager = new PathManager();
     var explosionManager = new ExplosionManager(resources);
 
-    var playerFactory = new PlayerFactory(resources);
-    var physicsP1 = new Physics(explosionManager);
-    var lasersManager = new LasersManager(audio, resources);
+    var bulletsManager = new BulletsManager(resources, pathManager);
+    var ennemiesManager = new EnnemiesManager(gameState, resources, pathManager, bulletsManager);
 
-    var ennemiesManager = new EnnemiesManager(gameState, resources);
+    var physicsP1 = new Physics(explosionManager, bulletsManager);
+    var playerFactory = new PlayerFactory(resources);
+    var lasersManager = new LasersManager(audio, resources);
 
     var background;
 
@@ -75,7 +77,7 @@
         controlsP1.startDetection();
 
         // Création du jeux
-        var game = new Game(canvas, context2d, gameState, explosionManager, ennemiesManager, lasersManager, background, playerFactory, physicsP1, controlsP1);
+        var game = new Game(canvas, context2d, gameState, explosionManager, bulletsManager, ennemiesManager, lasersManager, background, playerFactory, physicsP1, controlsP1);
 
         // affichage du jeux
         game.paintGame();
