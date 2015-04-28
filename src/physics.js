@@ -4,11 +4,13 @@
     /**
      * Moteur de physique
      *
-     * @param {Object} explosionManager Gestionnaire d'explosion
+     * @param {Object} explosionManager Gestionnaire d'explosions
+     * @param {Object} bulletsManager   Gestionnaire des bullets
      */
-    function Physics(explosionManager) {
+    function Physics(explosionManager, bulletsManager) {
 
         this.explosionManager = explosionManager;
+        this.bulletsManager = bulletsManager;
 
         this.canvasWidth = 480;
         this.canvasHeight = 640;
@@ -97,7 +99,7 @@
         return score;
     };
 
-    Physics.prototype.detectCollisionsOnPlayer = function (playerX, playerY, playerSprite, bullets) {
+    Physics.prototype.detectCollisionsOnPlayer = function (playerX, playerY, playerSprite) {
         var minX = playerX - playerSprite.hitboxWidth / 2;
         var maxX = playerX + playerSprite.hitboxWidth / 2;
         var minY = playerY - playerSprite.hitboxHeight / 2;
@@ -105,7 +107,7 @@
 
         var bulletsToDelete = [];
 
-        bullets.forEach(function (bullet) {
+        this.bulletsManager.bullets.forEach(function (bullet) {
             var bulletMinX = bullet.x;
             var bulletMaxX = bullet.x + bullet.animationFrameWidth;
             var bulletMinY = bullet.y - bullet.animationFrameHeight;
@@ -123,7 +125,7 @@
 
         if (bulletsToDelete.length > 0) {
             for (var i = 0; i < bulletsToDelete.length; i++) {
-                delete bullets[bulletsToDelete[i].id];
+                delete this.bulletsManager.bullets[bulletsToDelete[i].id];
             }
             return true;
         }

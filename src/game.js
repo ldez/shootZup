@@ -8,6 +8,7 @@
      * @param {Object} context2d        Context 2D du canvas
      * @param {Object} gameState        Gestionnaire de l'état d'éxécution du jeux
      * @param {Object} explosionManager Gestionnaire des explosions
+     * @param {Object} bulletsManager   Gestionnaire des bullets
      * @param {Object} ennemiesManager  Gestionnaire des ennemies
      * @param {Object} lasersManager    Gestionnaire des lasers
      * @param {Object} background       Gestionnaire du fond du jeux
@@ -15,13 +16,14 @@
      * @param {Object} physicsP1        Moteur de physique du joueur 1
      * @param {Object} controlsP1       Gestionnaire des touches du clavier du joueur 1
      */
-    function Game(canvas, context2d, gameState, explosionManager, ennemiesManager, lasersManager, background, playerFactory, physicsP1, controlsP1) {
+    function Game(canvas, context2d, gameState, explosionManager, bulletsManager, ennemiesManager, lasersManager, background, playerFactory, physicsP1, controlsP1) {
         this.canvas = canvas;
         this.context2d = context2d;
         this.gameState = gameState;
         this.background = background;
         this.explosionManager = explosionManager;
         this.scenario = {};
+        this.bulletsManager = bulletsManager;
         this.ennemiesManager = ennemiesManager;
 
         this.playerFactory = playerFactory;
@@ -119,13 +121,13 @@
             this.checkInputInGame(this.controlsP1, this.physicsP1, this.player1);
 
             // affichage des ennemies
-            this.ennemiesManager.paintEnnemies(this.context2d);
+            this.ennemiesManager.paint(this.context2d);
 
             // affichage des explosions des ennemies
             this.explosionManager.paint(this.context2d);
 
             // affichage des bullets des ennemies
-            this.ennemiesManager.paintBullets(this.context2d);
+            this.bulletsManager.paint(this.context2d);
 
             // affichage du vaisseau du joueur
             this.player1.paint(this.context2d, this.physicsP1.x, this.physicsP1.y);
@@ -140,7 +142,7 @@
             this.scoresP1 += this.physicsP1.detectCollisionOnEnnemies(this.ennemiesManager.ennemies, this.lasersManager.lasers);
 
             // detection des collisions avec le vaisseau du joueur
-            if (this.physicsP1.detectCollisionsOnPlayer(this.physicsP1.x, this.physicsP1.y, this.player1, this.ennemiesManager.bullets)) {
+            if (this.physicsP1.detectCollisionsOnPlayer(this.physicsP1.x, this.physicsP1.y, this.player1)) {
                 this.destroyPlayer(this.physicsP1, this.player1);
             }
 
