@@ -26,7 +26,7 @@
 
     Audio.prototype.loadSound = function (sound) {
 
-        var p = new Promise(function (resolve, reject) {
+        return new Promise(function (resolve, reject) {
 
             if (this.soundBuffers[sound.title]) {
                 resolve(sound);
@@ -47,14 +47,17 @@
                             reject(sound);
                         }
                     );
+
                 }.bind(this);
+
+                request.onerror = function (event) {
+                    reject("Erreur XMLHttpRequest ", event);
+                };
 
                 request.send();
             }
 
         }.bind(this));
-
-        return p;
     };
 
     Audio.prototype.load = function () {

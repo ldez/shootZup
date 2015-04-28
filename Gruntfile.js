@@ -26,6 +26,5 @@ module.exports = function (grunt) {
         'server'
     ]);
 
-
 };
 

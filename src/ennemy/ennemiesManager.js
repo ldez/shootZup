@@ -25,16 +25,21 @@
     };
 
     EnnemiesManager.prototype.loadScenario = function (file) {
-        return new Promise(function (resolve) {
+        return new Promise(function (resolve, reject) {
 
-            var xmlhttp = new XMLHttpRequest();
-            xmlhttp.open("GET", file, true);
+            var request = new XMLHttpRequest();
+            request.open("GET", file, true);
+            request.responseType = 'json';
 
-            xmlhttp.onload = function () {
-                resolve(JSON.parse(xmlhttp.responseText));
+            request.onload = function () {
+                resolve(request.response);
             };
 
-            xmlhttp.send();
+            request.onerror = function (event) {
+                reject("Erreur XMLHttpRequest ", event);
+            };
+
+            request.send();
         });
     };
 
