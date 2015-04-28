@@ -64,6 +64,10 @@
         );
     };
 
+    Ennemy.prototype.hitbox = function () {
+        return new RectangleHitBox(this, this.animationFrameWidth / 2, this.animationFrameHeight / 2);
+    };
+
     window.Ennemy = Ennemy;
 
 })(window);

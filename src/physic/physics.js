@@ -51,23 +51,12 @@
         for (var id in ennemies) {
             if (ennemies.hasOwnProperty(id)) {
                 var ennemy = ennemies[id];
-                var minX = ennemy.x - ennemy.animationFrameWidth / 2;
-                var maxX = ennemy.x + ennemy.animationFrameWidth / 2;
-                var minY = ennemy.y - ennemy.animationFrameHeight / 2;
-                var maxY = ennemy.y + ennemy.animationFrameHeight / 2;
 
                 for (var j = 0; j < playersLasers.length; j++) {
                     var laser = playersLasers[j];
-                    var laserMinX = laser.x;
-                    var laserMaxX = laser.x + laser.frameWidth;
-                    var laserMinY = laser.y - laser.frameHeight;
-                    var laserMaxY = laser.y;
 
                     // collisions basées sur boites englobantes
-                    if (minX < laserMaxX &&
-                        maxX > laserMinX &&
-                        minY < laserMaxY &&
-                        maxY > laserMinY) {
+                    if (ennemy.hitbox().collision(laser.hitbox())) {
 
                         ennemy.life--;
                         if (ennemy.life <= 0 && ennemiesToDelete.indexOf(ennemy) === -1) {
@@ -99,29 +88,18 @@
     };
 
     Physics.prototype.detectCollisionsOnPlayer = function (player) {
-        var minX = player.x - player.hitboxWidth / 2;
-        var maxX = player.x + player.hitboxWidth / 2;
-        var minY = player.y - player.hitboxHeight / 2;
-        var maxY = player.y + player.hitboxHeight / 2;
 
         var bulletsToDelete = [];
         var collision = false;
 
         this.bulletsManager.bullets.forEach(function (bullet) {
-            var bulletMinX = bullet.x;
-            var bulletMaxX = bullet.x + bullet.animationFrameWidth;
-            var bulletMinY = bullet.y - bullet.animationFrameHeight;
-            var bulletMaxY = bullet.y;
 
             // collisions basées sur boites englobantes
-            if (minX < bulletMaxX &&
-                maxX > bulletMinX &&
-                minY < bulletMaxY &&
-                maxY > bulletMinY) {
-
+            if (player.hitbox().collision(bullet.hitbox())) {
                 collision = true;
                 bulletsToDelete.push(bullet);
             }
+
         });
 
         for (var i = 0; i < bulletsToDelete.length; i++) {

@@ -26,6 +26,10 @@
         return this.y > this.canvasHeight;
     };
 
+    Laser.prototype.hitbox = function () {
+        return new RectangleRightHitBox(this, this.frameWidth, this.frameHeight);
+    };
+
     window.Laser = Laser;
 
 })(window);
