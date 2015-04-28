@@ -70,7 +70,7 @@
         // lance un shoot
         if (control.actions.SHOOT) {
             // création de 2 lasers
-            this.lasersManager.shoot(physics);
+            this.lasersManager.shoot(player);
 
             // empêche le tire continue
             control.actions.SHOOT = false;
@@ -78,16 +78,16 @@
 
         // déplacement horizontal
         if (control.actions.LEFT && physics.canMoveLeft(player)) {
-            physics.x -= 10;
+            player.x -= 10;
         } else if (control.actions.RIGHT && physics.canMoveRight(player)) {
-            physics.x += 10;
+            player.x += 10;
         }
 
         // déplacement vertical
         if (control.actions.UP && physics.canMoveUp(player)) {
-            physics.y -= 10;
+            player.y -= 10;
         } else if (control.actions.DOWN && physics.canMoveDown(player)) {
-            physics.y += 10;
+            player.y += 10;
         }
     };
 
@@ -95,12 +95,10 @@
      * Gestion du relancement du jeux
      *
      * @param {Object} control Gestionnaire des touches du clavier
-     * @param {Object} physics Moteur de physique
      */
-    Game.prototype.checkInputMenu = function (control, physics) {
+    Game.prototype.checkInputMenu = function (control) {
         if (this.gameState.isFinished() && control.actions.START) {
             this.lasersManager.reset();
-            physics.reset();
             this.player1 = this.playerFactory.create();
             this.ennemiesManager.reset();
             this.startGame(this.scenario);
@@ -130,7 +128,7 @@
             this.bulletsManager.paint(this.context2d);
 
             // affichage du vaisseau du joueur
-            this.player1.paint(this.context2d, this.physicsP1.x, this.physicsP1.y);
+            this.player1.paint(this.context2d);
 
             // affichage des lasers des joueurs
             this.lasersManager.paint(this.context2d);
@@ -142,8 +140,8 @@
             this.scoresP1 += this.physicsP1.detectCollisionOnEnnemies(this.ennemiesManager.ennemies, this.lasersManager.lasers);
 
             // detection des collisions avec le vaisseau du joueur
-            if (this.physicsP1.detectCollisionsOnPlayer(this.physicsP1.x, this.physicsP1.y, this.player1)) {
-                this.destroyPlayer(this.physicsP1, this.player1);
+            if (this.physicsP1.detectCollisionsOnPlayer(this.player1)) {
+                this.destroyPlayer(this.player1);
             }
 
             // déplacement des lasers des joueurs
@@ -159,7 +157,7 @@
         // si le jeux est fini
         else {
             // relancement du jeux sur action du joueur
-            this.checkInputMenu(this.controlsP1, this.physicsP1);
+            this.checkInputMenu(this.controlsP1);
 
             // affichage de l'écran de fin
             this.paintEndScreen(this.context2d, this.scoresP1);
@@ -171,15 +169,15 @@
     /**
      * Destruction d'un joueur
      *
-     * @param {Object} physics Moteur de physique
+     * @param {Object} player  Vaisseau du joueur
      */
-    Game.prototype.destroyPlayer = function (physics, player) {
+    Game.prototype.destroyPlayer = function (player) {
         // Change l'état du jeux
         this.gameState.gameOver();
         player.clearCurrentAnimation();
 
         // création de l'explosion du vaisseau du joueur
-        this.explosionManager.exploded(physics.x, physics.y, function () {
+        this.explosionManager.exploded(player.x, player.y, function () {
             setTimeout(function () {
                 this.gameState.finished();
             }.bind(this), 1000);

@@ -14,10 +14,10 @@
         });
     };
 
-    LasersManager.prototype.shoot = function (physicsP1) {
+    LasersManager.prototype.shoot = function (player) {
         // création de 2 lasers
-        this.lasers.push(new Laser(physicsP1.x - 10, physicsP1.y - 50, this.resources));
-        this.lasers.push(new Laser(physicsP1.x + 10, physicsP1.y - 50, this.resources));
+        this.lasers.push(new Laser(player.x - 10, player.y - 50, this.resources));
+        this.lasers.push(new Laser(player.x + 10, player.y - 50, this.resources));
         this.audio.laser();
     };
 

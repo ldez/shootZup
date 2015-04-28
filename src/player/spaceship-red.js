@@ -1,7 +1,7 @@
 (function (window) {
     'use strict';
 
-    function SpaceshipRed(resources) {
+    function SpaceshipRed(x, y, resources) {
         this.resources = resources;
 
         // Position de l'animation courante parmi les frames
@@ -17,6 +17,10 @@
         // Position y de l'animation courante dans le sprite général.
         this.animationY = 0;
 
+        // Positions
+        this.x = x;
+        this.y = y;
+
         this.animations = {
             'FLY': {
                 nbFrames: 32,
@@ -30,17 +34,21 @@
 
     SpaceshipRed.prototype.FLY = 'FLY';
 
-    SpaceshipRed.prototype.paint = function (context, x, y) {
+    SpaceshipRed.prototype.paint = function (context) {
 
         if (this.currentState === this.FLY) {
             context.drawImage(this.resources.images['spaceship-red'],
                 this.currentAnimationFrame * this.animationFrameWidth, this.animationY,
                 this.animationFrameWidth, this.animationFrameHeight,
                 // centrage de l'image par rapport à la position
-                x - (this.animationFrameWidth / 2), y - this.animationFrameHeight + (this.animationFrameHeight / 2),
+                this.x - (this.animationFrameWidth / 2), this.y - this.animationFrameHeight + (this.animationFrameHeight / 2),
                 this.animationFrameWidth, this.animationFrameHeight
             );
         }
+    };
+
+    SpaceshipRed.prototype.hitbox = function () {
+        return new RectangleHitBox(this, this.hitboxWidth / 2, this.hitboxHeight / 2);
     };
 
     window.SpaceshipRed = SpaceshipRed;

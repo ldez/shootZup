@@ -27,19 +27,19 @@
     };
 
     Physics.prototype.canMoveLeft = function (spaceship) {
-        return this.x >= 0 + this.moveSize + (spaceship.animationFrameWidth / 2);
+        return spaceship.x >= 0 + this.moveSize + (spaceship.animationFrameWidth / 2);
     };
 
     Physics.prototype.canMoveRight = function (spaceship) {
-        return this.x <= this.canvasWidth - this.moveSize - (spaceship.animationFrameWidth / 2);
+        return spaceship.x <= this.canvasWidth - this.moveSize - (spaceship.animationFrameWidth / 2);
     };
 
     Physics.prototype.canMoveUp = function (spaceship) {
-        return this.y >= 0 + this.moveSize + (spaceship.animationFrameHeight / 2);
+        return spaceship.y >= 0 + this.moveSize + (spaceship.animationFrameHeight / 2);
     };
 
     Physics.prototype.canMoveDown = function (spaceship) {
-        return this.y <= this.canvasHeight - this.moveSize - (spaceship.animationFrameHeight / 2);
+        return spaceship.y <= this.canvasHeight - this.moveSize - (spaceship.animationFrameHeight / 2);
     };
 
     Physics.prototype.detectCollisionOnEnnemies = function (ennemies, playersLasers) {
@@ -98,11 +98,11 @@
         return score;
     };
 
-    Physics.prototype.detectCollisionsOnPlayer = function (physics, playerSprite) {
-        var minX = physics.x - playerSprite.hitboxWidth / 2;
-        var maxX = physics.x + playerSprite.hitboxWidth / 2;
-        var minY = physics.y - playerSprite.hitboxHeight / 2;
-        var maxY = physics.y + playerSprite.hitboxHeight / 2;
+    Physics.prototype.detectCollisionsOnPlayer = function (player) {
+        var minX = player.x - player.hitboxWidth / 2;
+        var maxX = player.x + player.hitboxWidth / 2;
+        var minY = player.y - player.hitboxHeight / 2;
+        var maxY = player.y + player.hitboxHeight / 2;
 
         var bulletsToDelete = [];
         var collision = false;
