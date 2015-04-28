@@ -46,6 +46,10 @@
         );
     };
 
+    Bullet.prototype.hitbox = function () {
+        return new RectangleRightHitBox(this, this.animationFrameWidth, this.animationFrameHeight);
+    };
+
     window.Bullet = Bullet;
 
 })(window);

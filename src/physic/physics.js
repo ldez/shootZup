@@ -18,8 +18,7 @@
         this.moveSize = 10;
 
         // Positions du vaisseau.
-        this.x = this.canvasWidth / 2;
-        this.y = 600;
+        this.reset();
     }
 
     Physics.prototype.reset = function () {
@@ -99,13 +98,14 @@
         return score;
     };
 
-    Physics.prototype.detectCollisionsOnPlayer = function (playerX, playerY, playerSprite) {
-        var minX = playerX - playerSprite.hitboxWidth / 2;
-        var maxX = playerX + playerSprite.hitboxWidth / 2;
-        var minY = playerY - playerSprite.hitboxHeight / 2;
-        var maxY = playerY + playerSprite.hitboxHeight / 2;
+    Physics.prototype.detectCollisionsOnPlayer = function (physics, playerSprite) {
+        var minX = physics.x - playerSprite.hitboxWidth / 2;
+        var maxX = physics.x + playerSprite.hitboxWidth / 2;
+        var minY = physics.y - playerSprite.hitboxHeight / 2;
+        var maxY = physics.y + playerSprite.hitboxHeight / 2;
 
         var bulletsToDelete = [];
+        var collision = false;
 
         this.bulletsManager.bullets.forEach(function (bullet) {
             var bulletMinX = bullet.x;
@@ -119,16 +119,16 @@
                 minY < bulletMaxY &&
                 maxY > bulletMinY) {
 
+                collision = true;
                 bulletsToDelete.push(bullet);
             }
         });
 
-        if (bulletsToDelete.length > 0) {
-            for (var i = 0; i < bulletsToDelete.length; i++) {
-                delete this.bulletsManager.bullets[bulletsToDelete[i].id];
-            }
-            return true;
+        for (var i = 0; i < bulletsToDelete.length; i++) {
+            delete this.bulletsManager.bullets[bulletsToDelete[i].id];
         }
+
+        return collision;
     };
 
     window.Physics = Physics;
