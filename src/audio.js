@@ -3,7 +3,7 @@
 
     function Audio(sounds) {
         this.sounds = sounds || {};
-        this.soundsList = {};
+        this.soundBuffers = {};
         this.loadCount = 0;
         this.playingSound = false;
 
@@ -28,7 +28,7 @@
 
         var p = new Promise(function (resolve, reject) {
 
-            if (this.soundsList[sound.title]) {
+            if (this.soundBuffers[sound.title]) {
                 resolve(sound);
             } else {
                 var request = new XMLHttpRequest();
@@ -39,11 +39,11 @@
                     this.audioContext.decodeAudioData(
                         request.response,
                         function (buffer) {
-                            this.soundsList[sound.title] = buffer;
+                            this.soundBuffers[sound.title] = buffer;
                             resolve(sound);
                         }.bind(this),
                         function (error) {
-                            console.error('decodeAudioData error', error);
+                            console.error('Fail to decodeAudioData [%s]', sound.url, error);
                             reject(sound);
                         }
                     );
@@ -62,11 +62,11 @@
     };
 
     Audio.prototype.stageBgm = function () {
-        this.play(this.soundsList.stage, true, 0, 0);
+        this.play(this.soundBuffers.stage, true, 0, 0);
     };
 
     Audio.prototype.laser = function () {
-        this.play(this.soundsList.laser, false);
+        this.play(this.soundBuffers.laser, false);
     };
 
     Audio.prototype.play = function (sound, loop, loopStart, loopEnd, callback) {
