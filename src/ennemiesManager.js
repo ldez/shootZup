@@ -28,7 +28,7 @@
     };
 
     EnnemiesManager.prototype.loadScenario = function (file) {
-        var p = new Promise(function (resolve) {
+        return new Promise(function (resolve) {
 
             var xmlhttp = new XMLHttpRequest();
             xmlhttp.open("GET", file, true);
@@ -39,8 +39,6 @@
 
             xmlhttp.send();
         });
-
-        return p;
     };
 
     EnnemiesManager.prototype.start = function (scenario) {
