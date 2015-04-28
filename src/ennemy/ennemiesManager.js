@@ -125,13 +125,7 @@
         var ennemy = this.ennemies[commands.id];
         // Si le vaisseau n'a pas explosé
         if (ennemy) {
-            var path = this.pathManager.buildPath({
-                x: ennemy.x,
-                y: ennemy.y
-            }, {
-                x: commands.x,
-                y: commands.y
-            });
+            var path = this.pathManager.buildPath(ennemy, commands);
             return ennemy.action(path);
         } else {
             return Promise.resolve();

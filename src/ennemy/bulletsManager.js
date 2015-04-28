@@ -21,13 +21,7 @@
         var bullet = new Bullet(commands.id, ennemy.x, ennemy.y, this.resources);
         this.bullets.push(bullet);
 
-        var path = this.pathManager.buildPath({
-            x: bullet.x,
-            y: bullet.y
-        }, {
-            x: commands.x,
-            y: commands.y
-        });
+        var path = this.pathManager.buildPath(bullet, commands);
 
         bullet.action(path).then(function (value) {
             this.bullets.splice(this.bullets.indexOf(value), 1);

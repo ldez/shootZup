@@ -19,15 +19,11 @@
             sy = from.y < to.y ? 1 : -1;
         var err = (dx > dy ? dx : -dy) / 2;
 
-        // TODO revoir cette condition avec le if
-        while (true) {
+        while (from.x !== to.x || from.y !== to.y) {
             coordinates.push({
                 x: from.x,
                 y: from.y
             });
-            if (from.x === to.x && from.y === to.y) {
-                break;
-            }
             var e2 = err;
             if (e2 > -dx) {
                 err -= dy;
@@ -38,7 +34,6 @@
                 from.y += sy;
             }
         }
-
         return coordinates;
     };
 
