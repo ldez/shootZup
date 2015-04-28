@@ -77,17 +77,17 @@
         }
 
         // déplacement horizontal
-        if (control.actions.LEFT && physics.canMoveLeft(player)) {
-            player.x -= 10;
-        } else if (control.actions.RIGHT && physics.canMoveRight(player)) {
-            player.x += 10;
+        if (control.actions.LEFT) {
+            physics.moveLeft(player);
+        } else if (control.actions.RIGHT) {
+            physics.moveRight(player);
         }
 
         // déplacement vertical
-        if (control.actions.UP && physics.canMoveUp(player)) {
-            player.y -= 10;
-        } else if (control.actions.DOWN && physics.canMoveDown(player)) {
-            player.y += 10;
+        if (control.actions.UP) {
+            physics.moveUp(player);
+        } else if (control.actions.DOWN) {
+            physics.moveDown(player);
         }
     };
 

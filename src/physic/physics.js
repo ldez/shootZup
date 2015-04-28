@@ -16,30 +16,46 @@
         this.canvasHeight = 640;
 
         this.moveSize = 10;
-
-        // Positions du vaisseau.
-        this.reset();
     }
-
-    Physics.prototype.reset = function () {
-        this.x = this.canvasWidth / 2;
-        this.y = 600;
-    };
 
     Physics.prototype.canMoveLeft = function (spaceship) {
         return spaceship.x >= 0 + this.moveSize + (spaceship.animationFrameWidth / 2);
+    };
+
+    Physics.prototype.moveLeft = function (spaceship) {
+        if (this.canMoveLeft(spaceship)) {
+            spaceship.x -= this.moveSize;
+        }
     };
 
     Physics.prototype.canMoveRight = function (spaceship) {
         return spaceship.x <= this.canvasWidth - this.moveSize - (spaceship.animationFrameWidth / 2);
     };
 
+    Physics.prototype.moveRight = function (spaceship) {
+        if (this.canMoveRight(spaceship)) {
+            spaceship.x += this.moveSize;
+        }
+    };
+
     Physics.prototype.canMoveUp = function (spaceship) {
         return spaceship.y >= 0 + this.moveSize + (spaceship.animationFrameHeight / 2);
     };
 
+    Physics.prototype.moveUp = function (spaceship) {
+        if (this.canMoveUp(spaceship)) {
+            spaceship.y -= this.moveSize;
+        }
+    };
+
     Physics.prototype.canMoveDown = function (spaceship) {
         return spaceship.y <= this.canvasHeight - this.moveSize - (spaceship.animationFrameHeight / 2);
+    };
+
+    Physics.prototype.moveDown = function (spaceship) {
+        if (this.canMoveDown(spaceship)) {
+            spaceship.y += this.moveSize;
+        }
     };
 
     Physics.prototype.detectCollisionOnEnnemies = function (ennemies, playersLasers) {
