@@ -13,16 +13,16 @@
 
         switch (number) {
         case 1:
-            spaceship = new SpaceshipRed(this.canvasSize.width / 2, 600, this.resources);
+            spaceship = new SpaceshipRed(this.canvasSize.width / 2, this.canvasSize.height - 60, this.resources);
             break;
         case 2:
-            spaceship = new SpaceshipGreen(this.canvasSize.width / 2, 600, this.resources);
+            spaceship = new SpaceshipGreen(this.canvasSize.width / 2, this.canvasSize.height - 60, this.resources);
             break;
         case 3:
-            spaceship = new SpaceshipBlue(this.canvasSize.width / 2, 600, this.resources);
+            spaceship = new SpaceshipBlue(this.canvasSize.width / 2, this.canvasSize.height - 60, this.resources);
             break;
         default:
-            throw new Error('Invalid Starship choose');
+            throw new Error('Invalid Spaceship choose');
         }
 
         return spaceship;
