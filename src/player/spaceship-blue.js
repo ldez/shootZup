@@ -10,7 +10,7 @@
             },
             // Taille en pixels de la hitbox
             hitboxSize = {
-                width: 45,
+                width: 40,
                 height: 45
             },
             // paramètre de l'animation
