@@ -8,6 +8,9 @@
     }
 
     BulletsManager.prototype.reset = function () {
+        this.bullets.forEach(function(bullet){
+            bullet.clearCurrentMove();
+        });
         this.bullets.splice(0, this.bullets.length);
     };
 
@@ -21,11 +24,12 @@
         var bullet = new Bullet(commands.id, ennemy.x, ennemy.y, this.resources);
         this.bullets.push(bullet);
 
-        var path = this.pathManager.buildPath(bullet, commands);
-
-        bullet.action(path).then(function (value) {
-            this.bullets.splice(this.bullets.indexOf(value), 1);
+        this.pathManager.buildPath(bullet, commands).then(function (path) {
+            bullet.move(path).then(function (value) {
+                this.bullets.splice(this.bullets.indexOf(value), 1);
+            }.bind(this));
         }.bind(this));
+
     };
 
     window.BulletsManager = BulletsManager;

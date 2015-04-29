@@ -24,6 +24,7 @@
 
         for (var id in this.ennemies) {
             if (this.ennemies.hasOwnProperty(id)) {
+                this.ennemies[id].clearCurrentMove();
                 this.ennemies[id].clearCurrentAnimation();
             }
         }
@@ -114,29 +115,36 @@
 
     EnnemiesManager.prototype.commandNew = function (commands) {
         return new Promise(function (resolve) {
-            var ennemy = new Ennemy(commands.id, commands.x, commands.y, this.resources);
-            this.ennemies[commands.id] = ennemy;
-            ennemy.startLoop(ennemy.FLY);
+            if (this.gameState.isPlaying()) {
+                var ennemy = new Ennemy(commands.id, commands.x, commands.y, this.resources);
+                this.ennemies[commands.id] = ennemy;
+                ennemy.startLoop(ennemy.FLY);
+            }
             resolve();
         }.bind(this));
     };
 
     EnnemiesManager.prototype.commandMove = function (commands) {
         var ennemy = this.ennemies[commands.id];
+
         // Si le vaisseau n'a pas explosé
-        if (ennemy) {
-            var path = this.pathManager.buildPath(ennemy, commands);
-            return ennemy.action(path);
-        } else {
-            return Promise.resolve();
+        if (ennemy && this.gameState.isPlaying()) {
+            return this.pathManager.buildPath(ennemy, commands).then(function (path) {
+                if (this.gameState.isPlaying()) {
+                    return ennemy.move(path);
+                }
+                return Promise.resolve();
+            }.bind(this));
         }
+        return Promise.resolve();
+
     };
 
     EnnemiesManager.prototype.commandShoot = function (commands) {
         return new Promise(function (resolve) {
             var ennemy = this.ennemies[commands.id];
             // Si le vaisseau n'a pas explosé
-            if (ennemy) {
+            if (ennemy && this.gameState.isPlaying()) {
                 this.bulletsManager.fire(commands, ennemy);
             }
             resolve();
@@ -147,7 +155,7 @@
         return new Promise(function (resolve) {
             var ennemy = this.ennemies[commands.id];
             // Si le vaisseau n'a pas explosé
-            if (ennemy) {
+            if (ennemy && this.gameState.isPlaying()) {
                 delete this.ennemies[commands.id];
             }
             resolve();

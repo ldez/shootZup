@@ -9,6 +9,8 @@
         // Energie du vaisseau
         this.life = 3;
 
+        this.moveLoop = null;
+
         // Taille en pixels d'une frame d'animation
         var frameSize = {
                 width: 35,
@@ -32,14 +34,20 @@
 
     Ennemy.prototype = Object.create(Spaceship.prototype);
 
-    Ennemy.prototype.action = function (path) {
+    Ennemy.prototype.clearCurrentMove = function () {
+        if (this.moveLoop) {
+            clearTimeout(this.moveLoop);
+        }
+    };
+
+    Ennemy.prototype.move = function (path) {
 
         var sequence = Promise.resolve();
 
         path.forEach(function (coords) {
             sequence = sequence.then(function () {
                 return new Promise(function (resolve) {
-                    setTimeout(function () {
+                    this.moveLoop = setTimeout(function () {
                         this.x = coords.x;
                         this.y = coords.y;
                         resolve();

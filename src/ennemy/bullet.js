@@ -7,6 +7,8 @@
 
         this.id = id;
 
+        this.moveLoop = null;
+
         // Positions
         this.x = x;
         this.y = y;
@@ -18,14 +20,20 @@
         };
     }
 
-    Bullet.prototype.action = function (path) {
+    Bullet.prototype.clearCurrentMove = function () {
+        if (this.moveLoop) {
+            clearTimeout(this.moveLoop);
+        }
+    };
+
+    Bullet.prototype.move = function (path) {
 
         var sequence = Promise.resolve();
 
         path.forEach(function (coords) {
             sequence = sequence.then(function () {
                 return new Promise(function (resolve) {
-                    setTimeout(function () {
+                    this.moveLoop = setTimeout(function () {
                         this.x = coords.x;
                         this.y = coords.y;
                         resolve(this);

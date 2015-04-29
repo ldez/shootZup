@@ -27,7 +27,9 @@
 
     Sprite.prototype.clearCurrentAnimation = function () {
         this.currentAnimationFrame = 0;
-        clearTimeout(this.animationLoop);
+        if (this.animationLoop) {
+            clearTimeout(this.animationLoop);
+        }
     };
 
     Sprite.prototype.startLoop = function (animation) {
