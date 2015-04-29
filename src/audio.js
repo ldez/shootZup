@@ -65,28 +65,36 @@
     };
 
     Audio.prototype.stageBgm = function () {
-        this.play(this.soundBuffers.stage, true, 0, 0);
+        return this.play(this.soundBuffers.stage, true, 0, 0);
     };
 
     Audio.prototype.laser = function () {
-        this.play(this.soundBuffers.laser, false);
+        return this.play(this.soundBuffers.laser, false);
     };
 
-    Audio.prototype.play = function (sound, loop, loopStart, loopEnd, callback) {
-        var source = this.audioContext.createBufferSource();
-        source.buffer = sound;
-        source.loop = loop;
-        if (loop) {
-            source.loopStart = loopStart;
-            source.loopEnd = loopEnd;
-        }
+    Audio.prototype.play = function (sound, loop, loopStart, loopEnd) {
+        return new Promise(function (resolve) {
 
-        if (typeof callback === 'function') {
-            source.onended = callback;
-        }
+            var source = this.audioContext.createBufferSource();
+            source.buffer = sound;
+            source.loop = loop;
 
-        source.connect(this.audioContext.destination);
-        source.start(0);
+            if (loop) {
+                source.loopStart = loopStart;
+                source.loopEnd = loopEnd;
+
+                resolve(source);
+            }
+
+            source.onended = function () {
+                if (!loop) {
+                    resolve(source);
+                }
+            };
+
+            source.connect(this.audioContext.destination);
+            source.start(0);
+        }.bind(this));
     };
 
     window.Audio = Audio;

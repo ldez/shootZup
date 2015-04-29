@@ -64,36 +64,41 @@
 
     var background;
 
-    // préchargement des sons
-    audio.load().then(function () {
+    var preLoadActions = [
+        // préchargement des sons
+        audio.load(),
 
         // préchargement des images
-        return resources.load();
+        resources.load(),
 
-    }).then(function () {
+    ];
 
-        // contruction du fond
-        background = new Background(resources, canvasSize);
+    Promise.all(preLoadActions)
+        .then(function () {
 
-        // démarrage de la musique de fond
-        audio.stageBgm();
+            // contruction du fond
+            background = new Background(resources, canvasSize);
 
-        // contruction du scénario des ennemies
-        return ennemiesManager.loadScenario('resources/stage1.json');
+            // démarrage de la musique de fond
+            return audio.stageBgm();
+        })
+        .then(function () {
 
-    }).then(function (scenario) {
+            // contruction du scénario des ennemies
+            return ennemiesManager.loadScenario('resources/stage1.json');
+        }).then(function (scenario) {
 
-        // démarrage de gestion des controles utilisateurs
-        controlsP1.startDetection();
+            // démarrage de gestion des controles utilisateurs
+            controlsP1.startDetection();
 
-        // Création du jeux
-        var game = new Game(canvas, context2d, gameState, explosionManager, bulletsManager, ennemiesManager, lasersManager, background, playerFactory, physics, controlsP1);
+            // Création du jeux
+            var game = new Game(canvas, context2d, gameState, explosionManager, bulletsManager, ennemiesManager, lasersManager, background, playerFactory, physics, controlsP1);
 
-        // affichage du jeux
-        game.paintGame();
+            // affichage du jeux
+            game.paint();
 
-        // démarrage du jeux
-        game.startGame(scenario);
-    });
+            // démarrage du jeux
+            game.start(scenario);
+        });
 
 })();
