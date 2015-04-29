@@ -1,17 +1,17 @@
 (function (window) {
     'use strict';
 
-    function LasersManager(audio, resources) {
+    function LasersManager(audio, resources, canvasSize) {
         this.audio = audio;
         this.resources = resources;
+        this.canvasSize = canvasSize;
         this.lasers = [];
     }
 
     LasersManager.prototype.move = function () {
         this.lasers = this.lasers.filter(function (laser) {
-            laser.move();
-            return !laser.isOutOfBounds();
-        });
+            return !laser.move(this.canvasSize.height);
+        }.bind(this));
     };
 
     LasersManager.prototype.shoot = function (player) {

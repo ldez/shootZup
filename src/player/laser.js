@@ -12,20 +12,20 @@
             width: 3,
             height: 32
         };
-
-        this.canvasHeight = 640;
     }
 
     Laser.prototype.paint = function (context) {
         context.drawImage(this.resources.images.laser, this.x, this.y - this.frameSize.height);
     };
 
-    Laser.prototype.move = function () {
+    Laser.prototype.move = function (canvasHeight) {
         this.y -= this.frameSize.height + 10;
+
+        return this.isOutOfBounds(canvasHeight);
     };
 
-    Laser.prototype.isOutOfBounds = function () {
-        return this.y > this.canvasHeight;
+    Laser.prototype.isOutOfBounds = function (canvasHeight) {
+        return this.y > canvasHeight;
     };
 
     Laser.prototype.hitbox = function () {

@@ -4,16 +4,16 @@
     /**
      * Fond d'écran simple
      *
-     * @param {Object} resources Gestionnaire d'images
+     * @param {Object} resources  Gestionnaire d'images
+     * @param {Object} canvasSize Taille du canvas
      */
-    function Background(resources) {
+    function Background(resources, canvasSize) {
 
-        this.canvasHeight = 640;
         this.backgrounds = [];
 
         this.backgrounds[0] = {
             background: resources.images.sky,
-            width: 480,
+            width: canvasSize.width,
             height: 1280,
             scrollValue: 0.2,
             scrolled: 0
@@ -21,7 +21,7 @@
 
         this.backgrounds[1] = {
             background: resources.images.stars,
-            width: 480,
+            width: canvasSize.width,
             height: 1680,
             scrollValue: 2,
             scrolled: 0

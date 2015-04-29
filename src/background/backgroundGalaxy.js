@@ -4,11 +4,11 @@
     /**
      * Fond d'écran en rotation sur lui même
      *
-     * @param {Object} resources Gestionnaire d'images
+     * @param {Object} resources  Gestionnaire d'images
+     * @param {Object} canvasSize Taille du canvas
      */
-    function Background(resources) {
+    function Background(resources, canvasSize) {
 
-        this.canvasHeight = 640;
         this.backgrounds = [];
 
         this.backgrounds[0] = {
@@ -23,7 +23,7 @@
 
         this.backgrounds[1] = {
             background: resources.images.stars,
-            width: 480,
+            width: canvasSize.width,
             height: 1680,
             scrollValue: 2,
             rotateValue: 0,

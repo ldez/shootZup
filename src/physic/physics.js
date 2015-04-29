@@ -5,14 +5,11 @@
      * Moteur de physique
      *
      * @param {Object} explosionManager Gestionnaire d'explosions
+     * @param {Object} canvasSize       Taille du canvas
      */
-    function Physics(explosionManager) {
-
+    function Physics(explosionManager, canvasSize) {
         this.explosionManager = explosionManager;
-
-        this.canvasWidth = 480;
-        this.canvasHeight = 640;
-
+        this.canvasSize = canvasSize;
         this.moveSize = 10;
     }
 
@@ -27,7 +24,7 @@
     };
 
     Physics.prototype.canMoveRight = function (spaceship) {
-        return spaceship.x <= this.canvasWidth - this.moveSize - (spaceship.frameSize.width / 2);
+        return spaceship.x <= this.canvasSize.width - this.moveSize - (spaceship.frameSize.width / 2);
     };
 
     Physics.prototype.moveRight = function (spaceship) {
@@ -47,7 +44,7 @@
     };
 
     Physics.prototype.canMoveDown = function (spaceship) {
-        return spaceship.y <= this.canvasHeight - this.moveSize - (spaceship.frameSize.height / 2);
+        return spaceship.y <= this.canvasSize.height - this.moveSize - (spaceship.frameSize.height / 2);
     };
 
     Physics.prototype.moveDown = function (spaceship) {

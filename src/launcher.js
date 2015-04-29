@@ -17,6 +17,17 @@
             };
     })();
 
+    var canvas = document.getElementById('game');
+    var context2d = canvas.getContext('2d');
+
+    // TODO Utiliser directement le canvas ???
+    var canvasSize = {
+        // 640
+        height: canvas.height,
+        // 480
+        width: canvas.width
+    };
+
     var sprites = [
         {title: 'spaceship-red', url: 'resources/image/spaceship-red.png'},
         {title: 'spaceship-blue', url: 'resources/image/spaceship-blue.png'},
@@ -47,14 +58,11 @@
     var bulletsManager = new BulletsManager(resources, pathManager);
     var ennemiesManager = new EnnemiesManager(gameState, resources, pathManager, bulletsManager);
 
-    var physics = new Physics(explosionManager);
-    var lasersManager = new LasersManager(audio, resources);
-    var playerFactory = new PlayerFactory(resources, physics);
+    var physics = new Physics(explosionManager, canvasSize);
+    var lasersManager = new LasersManager(audio, resources, canvasSize);
+    var playerFactory = new PlayerFactory(resources, canvasSize);
 
     var background;
-
-    var canvas = document.getElementById('game');
-    var context2d = canvas.getContext('2d');
 
     // préchargement des sons
     audio.load().then(function () {
@@ -65,7 +73,7 @@
     }).then(function () {
 
         // contruction du fond
-        background = new Background(resources);
+        background = new Background(resources, canvasSize);
 
         // démarrage de la musique de fond
         audio.stageBgm();
