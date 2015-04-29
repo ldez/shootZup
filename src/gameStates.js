@@ -3,6 +3,7 @@
 
     function GameState() {
         this.current = this.LOADING;
+        this.playerState = this.LOADING;
     }
 
     GameState.prototype.LOADING = 0;
@@ -11,6 +12,7 @@
     GameState.prototype.FINISHED = 3;
 
     GameState.prototype.play = function () {
+        this.playerState = this.PLAYING;
         this.current = this.PLAYING;
     };
     GameState.prototype.isPlaying = function () {
@@ -18,6 +20,7 @@
     };
 
     GameState.prototype.gameOver = function () {
+        this.playerState = this.GAMEOVER;
         this.current = this.GAMEOVER;
     };
 
@@ -31,6 +34,10 @@
 
     GameState.prototype.isFinished = function () {
         return this.current === this.FINISHED;
+    };
+
+    GameState.prototype.isPlayerWin = function () {
+        return this.playerState === this.PLAYING;
     };
 
     window.GameState = GameState;

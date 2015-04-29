@@ -41,7 +41,7 @@
      *
      * @param {Object} scenario Scénario à lancer
      */
-    Game.prototype.startGame = function (scenario) {
+    Game.prototype.start = function (scenario) {
         this.scenario = scenario;
         this.scoresP1 = 0;
         this.gameState.play();
@@ -101,14 +101,14 @@
             this.lasersManager.reset();
             this.player1 = this.playerFactory.create();
             this.ennemiesManager.reset();
-            this.startGame(this.scenario);
+            this.start(this.scenario);
         }
     };
 
     /**
      * Affichage des éléments du jeux
      */
-    Game.prototype.paintGame = function () {
+    Game.prototype.paint = function () {
 
         // affichage du fond du jeux
         this.background.paint(this.context2d);
@@ -163,7 +163,7 @@
             this.paintEndScreen(this.context2d, this.scoresP1);
         }
 
-        window.requestAnimationFrame(this.paintGame.bind(this));
+        window.requestAnimationFrame(this.paint.bind(this));
     };
 
     /**
@@ -191,9 +191,10 @@
      * @param {Number} score   Score du joueur
      */
     Game.prototype.paintScores = function (context, score) {
-        context.fillStyle = "red";
-        context.font = "bold 16px lcd";
-        context.fillText("score " + score, 10, 25);
+        context.textAlign = 'start';
+        context.fillStyle = 'red';
+        context.font = 'bold 16px lcd';
+        context.fillText('score ' + score, 10, 25);
     };
 
     /**
@@ -203,15 +204,38 @@
      * @param {Number} score   Score du joueur
      */
     Game.prototype.paintEndScreen = function (context, score) {
-        context.fillStyle = "red";
-        context.font = "bold 24px lcd";
-        var text = "score " + score;
-        var width = context.measureText(text).width;
-        context.fillText(text, (this.canvas.width / 2) - (width / 2), this.canvas.height / 2);
 
-        var text2 = "Press ENTER to restart";
-        var width2 = context.measureText(text2).width;
-        context.fillText(text2, (this.canvas.width / 2) - (width2 / 2), this.canvas.height / 2 + 30);
+        context.fillStyle = 'white';
+        context.font = 'bold 40px lcd';
+
+        var playerMessage = '';
+        if (this.gameState.isPlayerWin()) {
+            playerMessage = 'You WIN !!!';
+        } else {
+            playerMessage = 'GAME OVER';
+        }
+        this.fillTextCenter(context, playerMessage, -50);
+
+        context.fillStyle = 'red';
+        context.font = 'bold 24px lcd';
+
+        var scoreText = 'score ' + score;
+        this.fillTextCenter(context, scoreText, 0);
+
+        var text = 'Press ENTER to restart';
+        this.fillTextCenter(context, text, 40);
+
+    };
+
+    /**
+     * Affiche un texte au center du canvas
+     *
+     * @param {String} text               Texte à afficher
+     * @param {Number} centerHeigthOffset Hauteur du offset par rapport au centre du canvas
+     */
+    Game.prototype.fillTextCenter = function (context, text, centerHeigthOffset) {
+        context.textAlign = 'center';
+        context.fillText(text, this.canvas.width / 2, this.canvas.height / 2 + centerHeigthOffset);
     };
 
     window.Game = Game;
