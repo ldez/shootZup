@@ -4,6 +4,7 @@
     function GameState() {
         this.current = this.LOADING;
         this.playerState = this.LOADING;
+        this.scores = {};
     }
 
     GameState.prototype.LOADING = 0;
@@ -12,6 +13,7 @@
     GameState.prototype.FINISHED = 3;
 
     GameState.prototype.play = function () {
+        this.scores.player1 = 0;
         this.playerState = this.PLAYING;
         this.current = this.PLAYING;
     };

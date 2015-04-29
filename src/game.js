@@ -28,7 +28,6 @@
 
         this.playerFactory = playerFactory;
         this.lasersManager = lasersManager;
-        this.scoresP1 = 0;
         this.player1 = playerFactory.create();
         this.physics = physics;
         this.controlsP1 = controlsP1;
@@ -43,7 +42,6 @@
      */
     Game.prototype.start = function (scenario) {
         this.scenario = scenario;
-        this.scoresP1 = 0;
         this.gameState.play();
         this.player1.startLoop(this.player1.FLY);
 
@@ -134,10 +132,10 @@
             this.lasersManager.paint(this.context2d);
 
             // affichage du score
-            this.paintScores(this.context2d, this.scoresP1);
+            this.paintScores(this.context2d, this.gameState.scores.player1);
 
             // calcul du nouveau score - detection des collision entre les lasers et les ennemies
-            this.scoresP1 += this.physics.detectCollisionOnEnnemies(this.ennemiesManager.ennemies, this.lasersManager.lasers);
+            this.gameState.scores.player1 += this.physics.detectCollisionOnEnnemies(this.ennemiesManager.ennemies, this.lasersManager.lasers);
 
             // detection des collisions avec le vaisseau du joueur
             if (this.physics.detectCollisionsOnPlayer(this.player1, this.bulletsManager.bullets, this.ennemiesManager.ennemies)) {
@@ -160,7 +158,7 @@
             this.checkInputMenu(this.controlsP1);
 
             // affichage de l'écran de fin
-            this.paintEndScreen(this.context2d, this.scoresP1);
+            this.paintEndScreen(this.context2d, this.gameState.scores.player1);
         }
 
         window.requestAnimationFrame(this.paint.bind(this));
@@ -174,6 +172,8 @@
     Game.prototype.destroyPlayer = function (player) {
         // Change l'état du jeux
         this.gameState.gameOver();
+
+        // Stop l'animation du vaisseau du joueur
         player.clearCurrentAnimation();
 
         // création de l'explosion du vaisseau du joueur
