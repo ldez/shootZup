@@ -18,7 +18,7 @@
                 nbFrames: 12,
                 animationFrameWidth: 55,
                 animationY: 0,
-                speedRate: 15
+                speedRate: 60
             };
 
         Spaceship.call(this, x, y, 'spaceship-blue', frameSize, hitboxSize, fly, resources);
