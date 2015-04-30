@@ -6,9 +6,18 @@
         this.images = {};
     }
 
+    Resources.prototype.loadSprites = function (spriteList) {
+
+        var promises = spriteList.map(function (element) {
+            return this.loadSprite(element);
+        }.bind(this));
+
+        return Promise.all(promises);
+    };
+
     Resources.prototype.loadSprite = function (sprite) {
 
-        var p = new Promise(function (resolve, reject) {
+        return new Promise(function (resolve, reject) {
             var image = this.images[sprite.title];
 
             // if image already load use cache
@@ -32,18 +41,6 @@
             }
         }.bind(this));
 
-        return p;
-    };
-
-    Resources.prototype.loadSprites = function (spriteList) {
-
-        var promises = [];
-
-        spriteList.forEach(function (element) {
-            promises.push(this.loadSprite(element));
-        }.bind(this));
-
-        return Promise.all(promises);
     };
 
     Resources.prototype.load = function () {
