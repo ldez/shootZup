@@ -69,8 +69,7 @@
         audio.load(),
 
         // préchargement des images
-        resources.load(),
-
+        resources.load()
     ];
 
     Promise.all(preLoadActions)
