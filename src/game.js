@@ -144,7 +144,6 @@
 
             // déplacement des lasers des joueurs
             this.lasersManager.move();
-
         }
         // si le joueur est mort
         else if (this.gameState.isGameOver()) {
@@ -153,12 +152,17 @@
             this.explosionManager.paint(this.context2d);
         }
         // si le jeux est fini
-        else {
-            // relancement du jeux sur action du joueur
-            this.checkInputMenu(this.controlsP1);
-
+        else if (this.gameState.isFinished()) {
             // affichage de l'écran de fin
             this.paintEndScreen(this.context2d, this.gameState.scores.player1);
+
+            // relancement du jeux sur action du joueur
+            this.checkInputMenu(this.controlsP1);
+        }
+        // si jeux est en chargement
+        else {
+            // Loading
+            console.log('Loading...');
         }
 
         window.requestAnimationFrame(this.paint.bind(this));
