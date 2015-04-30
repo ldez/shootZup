@@ -114,14 +114,13 @@
     };
 
     EnnemiesManager.prototype.commandNew = function (commands) {
-        return new Promise(function (resolve) {
-            if (this.gameState.isPlaying()) {
-                var ennemy = new Ennemy(commands.id, commands.x, commands.y, this.resources);
-                this.ennemies[commands.id] = ennemy;
-                ennemy.startLoop(ennemy.FLY);
-            }
-            resolve();
-        }.bind(this));
+        var promise = Promise.resolve();
+        if (this.gameState.isPlaying()) {
+            var ennemy = new Ennemy(commands.id, commands.x, commands.y, this.resources);
+            this.ennemies[commands.id] = ennemy;
+            promise = ennemy.startLoop(ennemy.FLY);
+        }
+        return promise;
     };
 
     EnnemiesManager.prototype.commandMove = function (commands) {

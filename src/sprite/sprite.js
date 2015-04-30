@@ -33,17 +33,20 @@
     };
 
     Sprite.prototype.startLoop = function (animation) {
-        if (this.currentState !== animation) {
-            this.clearCurrentAnimation();
-            this.animationY = this.animations[animation].animationY;
-            this.frameSize.width = this.animations[animation].animationFrameWidth;
+        return new Promise(function (resolve) {
+            if (this.currentState !== animation) {
+                this.clearCurrentAnimation();
+                this.animationY = this.animations[animation].animationY;
+                this.frameSize.width = this.animations[animation].animationFrameWidth;
 
-            this.currentState = animation;
+                this.currentState = animation;
 
-            this.animationLoop = setTimeout(function () {
-                this.animLoop(animation);
-            }.bind(this), this.animations[animation].speedRate);
-        }
+                this.animationLoop = setTimeout(function () {
+                    this.animLoop(animation);
+                    resolve();
+                }.bind(this), this.animations[animation].speedRate);
+            }
+        }.bind(this));
     };
 
     Sprite.prototype.animLoop = function (animation) {
