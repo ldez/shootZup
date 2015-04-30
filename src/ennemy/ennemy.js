@@ -29,7 +29,7 @@
                 speedRate: 15
             };
 
-        Spaceship.call(this, x, y, 'spaceship-green', frameSize, hitboxSize, fly, resources);
+        Spaceship.call(this, x, y, 'ennemy-green', frameSize, hitboxSize, fly, resources);
     }
 
     Ennemy.prototype = Object.create(Spaceship.prototype);
