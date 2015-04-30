@@ -124,18 +124,20 @@
     };
 
     EnnemiesManager.prototype.commandMove = function (commands) {
+        var promise = Promise.resolve();
         var ennemy = this.ennemies[commands.id];
 
         // Si le vaisseau n'a pas explosé
         if (ennemy && this.gameState.isPlaying()) {
-            return this.pathManager.buildPath(ennemy, commands).then(function (path) {
-                if (this.gameState.isPlaying()) {
-                    return ennemy.move(path);
-                }
-                return Promise.resolve();
-            }.bind(this));
+            promise = this.pathManager.buildPath(ennemy, commands)
+                .then(function (path) {
+                    if (this.gameState.isPlaying()) {
+                        return ennemy.move(path);
+                    }
+                    return Promise.resolve();
+                }.bind(this));
         }
-        return Promise.resolve();
+        return promise;
 
     };
 
