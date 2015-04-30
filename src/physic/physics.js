@@ -69,7 +69,10 @@
                     // collisions basées sur boites englobantes
                     if (ennemy.hitbox().collision(laser.hitbox())) {
 
-                        ennemy.life--;
+                        // Calcul du dommage
+                        ennemy.life -= laser.strength;
+
+                        // Ennemy mort
                         if (ennemy.life <= 0 && ennemiesToDelete.indexOf(ennemy) === -1) {
                             // Pour éviter de supprimer 2 fois le même (2 lasers peuvent être en même temps en collision sur un vaisseau)
                             ennemiesToDelete.push(ennemy);

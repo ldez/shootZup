@@ -12,6 +12,9 @@
             width: 3,
             height: 32
         };
+
+        this.strength = 1;
+        this.moveSize = 10;
     }
 
     Laser.prototype.paint = function (context) {
@@ -19,7 +22,7 @@
     };
 
     Laser.prototype.move = function (canvasHeight) {
-        this.y -= this.frameSize.height + 10;
+        this.y -= this.frameSize.height + this.moveSize;
 
         return this.isOutOfBounds(canvasHeight);
     };
