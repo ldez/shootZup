@@ -60,6 +60,41 @@
         }.bind(this), this.animations[animation].speedRate);
     };
 
+
+    Sprite.prototype.startOnce = function (animation) {
+        return new Promise(function (resolve) {
+
+            if (this.currentState !== animation) {
+                this.clearCurrentAnimation();
+                this.currentState = animation;
+
+                this.animationLoop = setTimeout(function () {
+                    this.animOnce(animation).then(function () {
+                        resolve();
+                    });
+                }.bind(this), this.animations[animation].speedRate);
+            }
+
+        }.bind(this));
+    };
+
+    Sprite.prototype.animOnce = function (animation) {
+        return new Promise(function (resolve) {
+
+            this.currentAnimationFrame += 1;
+            if (this.currentAnimationFrame !== this.animations[animation].nbFrames) {
+                this.animationLoop = setTimeout(function () {
+                    this.animOnce(animation).then(function () {
+                        resolve();
+                    });
+                }.bind(this), this.animations[animation].speedRate);
+            } else {
+                resolve();
+            }
+        }.bind(this));
+    };
+
+
     window.Sprite = Sprite;
 
 })(window);
