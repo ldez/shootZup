@@ -17,10 +17,10 @@
 
     Audio.prototype.loadSounds = function (soundList) {
 
-        var promises = [];
-        soundList.forEach(function (element) {
-            promises.push(this.loadSound(element));
+        var promises = soundList.map(function (element) {
+            return this.loadSound(element);
         }.bind(this));
+
         return Promise.all(promises);
     };
 
@@ -47,7 +47,6 @@
                             reject(sound);
                         }
                     );
-
                 }.bind(this);
 
                 request.onerror = function (event) {
