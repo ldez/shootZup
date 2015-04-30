@@ -177,11 +177,12 @@
         player.clearCurrentAnimation();
 
         // création de l'explosion du vaisseau du joueur
-        this.explosionManager.exploded(player.x, player.y, function () {
-            setTimeout(function () {
-                this.gameState.finished();
-            }.bind(this), 1000);
-        }.bind(this));
+        this.explosionManager.exploded(player.x, player.y)
+            .then(function () {
+                setTimeout(function () {
+                    this.gameState.finished();
+                }.bind(this), 1000);
+            }.bind(this));
     };
 
     /**

@@ -33,27 +33,37 @@
         );
     };
 
-    Explosion.prototype.startOnce = function (animation, callback) {
-        if (this.currentState !== animation) {
-            this.clearCurrentAnimation();
-            this.currentState = animation;
+    Explosion.prototype.startOnce = function (animation) {
+        return new Promise(function (resolve) {
 
-            this.animationLoop = setTimeout(function () {
-                this.animOnce(animation, callback);
-            }.bind(this), this.duration);
-        }
+            if (this.currentState !== animation) {
+                this.clearCurrentAnimation();
+                this.currentState = animation;
+
+                this.animationLoop = setTimeout(function () {
+                    this.animOnce(animation).then(function (boom) {
+                        resolve(boom);
+                    }.bind(this));
+                }.bind(this), this.duration);
+            }
+
+        }.bind(this));
     };
 
-    Explosion.prototype.animOnce = function (animation, callback) {
-        this.currentAnimationFrame += 1;
+    Explosion.prototype.animOnce = function (animation) {
+        return new Promise(function (resolve) {
 
-        if (this.currentAnimationFrame !== this.animations[animation].nbFrames) {
-            this.animationLoop = setTimeout(function () {
-                this.animOnce(animation, callback);
-            }.bind(this), this.duration);
-        } else {
-            callback();
-        }
+            this.currentAnimationFrame += 1;
+            if (this.currentAnimationFrame !== this.animations[animation].nbFrames) {
+                this.animationLoop = setTimeout(function () {
+                    this.animOnce(animation).then(function () {
+                        resolve(this.BOOM);
+                    }.bind(this));
+                }.bind(this), this.duration);
+            } else {
+                resolve(this.BOOM);
+            }
+        }.bind(this));
     };
 
     window.Explosion = Explosion;
