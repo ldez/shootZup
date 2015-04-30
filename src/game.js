@@ -50,7 +50,7 @@
             // définit la durée maximale du jeux.
             if (!this.gameState.isGameOver()) {
                 setTimeout(function () {
-                    this.gameState.finished();
+                    this.gameState.finished(this.player1.imageName);
                 }.bind(this), this.duration);
             }
         }.bind(this));
@@ -159,7 +159,7 @@
             // relancement du jeux sur action du joueur
             this.checkInputMenu(this.controlsP1);
         }
-        // si jeux est en chargement
+        // si le jeux est en chargement
         else {
             // Loading
             console.log('Loading...');
@@ -184,7 +184,7 @@
         this.explosionManager.exploded(player.x, player.y)
             .then(function () {
                 setTimeout(function () {
-                    this.gameState.finished();
+                    this.gameState.finished(player.imageName);
                 }.bind(this), 1000);
             }.bind(this));
     };
@@ -210,6 +210,7 @@
      */
     Game.prototype.paintEndScreen = function (context, score) {
 
+        // Message Game State
         context.fillStyle = 'white';
         context.font = 'bold 40px lcd';
 
@@ -219,8 +220,9 @@
         } else {
             playerMessage = 'GAME OVER';
         }
-        this.fillTextCenter(context, playerMessage, -50);
+        this.fillTextCenter(context, playerMessage, -100);
 
+        // Score et restart message
         context.fillStyle = 'red';
         context.font = 'bold 24px lcd';
 
@@ -230,6 +232,14 @@
         var text = 'Press ENTER to restart';
         this.fillTextCenter(context, text, 40);
 
+        // Highscores
+        context.fillStyle = 'yellow';
+
+        this.gameState.highscores.forEach(function (player, index) {
+            context.font = 'bold ' + (18 - index * 3) + 'px lcd';
+            var highscoreLine = '[ ' + player.score + ' - ' + player.name + ' ]';
+            this.fillTextCenter(context, highscoreLine, 100 + 30 * index);
+        }.bind(this));
     };
 
     /**
