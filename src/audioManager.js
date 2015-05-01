@@ -22,7 +22,8 @@
             if (!sound) {
                 this.sounds[soundDescriptor.title] = {
                     title: soundDescriptor.title,
-                    url: soundDescriptor.url
+                    url: soundDescriptor.url,
+                    initialGain: soundDescriptor.initialGain || 1
                 };
                 return this.loadSound(this.sounds[soundDescriptor.title]);
             }
@@ -71,33 +72,50 @@
         return this.loadSounds(this.soundDescriptors);
     };
 
+
     AudioManager.prototype.play = function (sound, loop, loopStart, loopEnd) {
         return new Promise(function (resolve) {
-            if (!this.mute) {
-                var source = this.audioContext.createBufferSource();
-                sound.source = null;
-                sound.source = source;
+            var source = this.audioContext.createBufferSource();
+            sound.source = source;
 
-                source.buffer = sound.buffer;
-                source.loop = loop;
+            source.buffer = sound.buffer;
 
-                if (loop) {
-                    source.loopStart = loopStart;
-                    source.loopEnd = loopEnd;
+            // Controle du volume
+            var gainNode = this.audioContext.createGain ? this.audioContext.createGain() : this.audioContext.createGainNode();
+            source.connect(gainNode);
+            gainNode.connect(this.audioContext.destination);
+            sound.gainNode = gainNode;
+            gainNode.gain.value = this.mute ? -1 : sound.initialGain;
 
+            // Gestion des boucles sonores
+            source.loop = loop;
+            if (loop) {
+                source.loopStart = loopStart;
+                source.loopEnd = loopEnd;
+
+                resolve(source);
+            }
+
+            source.onended = function () {
+                if (!loop) {
                     resolve(source);
                 }
+            };
 
-                source.onended = function () {
-                    if (!loop) {
-                        resolve(source);
-                    }
-                };
-
-                source.connect(this.audioContext.destination);
-                source.start(0);
-            }
+            source.connect(this.audioContext.destination);
+            source.start(0);
         }.bind(this));
+    };
+
+    AudioManager.prototype.muteSound = function (sound) {
+        if (sound.source) {
+            sound.gainNode.gain.value = -1;
+        }
+    };
+    AudioManager.prototype.resumeSound = function (sound) {
+        if (sound.source) {
+            sound.gainNode.gain.value = sound.initialGain;
+        }
     };
 
     AudioManager.prototype.stopSound = function (sound) {
@@ -121,9 +139,9 @@
     AudioManager.prototype.toogleMute = function () {
         this.mute = !this.mute;
         if (this.mute) {
-            this.stopSound(this.sounds.stage);
+            this.muteSound(this.sounds.stage);
         } else {
-            this.stageBgm();
+            this.resumeSound(this.sounds.stage);
         }
         return this.mute;
     };
