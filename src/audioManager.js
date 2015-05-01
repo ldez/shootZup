@@ -71,24 +71,6 @@
         return this.loadSounds(this.soundDescriptors);
     };
 
-    AudioManager.prototype.stageBgm = function () {
-        return this.play(this.sounds.stage, true, 0, 0);
-    };
-
-    AudioManager.prototype.laser = function () {
-        return this.play(this.sounds.laser, false);
-    };
-
-    AudioManager.prototype.toogleMute = function () {
-        this.mute = !this.mute;
-        if (this.mute) {
-            this.sounds.stage.source.stop(0);
-        } else {
-            this.stageBgm();
-        }
-        return this.mute;
-    };
-
     AudioManager.prototype.play = function (sound, loop, loopStart, loopEnd) {
         return new Promise(function (resolve) {
             if (!this.mute) {
@@ -116,6 +98,28 @@
                 source.start(0);
             }
         }.bind(this));
+    };
+
+    /*
+     * Méthodes de lecture spécifique des sons
+     */
+
+    AudioManager.prototype.stageBgm = function () {
+        return this.play(this.sounds.stage, true, 0, 0);
+    };
+
+    AudioManager.prototype.laser = function () {
+        return this.play(this.sounds.laser, false);
+    };
+
+    AudioManager.prototype.toogleMute = function () {
+        this.mute = !this.mute;
+        if (this.mute) {
+            this.sounds.stage.source.stop(0);
+        } else {
+            this.stageBgm();
+        }
+        return this.mute;
     };
 
     window.AudioManager = AudioManager;
