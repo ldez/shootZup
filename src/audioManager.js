@@ -1,9 +1,10 @@
 (function (window) {
     'use strict';
 
-    function AudioManager(sounds) {
-        this.sounds = sounds || {};
+    function AudioManager(soundDescriptors) {
+        this.soundDescriptors = soundDescriptors || {};
         this.soundBuffers = {};
+        this.bufferSources = {};
         this.loadCount = 0;
         this.playingSound = false;
 
@@ -15,36 +16,36 @@
         }
     }
 
-    AudioManager.prototype.loadSounds = function (soundList) {
+    AudioManager.prototype.loadSounds = function (soundDescriptors) {
 
-        var promises = soundList.map(function (element) {
-            return this.loadSound(element);
+        var promises = soundDescriptors.map(function (soundDescriptor) {
+            return this.loadSound(soundDescriptor);
         }.bind(this));
 
         return Promise.all(promises);
     };
 
-    AudioManager.prototype.loadSound = function (sound) {
+    AudioManager.prototype.loadSound = function (soundDescriptor) {
 
         return new Promise(function (resolve, reject) {
 
-            if (this.soundBuffers[sound.title]) {
-                resolve(sound);
+            if (this.soundBuffers[soundDescriptor.title]) {
+                resolve(soundDescriptor);
             } else {
                 var request = new XMLHttpRequest();
-                request.open('GET', sound.url, true);
+                request.open('GET', soundDescriptor.url, true);
                 request.responseType = 'arraybuffer';
 
                 request.onload = function () {
                     this.audioContext.decodeAudioData(
                         request.response,
                         function (buffer) {
-                            this.soundBuffers[sound.title] = buffer;
-                            resolve(sound);
+                            this.soundBuffers[soundDescriptor.title] = buffer;
+                            resolve(soundDescriptor);
                         }.bind(this),
                         function (error) {
-                            console.error('Fail to decodeAudioData [%s]', sound.url, error);
-                            reject(sound);
+                            console.error('Fail to decodeAudioData [%s]', soundDescriptor.url, error);
+                            reject(soundDescriptor);
                         }
                     );
                 }.bind(this);
@@ -60,7 +61,7 @@
     };
 
     AudioManager.prototype.load = function () {
-        return this.loadSounds(this.sounds);
+        return this.loadSounds(this.soundDescriptors);
     };
 
     AudioManager.prototype.stageBgm = function () {
@@ -69,6 +70,10 @@
 
     AudioManager.prototype.laser = function () {
         return this.play(this.soundBuffers.laser, false);
+    };
+
+    AudioManager.prototype.mute = function () {
+        this.source.stop(0);
     };
 
     AudioManager.prototype.play = function (sound, loop, loopStart, loopEnd) {
