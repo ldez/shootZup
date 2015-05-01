@@ -100,6 +100,12 @@
         }.bind(this));
     };
 
+    AudioManager.prototype.stopSound = function (sound) {
+        if (sound.source) {
+            sound.source.stop(0);
+        }
+    };
+
     /*
      * Méthodes de lecture spécifique des sons
      */
@@ -115,7 +121,7 @@
     AudioManager.prototype.toogleMute = function () {
         this.mute = !this.mute;
         if (this.mute) {
-            this.sounds.stage.source.stop(0);
+            this.stopSound(this.sounds.stage);
         } else {
             this.stageBgm();
         }
