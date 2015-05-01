@@ -1,7 +1,7 @@
 (function (window) {
     'use strict';
 
-    function Audio(sounds) {
+    function AudioManager(sounds) {
         this.sounds = sounds || {};
         this.soundBuffers = {};
         this.loadCount = 0;
@@ -15,7 +15,7 @@
         }
     }
 
-    Audio.prototype.loadSounds = function (soundList) {
+    AudioManager.prototype.loadSounds = function (soundList) {
 
         var promises = soundList.map(function (element) {
             return this.loadSound(element);
@@ -24,7 +24,7 @@
         return Promise.all(promises);
     };
 
-    Audio.prototype.loadSound = function (sound) {
+    AudioManager.prototype.loadSound = function (sound) {
 
         return new Promise(function (resolve, reject) {
 
@@ -59,19 +59,19 @@
         }.bind(this));
     };
 
-    Audio.prototype.load = function () {
+    AudioManager.prototype.load = function () {
         return this.loadSounds(this.sounds);
     };
 
-    Audio.prototype.stageBgm = function () {
+    AudioManager.prototype.stageBgm = function () {
         return this.play(this.soundBuffers.stage, true, 0, 0);
     };
 
-    Audio.prototype.laser = function () {
+    AudioManager.prototype.laser = function () {
         return this.play(this.soundBuffers.laser, false);
     };
 
-    Audio.prototype.play = function (sound, loop, loopStart, loopEnd) {
+    AudioManager.prototype.play = function (sound, loop, loopStart, loopEnd) {
         return new Promise(function (resolve) {
 
             var source = this.audioContext.createBufferSource();
@@ -96,6 +96,6 @@
         }.bind(this));
     };
 
-    window.Audio = Audio;
+    window.AudioManager = AudioManager;
 
 })(window);

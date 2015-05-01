@@ -1,8 +1,8 @@
 (function (window) {
     'use strict';
 
-    function LasersManager(audio, resources, canvasSize) {
-        this.audio = audio;
+    function LasersManager(audioManager, resources, canvasSize) {
+        this.audioManager = audioManager;
         this.resources = resources;
         this.canvasSize = canvasSize;
         this.lasers = [];
@@ -18,7 +18,7 @@
         // création de 2 lasers
         this.lasers.push(new Laser(player.x - 10, player.y - 50, this.resources));
         this.lasers.push(new Laser(player.x + 10, player.y - 50, this.resources));
-        this.audio.laser();
+        this.audioManager.laser();
     };
 
     LasersManager.prototype.paint = function (context) {

@@ -46,7 +46,7 @@
         {title: 'stage', url: 'resources/audio/loop.mp3'},
         {title: 'laser', url: 'resources/audio/science_fiction_laser_005.mp3'}
     ];
-    var audio = new Audio(sounds);
+    var audioManager = new AudioManager(sounds);
 
     var gameState = new GameState();
 
@@ -59,14 +59,14 @@
     var ennemiesManager = new EnnemiesManager(gameState, resources, pathManager, bulletsManager);
 
     var physics = new Physics(explosionManager, canvasSize);
-    var lasersManager = new LasersManager(audio, resources, canvasSize);
+    var lasersManager = new LasersManager(audioManager, resources, canvasSize);
     var playerFactory = new PlayerFactory(resources, canvasSize);
 
     var background;
 
     var preLoadActions = [
         // préchargement des sons
-        audio.load(),
+        audioManager.load(),
 
         // préchargement des images
         resources.load()
@@ -79,7 +79,7 @@
             background = new Background(resources, canvasSize);
 
             // démarrage de la musique de fond
-            return audio.stageBgm();
+            return audioManager.stageBgm();
         })
         .then(function () {
 
