@@ -139,7 +139,7 @@
         for (var i = 0; i < ennemiesToDelete.length; i++) {
             var ennemieToDelete = ennemiesToDelete[i];
             delete ennemies[ennemieToDelete.id];
-            this.explosionManager.exploded(ennemieToDelete.x, ennemieToDelete.y);
+            this.explosionManager.ennemyExploded(ennemieToDelete.x, ennemieToDelete.y);
         }
     };
 

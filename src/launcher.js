@@ -35,6 +35,7 @@
         {title: 'ennemy-green', url: 'resources/image/spaceship-green.png'},
         {title: 'laser', url: 'resources/image/laser.png'},
         {title: 'boom', url: 'resources/image/explosion.png'},
+        {title: 'bigboom', url: 'resources/image/bigboom.png'},
         {title: 'sky', url: 'resources/image/sky.jpg'},
         {title: 'bullet', url: 'resources/image/bullet.png'},
         {title: 'galaxy', url: 'resources/image/galaxy3.jpg'},
@@ -43,8 +44,10 @@
     var resources = new Resources(sprites);
 
     var sounds = [
-        {title: 'stage', url: 'resources/audio/loop.mp3'},
-        {title: 'laser', url: 'resources/audio/science_fiction_laser_005.mp3'}
+        {title: 'stage', url: 'resources/audio/loop.mp3', initialGain: -0.7},
+        {title: 'laser', url: 'resources/audio/science_fiction_laser_005.mp3', initialGain: -0.8},
+        {title: 'boom', url: 'resources/audio/DeathFlash.ogg', initialGain: 1},
+        {title: 'foom', url: 'resources/audio/foom_0.ogg', initialGain: 1}
     ];
     var audioManager = new AudioManager(sounds);
 
@@ -53,13 +56,13 @@
     var controlsP1 = new Keyboard();
 
     var pathManager = new PathManager();
-    var explosionManager = new ExplosionManager(resources);
+    var explosionManager = new ExplosionManager(resources, audioManager);
 
     var bulletsManager = new BulletsManager(resources, pathManager);
     var ennemiesManager = new EnnemiesManager(gameState, resources, pathManager, bulletsManager);
 
     var physics = new Physics(explosionManager, canvasSize);
-    var lasersManager = new LasersManager(audioManager, resources, canvasSize);
+    var lasersManager = new LasersManager(resources, canvasSize, audioManager);
     var playerFactory = new PlayerFactory(resources, canvasSize);
 
     var background;

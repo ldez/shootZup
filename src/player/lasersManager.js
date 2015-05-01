@@ -1,10 +1,10 @@
 (function (window) {
     'use strict';
 
-    function LasersManager(audioManager, resources, canvasSize) {
-        this.audioManager = audioManager;
+    function LasersManager(resources, canvasSize, audioManager) {
         this.resources = resources;
         this.canvasSize = canvasSize;
+        this.audioManager = audioManager;
         this.lasers = [];
     }
 

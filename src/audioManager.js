@@ -133,7 +133,15 @@
     };
 
     AudioManager.prototype.laser = function () {
-        return this.play(this.sounds.laser, false);
+        return this.play(this.sounds.laser);
+    };
+
+    AudioManager.prototype.boom = function () {
+        return this.play(this.sounds.boom);
+    };
+
+    AudioManager.prototype.foom = function () {
+        return this.play(this.sounds.foom);
     };
 
     AudioManager.prototype.toogleMute = function () {

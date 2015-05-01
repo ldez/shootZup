@@ -181,7 +181,7 @@
         player.clearCurrentAnimation();
 
         // création de l'explosion du vaisseau du joueur
-        this.explosionManager.exploded(player.x, player.y)
+        this.explosionManager.playerExploded(player.x, player.y)
             .then(function () {
                 setTimeout(function () {
                     this.gameState.finished(player.imageName);
