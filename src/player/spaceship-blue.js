@@ -16,7 +16,7 @@
             // paramètre de l'animation
             fly = {
                 nbFrames: 12,
-                animationFrameWidth: 55,
+                animationFrameWidth: frameSize.width,
                 animationY: 0,
                 speedRate: 60
             };

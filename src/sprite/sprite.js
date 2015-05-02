@@ -37,6 +37,7 @@
             if (this.currentState !== animation) {
                 this.clearCurrentAnimation();
                 this.animationY = this.animations[animation].animationY;
+                // FIXME utile ?
                 this.frameSize.width = this.animations[animation].animationFrameWidth;
 
                 this.currentState = animation;

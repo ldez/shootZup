@@ -8,7 +8,7 @@
 
     PlayerFactory.prototype.create = function () {
 
-        var spaceship = null;
+        var spaceship;
         var number = this.getRandomInt(1, 3);
 
         switch (number) {
