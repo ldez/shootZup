@@ -32,63 +32,63 @@
         }
     };
 
-    Sprite.prototype.startLoop = function (animation) {
+    Sprite.prototype.startLoop = function (animationName) {
         return new Promise(function (resolve) {
-            if (this.currentState !== animation) {
+
+            if (this.currentState !== animationName) {
                 this.clearCurrentAnimation();
-                this.animationY = this.animations[animation].animationY;
+
+                var animation = this.animations[animationName];
+                this.animationY = animation.animationY;
                 // FIXME utile ?
-                this.frameSize.width = this.animations[animation].animationFrameWidth;
+                this.frameSize.width = animation.animationFrameWidth;
 
-                this.currentState = animation;
+                this.currentState = animationName;
 
-                this.animationLoop = setTimeout(function () {
-                    this.animLoop(animation);
+                 this.animationLoop = setInterval(function () {
+                    this.animLoop(animationName);
                     resolve();
-                }.bind(this), this.animations[animation].speedRate);
+                }.bind(this), animation.speedRate);
             }
+
         }.bind(this));
     };
 
-    Sprite.prototype.animLoop = function (animation) {
+    Sprite.prototype.animLoop = function (animationName) {
         this.currentAnimationFrame += 1;
-        if (this.currentAnimationFrame === this.animations[animation].nbFrames) {
+        if (this.currentAnimationFrame === this.animations[animationName].nbFrames) {
             this.currentAnimationFrame = 0;
         }
-
-        this.animationLoop = setTimeout(function () {
-            this.animLoop(animation);
-        }.bind(this), this.animations[animation].speedRate);
     };
 
 
-    Sprite.prototype.startOnce = function (animation) {
+    Sprite.prototype.startOnce = function (animationName) {
         return new Promise(function (resolve) {
 
-            if (this.currentState !== animation) {
+            if (this.currentState !== animationName) {
                 this.clearCurrentAnimation();
-                this.currentState = animation;
+                this.currentState = animationName;
 
                 this.animationLoop = setTimeout(function () {
-                    this.animOnce(animation).then(function () {
+                    this.animOnce(animationName).then(function () {
                         resolve();
                     });
-                }.bind(this), this.animations[animation].speedRate);
+                }.bind(this), this.animations[animationName].speedRate);
             }
 
         }.bind(this));
     };
 
-    Sprite.prototype.animOnce = function (animation) {
+    Sprite.prototype.animOnce = function (animationName) {
         return new Promise(function (resolve) {
 
             this.currentAnimationFrame += 1;
-            if (this.currentAnimationFrame !== this.animations[animation].nbFrames) {
+            if (this.currentAnimationFrame !== this.animations[animationName].nbFrames) {
                 this.animationLoop = setTimeout(function () {
-                    this.animOnce(animation).then(function () {
+                    this.animOnce(animationName).then(function () {
                         resolve();
                     });
-                }.bind(this), this.animations[animation].speedRate);
+                }.bind(this), this.animations[animationName].speedRate);
             } else {
                 resolve();
             }
