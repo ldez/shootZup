@@ -18,6 +18,9 @@
             width: 6,
             height: 6
         };
+
+        // vitesse d'une bullet
+        this.speed = 5;
     }
 
     Bullet.prototype.clearCurrentMove = function () {
@@ -37,7 +40,7 @@
                         this.x = coords.x;
                         this.y = coords.y;
                         resolve(this);
-                    }.bind(this), 5);
+                    }.bind(this), this.speed);
                 }.bind(this));
             }.bind(this));
         }.bind(this));
