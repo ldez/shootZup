@@ -28,7 +28,7 @@
     };
 
     Laser.prototype.isOutOfBounds = function (canvasHeight) {
-        return this.y > canvasHeight;
+        return this.y > canvasHeight || this.y < 0;
     };
 
     Laser.prototype.hitbox = function () {
