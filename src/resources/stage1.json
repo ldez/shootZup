@@ -128,29 +128,29 @@
 			"ships":
 				[
 					[
-						{"id": 1, "action": "new", "x": 200, "y": -20, "type": "blue", "life": 3, "speed": 3},
-						{"id": 1, "action": "move", "x": 200, "y": 100},
-						{"id": 1, "action": "shoot", "x": 50, "y": 640},
-						{"id": 1, "action": "shoot", "x": 150, "y": 640},
-						{"id": 1, "action": "shoot", "x": 250, "y": 640},
-						{"id": 1, "action": "shoot", "x": 350, "y": 640},
-						{"id": 1, "action": "shoot", "x": 450, "y": 640},
-						{"id": 1, "action": "shoot", "x": 550, "y": 640},
-						{"id": 1, "action": "move", "x": -20, "y": 300},
-						{"id": 1, "action": "leave"}
+						{"id": 17, "action": "new", "x": 200, "y": -20, "type": "blue", "life": 3, "speed": 3},
+						{"id": 17, "action": "move", "x": 200, "y": 100},
+						{"id": 17, "action": "shoot", "x": 50, "y": 640},
+						{"id": 17, "action": "shoot", "x": 150, "y": 640},
+						{"id": 17, "action": "shoot", "x": 250, "y": 640},
+						{"id": 17, "action": "shoot", "x": 350, "y": 640},
+						{"id": 17, "action": "shoot", "x": 450, "y": 640},
+						{"id": 17, "action": "shoot", "x": 550, "y": 640},
+						{"id": 17, "action": "move", "x": -20, "y": 300},
+						{"id": 17, "action": "leave"}
 					],
 					[
-						{"id": 2, "action": "new", "x": 240, "y": -20, "type": "blue", "life": 3, "speed": 3},
-						{"id": 2, "action": "move", "x": 240, "y": 100},
-						{"id": 2, "action": "shoot", "x": 50, "y": 640},
-						{"id": 2, "action": "shoot", "x": 150, "y": 640},
-						{"id": 2, "action": "shoot", "x": 250, "y": 640},
-						{"id": 2, "action": "shoot", "x": 350, "y": 640},
-						{"id": 2, "action": "shoot", "x": 450, "y": 640},
-						{"id": 2, "action": "shoot", "x": 550, "y": 640},
-						{"id": 2, "action": "move", "x": 240, "y": 100},
-						{"id": 2, "action": "move", "x": 500, "y": 300},
-						{"id": 2, "action": "leave"}
+						{"id": 18, "action": "new", "x": 240, "y": -20, "type": "blue", "life": 3, "speed": 3},
+						{"id": 18, "action": "move", "x": 240, "y": 100},
+						{"id": 18, "action": "shoot", "x": 50, "y": 640},
+						{"id": 18, "action": "shoot", "x": 150, "y": 640},
+						{"id": 18, "action": "shoot", "x": 250, "y": 640},
+						{"id": 18, "action": "shoot", "x": 350, "y": 640},
+						{"id": 18, "action": "shoot", "x": 450, "y": 640},
+						{"id": 18, "action": "shoot", "x": 550, "y": 640},
+						{"id": 18, "action": "move", "x": 240, "y": 100},
+						{"id": 18, "action": "move", "x": 500, "y": 300},
+						{"id": 18, "action": "leave"}
 					]
 				]
 		},
@@ -158,32 +158,32 @@
 			"ships":
 				[
 					[
-						{"id": 1, "action": "new", "x": 160, "y": -20, "type": "red", "life": 3, "speed": 2},
-						{"id": 1, "action": "move", "x": 160, "y": 100},
-						{"id": 1, "action": "shoot", "x": 320, "y": 640},
-						{"id": 1, "action": "move", "x": 160, "y": 640},
-						{"id": 1, "action": "leave"}
+						{"id": 19, "action": "new", "x": 160, "y": -20, "type": "red", "life": 3, "speed": 2},
+						{"id": 19, "action": "move", "x": 160, "y": 100},
+						{"id": 19, "action": "shoot", "x": 320, "y": 640},
+						{"id": 19, "action": "move", "x": 160, "y": 640},
+						{"id": 19, "action": "leave"}
 					],
 					[
-						{"id": 2, "action": "new", "x": 200, "y": -20, "type": "green", "life": 3, "speed": 3},
-						{"id": 2, "action": "move", "x": 200, "y": 100},
-						{"id": 2, "action": "shoot", "x": 280, "y": 640},
-						{"id": 2, "action": "move", "x": 200, "y": 640},
-						{"id": 2, "action": "leave"}
+						{"id": 20, "action": "new", "x": 200, "y": -20, "type": "green", "life": 3, "speed": 3},
+						{"id": 20, "action": "move", "x": 200, "y": 100},
+						{"id": 20, "action": "shoot", "x": 280, "y": 640},
+						{"id": 20, "action": "move", "x": 200, "y": 640},
+						{"id": 20, "action": "leave"}
 					],
 					[
-						{"id": 3, "action": "new", "x": 280, "y": -20, "type": "green", "life": 3, "speed": 3},
-						{"id": 3, "action": "move", "x": 280, "y": 100},
-						{"id": 3, "action": "shoot", "x": 200, "y": 640},
-						{"id": 3, "action": "move", "x": 280, "y": 640},
-						{"id": 3, "action": "leave"}
+						{"id": 21, "action": "new", "x": 280, "y": -20, "type": "green", "life": 3, "speed": 3},
+						{"id": 21, "action": "move", "x": 280, "y": 100},
+						{"id": 21, "action": "shoot", "x": 200, "y": 640},
+						{"id": 21, "action": "move", "x": 280, "y": 640},
+						{"id": 21, "action": "leave"}
 					],
 					[
-						{"id": 4, "action": "new", "x": 320, "y": -20, "type": "blue", "life": 3, "speed": 2},
-						{"id": 4, "action": "move", "x": 320, "y": 100},
-						{"id": 4, "action": "shoot", "x": 160, "y": 640},
-						{"id": 4, "action": "move", "x": 320, "y": 640},
-						{"id": 4, "action": "leave"}
+						{"id": 22, "action": "new", "x": 320, "y": -20, "type": "blue", "life": 3, "speed": 2},
+						{"id": 22, "action": "move", "x": 320, "y": 100},
+						{"id": 22, "action": "shoot", "x": 160, "y": 640},
+						{"id": 22, "action": "move", "x": 320, "y": 640},
+						{"id": 22, "action": "leave"}
 					]
 				]
 		}
