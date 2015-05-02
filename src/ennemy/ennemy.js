@@ -15,9 +15,6 @@
         Spaceship.call(this, command.x, command.y, imageName, frameSize, hitboxSize, fly, resources);
     }
 
-    Ennemy.prototype.defaultLife = 3;
-    Ennemy.prototype.defaultSpeed = 3;
-
     Ennemy.prototype = Object.create(Spaceship.prototype);
 
     Ennemy.prototype.clearCurrentMove = function () {
@@ -44,6 +41,9 @@
 
         return sequence;
     };
+
+    Ennemy.prototype.defaultLife = 3;
+    Ennemy.prototype.defaultSpeed = 3;
 
     window.Ennemy = Ennemy;
 
