@@ -46,14 +46,15 @@
         this.player1.startLoop(this.player1.FLY);
 
         // lance de scenario des ennemies
-        this.ennemiesManager.start(scenario).then(function () {
-            // définit la durée maximale du jeux.
-            if (!this.gameState.isGameOver()) {
-                setTimeout(function () {
-                    this.gameState.finished(this.player1.imageName);
-                }.bind(this), this.duration);
-            }
-        }.bind(this));
+        this.ennemiesManager.start(scenario)
+            .then(function () {
+                // définit la durée maximale du jeux.
+                if (this.gameState.isPlaying()) {
+                    setTimeout(function () {
+                        this.gameState.finished(this.player1.imageName);
+                    }.bind(this), this.duration);
+                }
+            }.bind(this));
     };
 
     /**
