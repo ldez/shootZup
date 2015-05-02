@@ -172,7 +172,9 @@
             var ennemy = this.ennemies[commands.id];
 
             // Si le vaisseau n'a pas explosé
-            if (ennemy && this.gameState.isPlaying()) {
+            if (ennemy) {
+                ennemy.clearCurrentAnimation();
+                ennemy.clearCurrentMove();
                 delete this.ennemies[commands.id];
             }
             resolve();
