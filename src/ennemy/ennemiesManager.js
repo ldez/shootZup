@@ -78,7 +78,7 @@
 
             var playing = this.gameState.isPlaying();
             if (playing) {
-                ships.push(this.startShip(ship));
+                ships.push(this.commandShip(ship));
             }
             // stop when game is not playing
             return playing;
@@ -88,21 +88,20 @@
         return Promise.all(ships);
     };
 
-    EnnemiesManager.prototype.startShip = function (ship) {
+    EnnemiesManager.prototype.commandShip = function (commands) {
         var sequence = Promise.resolve();
 
-        ship.forEach(function (commands) {
-
+        commands.forEach(function (command) {
             sequence = sequence.then(function () {
-                switch (commands.type) {
+                switch (command.action) {
                 case 'new':
-                    return this.commandNew(commands);
+                    return this.commandNew(command);
                 case 'move':
-                    return this.commandMove(commands);
+                    return this.commandMove(command);
                 case 'shoot':
-                    return this.commandShoot(commands);
+                    return this.commandShoot(command);
                 case 'leave':
-                    return this.commandLeave(commands);
+                    return this.commandLeave(command);
                 default:
                     throw new Error('Invalid Ennemy ship command');
                 }
@@ -116,7 +115,23 @@
     EnnemiesManager.prototype.commandNew = function (commands) {
         var promise = Promise.resolve();
         if (this.gameState.isPlaying()) {
-            var ennemy = new Ennemy(commands.id, commands.x, commands.y, this.resources);
+
+            var ennemy;
+
+            switch (commands.type) {
+            case 'red':
+                ennemy = new EnnemyRed(commands, this.resources);
+                break;
+            case 'green':
+                ennemy = new EnnemyGreen(commands, this.resources);
+                break;
+            case 'blue':
+                ennemy = new EnnemyBlue(commands, this.resources);
+                break;
+            default:
+                throw new Error('Invalid Ennemy ship type');
+            }
+
             this.ennemies[commands.id] = ennemy;
             promise = ennemy.startLoop(ennemy.FLY);
         }
@@ -138,12 +153,12 @@
                 }.bind(this));
         }
         return promise;
-
     };
 
     EnnemiesManager.prototype.commandShoot = function (commands) {
         return new Promise(function (resolve) {
             var ennemy = this.ennemies[commands.id];
+
             // Si le vaisseau n'a pas explosé
             if (ennemy && this.gameState.isPlaying()) {
                 this.bulletsManager.fire(commands, ennemy);
@@ -155,6 +170,7 @@
     EnnemiesManager.prototype.commandLeave = function (commands) {
         return new Promise(function (resolve) {
             var ennemy = this.ennemies[commands.id];
+
             // Si le vaisseau n'a pas explosé
             if (ennemy && this.gameState.isPlaying()) {
                 delete this.ennemies[commands.id];

@@ -33,6 +33,8 @@
         {title: 'spaceship-blue', url: 'resources/image/spaceship-blue.png'},
         {title: 'spaceship-green', url: 'resources/image/spaceship-green-large.png'},
         {title: 'ennemy-green', url: 'resources/image/ennemy-green.png'},
+        {title: 'ennemy-red', url: 'resources/image/ennemy-red.png'},
+        {title: 'ennemy-blue', url: 'resources/image/ennemy-blue.png'},
         {title: 'laser', url: 'resources/image/laser.png'},
         {title: 'boom', url: 'resources/image/explosion.png'},
         {title: 'bigboom', url: 'resources/image/bigboom.png'},

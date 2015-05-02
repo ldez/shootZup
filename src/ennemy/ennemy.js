@@ -1,36 +1,22 @@
 (function (window) {
     'use strict';
 
-    function Ennemy(id, x, y, resources) {
-        this.resources = resources;
-
-        this.id = id;
+    function Ennemy(command, imageName, frameSize, hitboxSize, fly, resources) {
+        this.id = command.id;
 
         // Energie du vaisseau
-        this.life = 3;
+        this.life = command.life || this.defaultLife;
+
+        // Vitesse du vaisseau
+        this.speed = command.speed || this.defaultSpeed;
 
         this.moveLoop = null;
 
-        // Taille en pixels d'une frame d'animation
-        var frameSize = {
-                width: 35,
-                height: 37
-            },
-            // Taille en pixels de la hitbox
-            hitboxSize = {
-                width: frameSize.width,
-                height: frameSize.height
-            },
-            // paramètre de l'animation
-            fly = {
-                nbFrames: 6,
-                animationFrameWidth: 35,
-                animationY: 0,
-                speedRate: 15
-            };
-
-        Spaceship.call(this, x, y, 'ennemy-green', frameSize, hitboxSize, fly, resources);
+        Spaceship.call(this, command.x, command.y, imageName, frameSize, hitboxSize, fly, resources);
     }
+
+    Ennemy.prototype.defaultLife = 3;
+    Ennemy.prototype.defaultSpeed = 3;
 
     Ennemy.prototype = Object.create(Spaceship.prototype);
 
@@ -51,7 +37,7 @@
                         this.x = coords.x;
                         this.y = coords.y;
                         resolve();
-                    }.bind(this), 3);
+                    }.bind(this), this.speed);
                 }.bind(this));
             }.bind(this));
         }.bind(this));
