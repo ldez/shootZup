@@ -45,7 +45,7 @@
 
                 this.currentState = animationName;
 
-                 this.animationLoop = setInterval(function () {
+                this.animationLoop = setInterval(function () {
                     this.animLoop(animationName);
                     resolve();
                 }.bind(this), animation.speedRate);

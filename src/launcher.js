@@ -88,7 +88,7 @@
         })
         .then(function () {
 
-            // contruction du scénario des ennemies
+            // construction du scénario des ennemies
             return ennemiesManager.loadScenario('resources/stage1.json');
         }).then(function (scenario) {
 
