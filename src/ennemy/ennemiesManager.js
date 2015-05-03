@@ -1,11 +1,11 @@
 (function (window) {
     'use strict';
 
-    function EnnemiesManager(gameState, resources, pathManager, bulletsManager) {
+    function EnnemiesManager(gameState, resources, botPhysicManager, bulletsManager) {
         this.resources = resources;
         this.gameState = gameState;
-        this.pathManager = pathManager;
         this.bulletsManager = bulletsManager;
+        this.botPhysicManager = botPhysicManager;
 
         // TODO voir comment utiliser un array plutôt qu'un objet sinon map ?
         this.ennemies = {};
@@ -24,10 +24,16 @@
 
         for (var id in this.ennemies) {
             if (this.ennemies.hasOwnProperty(id)) {
-                this.ennemies[id].clearCurrentMove();
-                this.ennemies[id].clearCurrentAnimation();
+                var ennemy = this.ennemies[id];
+                // Arrêt de l'annimation
+                ennemy.clearCurrentAnimation();
             }
         }
+
+        // suppression de tout les mouvements : ennemies et bullets
+        this.botPhysicManager.clearAllMoves();
+
+        // Suppression de tous les ennemies
         this.ennemies = {};
     };
 
@@ -93,6 +99,7 @@
 
         commands.forEach(function (command) {
             sequence = sequence.then(function () {
+
                 switch (command.action) {
                 case 'new':
                     return this.commandNew(command);
@@ -115,7 +122,6 @@
     EnnemiesManager.prototype.commandNew = function (commands) {
         var promise = Promise.resolve();
         if (this.gameState.isPlaying()) {
-
             var ennemy;
 
             switch (commands.type) {
@@ -144,13 +150,7 @@
 
         // Si le vaisseau n'a pas explosé
         if (ennemy && this.gameState.isPlaying()) {
-            promise = this.pathManager.buildPath(ennemy, commands)
-                .then(function (path) {
-                    if (this.gameState.isPlaying()) {
-                        return ennemy.move(path);
-                    }
-                    return Promise.resolve();
-                }.bind(this));
+            promise = this.botPhysicManager.moveOnpath(ennemy, commands);
         }
         return promise;
     };
@@ -173,10 +173,14 @@
 
             // Si le vaisseau n'a pas explosé
             if (ennemy) {
+                // Arrêt de l'annimation
                 ennemy.clearCurrentAnimation();
-                ennemy.clearCurrentMove();
+                // Arrêt du déplacement
+                this.botPhysicManager.clearMove(ennemy);
+                // Suppression de la liste des ennemies
                 delete this.ennemies[commands.id];
             }
+
             resolve();
         }.bind(this));
     };

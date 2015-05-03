@@ -136,11 +136,17 @@
     };
 
     Physics.prototype.ennemyDeath = function (ennemies, ennemiesToDelete) {
-        for (var i = 0; i < ennemiesToDelete.length; i++) {
-            var ennemieToDelete = ennemiesToDelete[i];
+
+        ennemiesToDelete.forEach(function (ennemieToDelete) {
+            var ennemy = ennemies[ennemieToDelete.id];
+
+            // Arrêt de l'annimation
+            ennemy.clearCurrentAnimation();
+            // Suppression de la liste des ennemies
             delete ennemies[ennemieToDelete.id];
+
             this.explosionManager.ennemyExploded(ennemieToDelete.x, ennemieToDelete.y);
-        }
+        }.bind(this));
     };
 
     window.Physics = Physics;

@@ -20,15 +20,21 @@
         this.animationY = 0;
 
         // Sert à controler la boucle d'animation
-        this.animationLoop = null;
+        this.animationLoopTimeoutId = null;
+        this.animationLoopIntervalId = null;
 
         this.currentState = '';
     }
 
     Sprite.prototype.clearCurrentAnimation = function () {
+
         this.currentAnimationFrame = 0;
-        if (this.animationLoop) {
-            clearTimeout(this.animationLoop);
+
+        if (this.animationLoopIntervalId) {
+            clearInterval(this.animationLoopIntervalId);
+        }
+        if (this.animationLoopTimeoutId) {
+            clearTimeout(this.animationLoopTimeoutId);
         }
     };
 
@@ -45,10 +51,10 @@
 
                 this.currentState = animationName;
 
-                this.animationLoop = setInterval(function () {
+                this.animationLoopIntervalId = setInterval(function () {
                     this.animLoop(animationName);
-                    resolve();
                 }.bind(this), animation.speedRate);
+                resolve();
             }
 
         }.bind(this));
@@ -69,7 +75,7 @@
                 this.clearCurrentAnimation();
                 this.currentState = animationName;
 
-                this.animationLoop = setTimeout(function () {
+                this.animationLoopTimeoutId = setTimeout(function () {
                     this.animOnce(animationName).then(function () {
                         resolve();
                     });
@@ -84,7 +90,7 @@
 
             this.currentAnimationFrame += 1;
             if (this.currentAnimationFrame !== this.animations[animationName].nbFrames) {
-                this.animationLoop = setTimeout(function () {
+                this.animationLoopTimeoutId = setTimeout(function () {
                     this.animOnce(animationName).then(function () {
                         resolve();
                     });

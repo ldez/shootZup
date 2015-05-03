@@ -48,13 +48,25 @@
         // lance de scenario des ennemies
         this.ennemiesManager.start(scenario)
             .then(function () {
+
                 // définit la durée maximale du jeux.
                 if (this.gameState.isPlaying()) {
                     setTimeout(function () {
+                        this.reset();
                         this.gameState.finished(this.player1.imageName);
                     }.bind(this), this.duration);
                 }
+
             }.bind(this));
+    };
+
+    Game.prototype.reset = function () {
+
+        // Stop l'animation du vaisseau du joueur
+        this.player1.clearCurrentAnimation();
+        this.lasersManager.reset();
+
+        this.ennemiesManager.reset();
     };
 
     /**
@@ -97,9 +109,7 @@
      */
     Game.prototype.checkInputMenu = function (control) {
         if (this.gameState.isFinished() && control.actions.START) {
-            this.lasersManager.reset();
             this.player1 = this.playerFactory.create();
-            this.ennemiesManager.reset();
             this.start(this.scenario);
         }
     };
@@ -185,6 +195,7 @@
         this.explosionManager.playerExploded(player.x, player.y)
             .then(function () {
                 setTimeout(function () {
+                    this.reset();
                     this.gameState.finished(player.imageName);
                 }.bind(this), 1000);
             }.bind(this));

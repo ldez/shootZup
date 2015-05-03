@@ -1,16 +1,19 @@
 (function (window) {
     'use strict';
 
-    function BulletsManager(resources, pathManager) {
+    function BulletsManager(resources, botPhysicManager) {
+
         this.resources = resources;
-        this.pathManager = pathManager;
+        this.botPhysicManager = botPhysicManager;
         this.bullets = [];
     }
 
     BulletsManager.prototype.reset = function () {
-        this.bullets.forEach(function(bullet){
-            bullet.clearCurrentMove();
-        });
+
+        this.bullets.forEach(function (bullet) {
+            this.botPhysicManager.clearMove(bullet);
+        }.bind(this));
+
         this.bullets.splice(0, this.bullets.length);
     };
 
@@ -21,15 +24,13 @@
     };
 
     BulletsManager.prototype.fire = function (ennemy, commands) {
+
         var bullet = new Bullet(commands.id, ennemy.x, ennemy.y, this.resources);
         this.bullets.push(bullet);
 
-        this.pathManager.buildPath(bullet, commands).then(function (path) {
-            bullet.move(path).then(function (value) {
-                this.bullets.splice(this.bullets.indexOf(value), 1);
-            }.bind(this));
+        this.botPhysicManager.moveOnpath(bullet, commands).then(function (bot) {
+            this.bullets.splice(this.bullets.indexOf(bot), 1);
         }.bind(this));
-
     };
 
     window.BulletsManager = BulletsManager;

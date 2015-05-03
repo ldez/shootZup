@@ -73,12 +73,15 @@
     var controlsP1 = new Keyboard();
 
     var pathManager = new PathManager();
+    var botPhysicManager = new BotPhysicManager(pathManager, gameState);
+
     var explosionManager = new ExplosionManager(resources, audioManager);
 
-    var bulletsManager = new BulletsManager(resources, pathManager);
-    var ennemiesManager = new EnnemiesManager(gameState, resources, pathManager, bulletsManager);
-
     var physics = new Physics(canvasSize, explosionManager);
+
+    var bulletsManager = new BulletsManager(resources, botPhysicManager);
+    var ennemiesManager = new EnnemiesManager(gameState, resources, botPhysicManager, bulletsManager);
+
     var lasersManager = new LasersManager(resources, canvasSize, audioManager);
     var playerFactory = new PlayerFactory(resources, canvasSize);
 
