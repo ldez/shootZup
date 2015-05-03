@@ -63,7 +63,7 @@
     var bulletsManager = new BulletsManager(resources, pathManager);
     var ennemiesManager = new EnnemiesManager(gameState, resources, pathManager, bulletsManager);
 
-    var physics = new Physics(explosionManager, canvasSize);
+    var physics = new Physics(canvasSize, explosionManager);
     var lasersManager = new LasersManager(resources, canvasSize, audioManager);
     var playerFactory = new PlayerFactory(resources, canvasSize);
 

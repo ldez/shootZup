@@ -1,10 +1,10 @@
 (function (window) {
     'use strict';
 
-    function AudioManager(soundDescriptors) {
+    function AudioManager(soundDescriptors, mute) {
         this.sounds = {};
         this.soundDescriptors = soundDescriptors || {};
-        this.mute = false;
+        this.mute = mute;
 
         try {
             window.AudioContext = window.AudioContext || window.webkitAudioContext;

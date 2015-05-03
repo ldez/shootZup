@@ -20,7 +20,7 @@
         });
     };
 
-    BulletsManager.prototype.fire = function (commands, ennemy) {
+    BulletsManager.prototype.fire = function (ennemy, commands) {
         var bullet = new Bullet(commands.id, ennemy.x, ennemy.y, this.resources);
         this.bullets.push(bullet);
 

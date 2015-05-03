@@ -7,9 +7,9 @@
      * @param {Object} explosionManager Gestionnaire d'explosions
      * @param {Object} canvasSize       Taille du canvas
      */
-    function Physics(explosionManager, canvasSize) {
-        this.explosionManager = explosionManager;
+    function Physics(canvasSize, explosionManager) {
         this.canvasSize = canvasSize;
+        this.explosionManager = explosionManager;
         this.moveSize = 10;
     }
 
