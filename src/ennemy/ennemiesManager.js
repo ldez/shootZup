@@ -161,7 +161,7 @@
 
             // Si le vaisseau n'a pas explosé
             if (ennemy && this.gameState.isPlaying()) {
-                this.bulletsManager.fire(commands, ennemy);
+                this.bulletsManager.fire(ennemy, commands);
             }
             resolve();
         }.bind(this));
