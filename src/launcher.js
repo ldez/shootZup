@@ -45,7 +45,7 @@
     ];
     var resources = new Resources(sprites);
 
-    var mute = window.localStorage.getItem('mute');
+    var mute = window.localStorage.getItem('mute') === 'true';
 
     var sounds = [
         {title: 'stage', url: 'resources/audio/loop.mp3', initialGain: -0.7},
@@ -58,10 +58,9 @@
     // Button on/off pour le son
     var btnMute = document.getElementById('mute');
     btnMute.onclick = function () {
-        audioManager.toogleMute();
         this.classList.toggle('btn-mute-on');
         this.classList.toggle('btn-mute-off');
-        window.localStorage.setItem('mute', !window.localStorage.getItem('mute'));
+        window.localStorage.setItem('mute', audioManager.toogleMute());
     };
     if (mute) {
         btnMute.classList.toggle('btn-mute-on');
