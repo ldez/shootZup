@@ -47,14 +47,6 @@
 
     var mute = window.localStorage.getItem('mute') === 'true';
 
-    var sounds = [
-        {title: 'stage', url: 'resources/audio/loop.mp3', initialGain: -0.7},
-        {title: 'laser', url: 'resources/audio/science_fiction_laser_005.mp3', initialGain: -0.8},
-        {title: 'boom', url: 'resources/audio/DeathFlash.ogg', initialGain: 1},
-        {title: 'foom', url: 'resources/audio/foom_0.ogg', initialGain: 1}
-    ];
-    var audioManager = new AudioManager(sounds, mute);
-
     // Button on/off pour le son
     var btnMute = document.getElementById('mute');
     btnMute.onclick = function () {
@@ -66,6 +58,14 @@
         btnMute.classList.toggle('btn-mute-on');
         btnMute.classList.toggle('btn-mute-off');
     }
+
+    var sounds = [
+        {title: 'stage', url: 'resources/audio/loop.mp3', initialGain: -0.7},
+        {title: 'laser', url: 'resources/audio/science_fiction_laser_005.mp3', initialGain: -0.8},
+        {title: 'boom', url: 'resources/audio/DeathFlash.ogg', initialGain: 1},
+        {title: 'foom', url: 'resources/audio/foom_0.ogg', initialGain: 1}
+    ];
+    var audioManager = new AudioManager(sounds, mute);
 
     var gameState = new GameState();
 
