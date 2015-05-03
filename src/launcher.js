@@ -45,6 +45,8 @@
     ];
     var resources = new Resources(sprites);
 
+    var mute = window.localStorage.getItem('mute');
+
     var sounds = [
         {title: 'stage', url: 'resources/audio/loop.mp3', initialGain: -0.7},
         {title: 'laser', url: 'resources/audio/science_fiction_laser_005.mp3', initialGain: -0.8},
