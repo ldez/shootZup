@@ -5,6 +5,9 @@
         this.keys = mapping || this.defaultMapping;
 
         this.actions = {};
+
+        this.currentOnKeyDownListener = null;
+        this.currentOnKeyUpListener = null;
     }
 
     Keyboard.prototype.defaultMapping = {
@@ -19,14 +22,38 @@
     };
 
     Keyboard.prototype.startDetection = function () {
+        this.detection(this.onKeyDownListenerGame.bind(this), this.onKeyUpListenerGame.bind(this));
+    };
 
-        document.onkeydown = function (event) {
-            this.keyControl(event, true);
-        }.bind(this);
+    Keyboard.prototype.stopDetection = function () {
+        this.detection();
+    };
 
-        document.onkeyup = function (event) {
-            this.keyControl(event, false);
-        }.bind(this);
+
+    Keyboard.prototype.detection = function (onKeyDownListener, onKeyUpListener) {
+
+        document.removeEventListener('keydown', this.currentOnKeyDownListener);
+        this.currentOnKeyDownListener = null;
+        if (onKeyDownListener) {
+            this.currentOnKeyDownListener = onKeyDownListener;
+            document.addEventListener('keydown', this.currentOnKeyDownListener);
+        }
+
+        document.removeEventListener('keyup', this.currentOnKeyUpListener);
+        this.currentOnKeyUpListener = null;
+        if (onKeyUpListener) {
+            this.currentOnKeyUpListener = onKeyUpListener;
+            document.addEventListener('keyup', this.currentOnKeyUpListener);
+        }
+    };
+
+
+    Keyboard.prototype.onKeyDownListenerGame = function (event) {
+        this.keyControl(event, true);
+    };
+
+    Keyboard.prototype.onKeyUpListenerGame = function (event) {
+        this.keyControl(event, false);
     };
 
     Keyboard.prototype.keyControl = function (event, state) {
