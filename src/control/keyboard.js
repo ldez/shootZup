@@ -29,7 +29,6 @@
         this.detection();
     };
 
-
     Keyboard.prototype.detection = function (onKeyDownListener, onKeyUpListener) {
 
         document.removeEventListener('keydown', this.currentOnKeyDownListener);

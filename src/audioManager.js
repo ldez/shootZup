@@ -4,7 +4,7 @@
     function AudioManager(soundDescriptors, mute) {
         this.sounds = {};
         this.soundDescriptors = soundDescriptors || {};
-        this.mute = mute;
+        this.mute = !!mute;
 
         try {
             window.AudioContext = window.AudioContext || window.webkitAudioContext;

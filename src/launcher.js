@@ -45,7 +45,19 @@
     ];
     var resources = new Resources(sprites);
 
-    var mute = window.localStorage.getItem('mute');
+    var mute = window.localStorage.getItem('mute') === 'true';
+
+    // Button on/off pour le son
+    var btnMute = document.getElementById('mute');
+    btnMute.onclick = function () {
+        this.classList.toggle('btn-mute-on');
+        this.classList.toggle('btn-mute-off');
+        window.localStorage.setItem('mute', audioManager.toogleMute());
+    };
+    if (mute) {
+        btnMute.classList.toggle('btn-mute-on');
+        btnMute.classList.toggle('btn-mute-off');
+    }
 
     var sounds = [
         {title: 'stage', url: 'resources/audio/loop.mp3', initialGain: -0.7},
@@ -55,30 +67,20 @@
     ];
     var audioManager = new AudioManager(sounds, mute);
 
-    // Button on/off pour le son
-    var btnMute = document.getElementById('mute');
-    btnMute.onclick = function () {
-        audioManager.toogleMute();
-        this.classList.toggle('btn-mute-on');
-        this.classList.toggle('btn-mute-off');
-        window.localStorage.setItem('mute', !window.localStorage.getItem('mute'));
-    };
-    if (mute) {
-        btnMute.classList.toggle('btn-mute-on');
-        btnMute.classList.toggle('btn-mute-off');
-    }
-
     var gameState = new GameState();
 
     var controlsP1 = new Keyboard();
 
     var pathManager = new PathManager();
+    var botPhysicManager = new BotPhysicManager(pathManager, gameState);
+
     var explosionManager = new ExplosionManager(resources, audioManager);
 
-    var bulletsManager = new BulletsManager(resources, pathManager);
-    var ennemiesManager = new EnnemiesManager(gameState, resources, pathManager, bulletsManager);
-
     var physics = new Physics(canvasSize, explosionManager);
+
+    var bulletsManager = new BulletsManager(resources, botPhysicManager);
+    var ennemiesManager = new EnnemiesManager(gameState, resources, botPhysicManager, bulletsManager);
+
     var lasersManager = new LasersManager(resources, canvasSize, audioManager);
     var playerFactory = new PlayerFactory(resources, canvasSize);
 

@@ -6,6 +6,7 @@
     /**
      * Calcul des coordonnées du chemin
      * (Bresenham algo)
+     *
      * @param   {Object} from From position
      * @param   {Object} to   To position
      * @returns {Object} Promesse des coordonnées du chemin
