@@ -1,4 +1,4 @@
-(function (window) {
+(function (window, document) {
     'use strict';
 
     /**
@@ -16,7 +16,7 @@
      * @param {Object} physics          Moteur de physique
      * @param {Object} controlsP1       Gestionnaire des touches du clavier du joueur 1
      */
-    function Game(canvas, context2d, gameState, explosionManager, bulletsManager, ennemiesManager, lasersManager, background, playerFactory, physics, controlsP1) {
+    function Game(canvas, context2d, gameState, explosionManager, bulletsManager, ennemiesManager, lasersManager, background, playerFactory, physics, controlsP1, bgCanvas, gameCanvas, uiCanvas) {
         this.canvas = canvas;
         this.context2d = context2d;
         this.gameState = gameState;
@@ -32,6 +32,16 @@
         this.physics = physics;
         this.controlsP1 = controlsP1;
 
+        this.uiDirty = true;
+        this.gameDirty = true;
+
+        this.bgCanvas = bgCanvas;
+        this.gameCanvas = gameCanvas;
+        this.uiCanvas = uiCanvas;
+
+        this.gameBuffer = this.createPreRenderBuffer(this.gameCanvas.canvas);
+        this.uiBuffer = this.createPreRenderBuffer(this.uiCanvas.canvas);
+
         this.duration = 3000;
     }
 
@@ -41,6 +51,10 @@
      * @param {Object} scenario Scénario à lancer
      */
     Game.prototype.start = function (scenario) {
+
+        this.uiDirty = true;
+        this.gameDirty = true;
+
         this.scenario = scenario;
         this.gameState.play();
         this.player1.startLoop(this.player1.FLY);
@@ -114,13 +128,39 @@
         }
     };
 
+    Game.prototype.clearCanvas = function (descriptor) {
+        descriptor.context2d.clearRect(0, 0, descriptor.canvas.width, descriptor.canvas.height);
+    };
+
+    Game.prototype.createPreRenderBuffer = function (canvas) {
+        var bufferCanvas = document.createElement('canvas');
+        bufferCanvas.width = canvas.width;
+        bufferCanvas.height = canvas.height;
+
+        var bufferContext = bufferCanvas.getContext('2d');
+
+        return {
+            canvas: bufferCanvas,
+            context2d: bufferContext
+        };
+    };
+
     /**
      * Affichage des éléments du jeux
      */
-    Game.prototype.paint = function () {
+    Game.prototype.render = function () {
+
+        if (this.uiDirty || this.gameDirty && this.gameState.isFinished()) {
+            this.clearCanvas(this.uiBuffer);
+            this.clearCanvas(this.uiCanvas);
+        }
+        if (this.gameDirty) {
+            this.clearCanvas(this.gameBuffer);
+            this.clearCanvas(this.gameCanvas);
+        }
 
         // affichage du fond du jeux
-        this.background.paint(this.context2d);
+        this.background.paint(this.bgCanvas.context2d);
 
         // Si le jeux est en cours
         if (this.gameState.isPlaying()) {
@@ -128,25 +168,29 @@
             this.checkInputInGame(this.controlsP1, this.physics, this.player1);
 
             // affichage des ennemies
-            this.ennemiesManager.paint(this.context2d);
+            this.ennemiesManager.paint(this.gameBuffer.context2d);
 
             // affichage des explosions des ennemies
-            this.explosionManager.paint(this.context2d);
+            this.explosionManager.paint(this.gameBuffer.context2d);
 
             // affichage des bullets des ennemies
-            this.bulletsManager.paint(this.context2d);
+            this.bulletsManager.paint(this.gameBuffer.context2d);
 
             // affichage du vaisseau du joueur
-            this.player1.paint(this.context2d);
+            this.player1.paint(this.gameBuffer.context2d);
 
             // affichage des lasers des joueurs
-            this.lasersManager.paint(this.context2d);
+            this.lasersManager.paint(this.gameBuffer.context2d);
 
             // affichage du score
-            this.paintScores(this.context2d, this.gameState.scores.player1);
+            this.paintScores(this.uiBuffer.context2d, this.gameState.scores.player1);
+
+            var oldScore = this.gameState.scores.player1;
 
             // calcul du nouveau score - detection des collision entre les lasers et les ennemies
             this.gameState.scores.player1 += this.physics.detectCollisionOnEnnemies(this.ennemiesManager.ennemies, this.lasersManager.lasers);
+
+            this.uiDirty = oldScore !== this.gameState.scores.player1;
 
             // detection des collisions avec le vaisseau du joueur
             if (this.physics.detectCollisionsOnPlayer(this.player1, this.bulletsManager.bullets, this.ennemiesManager.ennemies)) {
@@ -160,12 +204,14 @@
         else if (this.gameState.isGameOver()) {
 
             // affichage de explosion du vaisseau
-            this.explosionManager.paint(this.context2d);
+            this.explosionManager.paint(this.gameBuffer.context2d);
         }
         // si le jeux est fini
         else if (this.gameState.isFinished()) {
+
             // affichage de l'écran de fin
-            this.paintEndScreen(this.context2d, this.gameState.scores.player1);
+            this.paintEndScreen(this.uiBuffer.context2d, this.gameState.scores.player1);
+            this.gameDirty = false;
 
             // relancement du jeux sur action du joueur
             this.checkInputMenu(this.controlsP1);
@@ -173,10 +219,13 @@
         // si le jeux est en chargement
         else {
             // Loading
-            console.log('Loading...');
+            console.log('Loading...', this.gameState.current);
         }
 
-        window.requestAnimationFrame(this.paint.bind(this));
+        this.gameCanvas.context2d.drawImage(this.gameBuffer.canvas, 0, 0);
+        this.uiCanvas.context2d.drawImage(this.uiBuffer.canvas, 0, 0);
+
+        window.requestAnimationFrame(this.render.bind(this));
     };
 
     /**
@@ -208,10 +257,12 @@
      * @param {Number} score   Score du joueur
      */
     Game.prototype.paintScores = function (context, score) {
-        context.textAlign = 'start';
-        context.fillStyle = 'red';
-        context.font = 'bold 16px lcd';
-        context.fillText('score ' + score, 10, 25);
+        if (this.uiDirty) {
+            context.textAlign = 'start';
+            context.fillStyle = 'red';
+            context.font = 'bold 16px lcd';
+            context.fillText('score ' + score, 10, 25);
+        }
     };
 
     /**
@@ -222,36 +273,43 @@
      */
     Game.prototype.paintEndScreen = function (context, score) {
 
-        // Message Game State
-        context.fillStyle = 'white';
-        context.font = 'bold 40px lcd';
+        if (this.uiDirty || this.gameDirty) {
 
-        var playerMessage = '';
-        if (this.gameState.isPlayerWin()) {
-            playerMessage = 'You WIN !!!';
-        } else {
-            playerMessage = 'GAME OVER';
+            // Message Game State
+            context.fillStyle = 'white';
+            context.font = 'bold 40px lcd';
+
+            var playerMessage = '';
+            if (this.gameState.isPlayerWin()) {
+                playerMessage = 'You WIN !!!';
+            } else {
+                playerMessage = 'GAME OVER';
+            }
+            this.fillTextCenter(context, playerMessage, -100);
+
+            // Score et restart message
+            context.fillStyle = 'red';
+            context.font = 'bold 24px lcd';
+
+            var scoreText = 'score ' + score;
+            this.fillTextCenter(context, scoreText, 0);
+
+            var text = 'Press ENTER to restart';
+            this.fillTextCenter(context, text, 40);
+
+            // Highscores
+            context.fillStyle = 'yellow';
+
+            this.gameState.highscores.forEach(function (player, index) {
+                context.font = 'bold ' + (18 - index * 3) + 'px lcd';
+                var highscoreLine = '[ ' + player.score + ' - ' + player.name + ' ]';
+                this.fillTextCenter(context, highscoreLine, 100 + 30 * index);
+            }.bind(this));
+
+            this.uiDirty = false;
+            this.gameDirty = false;
         }
-        this.fillTextCenter(context, playerMessage, -100);
 
-        // Score et restart message
-        context.fillStyle = 'red';
-        context.font = 'bold 24px lcd';
-
-        var scoreText = 'score ' + score;
-        this.fillTextCenter(context, scoreText, 0);
-
-        var text = 'Press ENTER to restart';
-        this.fillTextCenter(context, text, 40);
-
-        // Highscores
-        context.fillStyle = 'yellow';
-
-        this.gameState.highscores.forEach(function (player, index) {
-            context.font = 'bold ' + (18 - index * 3) + 'px lcd';
-            var highscoreLine = '[ ' + player.score + ' - ' + player.name + ' ]';
-            this.fillTextCenter(context, highscoreLine, 100 + 30 * index);
-        }.bind(this));
     };
 
     /**
@@ -267,4 +325,4 @@
 
     window.Game = Game;
 
-})(window);
+})(window, document);

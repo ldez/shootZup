@@ -86,6 +86,11 @@
                     var laserIndex = playersLasers.indexOf(lasersToDelete[i]);
                     playersLasers.splice(laserIndex, 1);
                 }
+
+                //                lasersToDelete.forEach(function(laser){
+                //                    var laserIndex = playersLasers.indexOf(laser);
+                //                    playersLasers.splice(laserIndex, 1);
+                //                });
             }
 
         }

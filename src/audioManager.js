@@ -3,7 +3,7 @@
 
     function AudioManager(soundDescriptors, mute) {
         this.sounds = {};
-        this.soundDescriptors = soundDescriptors || {};
+        this.soundDescriptors = soundDescriptors || [];
         this.mute = !!mute;
 
         try {

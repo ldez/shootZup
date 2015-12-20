@@ -17,8 +17,19 @@
             };
     })();
 
-    var canvas = document.getElementById('game');
-    var context2d = canvas.getContext('2d');
+    function Canvas2dDescriptor(canvasId) {
+        this.canvas = document.getElementById(canvasId);
+        this.context2d = this.canvas.getContext('2d');
+    }
+
+    var bgCanvas = new Canvas2dDescriptor('background-layer');
+    var gameCanvas = new Canvas2dDescriptor('game-layer');
+    var uiCanvas = new Canvas2dDescriptor('ui-layer');
+
+    var canvas = gameCanvas.canvas;
+    var context2d = gameCanvas.context2d;
+    //    var canvas = document.getElementById('game');
+    //    var context2d = canvas.getContext('2d');
 
     // TODO Utiliser directement le canvas ???
     var canvasSize = {
@@ -45,6 +56,7 @@
     ];
     var resources = new Resources(sprites);
 
+//window.localStorage.clear();
     var mute = window.localStorage.getItem('mute') === 'true';
 
     // Button on/off pour le son
@@ -69,7 +81,30 @@
 
     var gameState = new GameState();
 
-    var controlsP1 = new Keyboard();
+    // KEYBOARD || GAMEPAD
+    var userControlType = 'DDGAMEPAD';
+
+    var controlsP1;
+    if (userControlType === 'GAMEPAD') {
+        var mappingP1 = {
+            A: 0,
+            B: 1,
+            LEFT: 15,
+            RIGHT: 16,
+            UP: 13,
+            DOWN: 14,
+            START: 9
+        };
+        // Mapping pour la merde de Chrome
+        //        var mappingP1 = {
+        //            A: 3,
+        //            B: 2,
+        //            START: 9
+        //        };
+        controlsP1 = new Gamepad(mappingP1);
+    } else {
+        controlsP1 = new Keyboard();
+    }
 
     var pathManager = new PathManager();
     var botPhysicManager = new BotPhysicManager(pathManager, gameState);
@@ -103,6 +138,15 @@
             // démarrage de la musique de fond
             return audioManager.stageBgm();
         })
+//        .then(function(){
+//            return new Promise(function(resolve){
+//                console.log('waiting...');
+//                setTimeout(function(){
+//                    console.log('stop waiting.');
+//                    resolve();
+//                },3000);
+//            });
+//        })
         .then(function () {
 
             // construction du scénario des ennemies
@@ -111,12 +155,13 @@
 
             // démarrage de gestion des controles utilisateurs
             controlsP1.startDetection();
+//        controlsP1.detection();
 
             // Création du jeux
-            var game = new Game(canvas, context2d, gameState, explosionManager, bulletsManager, ennemiesManager, lasersManager, background, playerFactory, physics, controlsP1);
+            var game = new Game(canvas, context2d, gameState, explosionManager, bulletsManager, ennemiesManager, lasersManager, background, playerFactory, physics, controlsP1, bgCanvas, gameCanvas, uiCanvas);
 
             // affichage du jeux
-            game.paint();
+            game.render();
 
             // démarrage du jeux
             game.start(scenario);

@@ -107,6 +107,7 @@
                     return this.commandMove(command);
                 case 'shoot':
                     return this.commandShoot(command);
+                    //                    return Promise.resolve();
                 case 'leave':
                     return this.commandLeave(command);
                 default:

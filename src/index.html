@@ -8,9 +8,17 @@
 </head>
 
 <body>
-    <canvas id="game" width="480" height="640"></canvas>
+    <!--    <canvas id="game" width="480" height="640"></canvas>-->
+
+    <div id="stage">
+        <canvas id="ui-layer" width="480" height="640"></canvas>
+        <canvas id="game-layer" width="480" height="640"></canvas>
+        <canvas id="background-layer" width="480" height="640"></canvas>
+    </div>
 
     <button id="mute" type="button" class="transparent-btn btn-mute-on"></button>
+
+<!--   <script src="observe.js"></script>-->
 
     <script src="audioManager.js"></script>
 
@@ -34,6 +42,8 @@
     <script src="physic/pathManager.js"></script>
 
     <script src="control/keyboard.js"></script>
+    <script src="control/gamepad.js"></script>
+    <script src="control/gamepad-checker.js"></script>
 
     <script src="player/laser.js"></script>
     <script src="player/lasersManager.js"></script>

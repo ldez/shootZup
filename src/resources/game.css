@@ -2,6 +2,32 @@
     font-family: 'lcd';
     src: url('./font/DigitalDream.ttf');
 }
+
+
+canvas {
+    position: absolute;
+}
+
+#stage {
+    width: 480px;
+    height: 640px;
+    position: relative;
+    box-shadow: 1px 1px 12px #555;
+    background-color: black;
+}
+
+#ui-layer {
+    z-index: 3
+}
+
+#game-layer {
+    z-index: 2
+}
+
+#background-layer {
+    z-index: 1
+}
+
 .transparent-btn {
     background-color: transparent;
     border-color: transparent;
