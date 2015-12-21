@@ -1,0 +1,22 @@
+@font-face {
+    font-family: 'lcd';
+    src: url('./font/DigitalDream.ttf');
+}
+.transparent-btn {
+    background-color: transparent;
+    border-color: transparent;
+}
+
+.btn-mute-on {
+    height: 30px;
+    width: 30px;
+    background: url('./image/sound64.svg') center no-repeat;
+    background-size: 20px 20px;
+}
+
+.btn-mute-off {
+    height: 30px;
+    width: 30px;
+    background: url('./image/mute10.svg') center no-repeat;
+    background-size: 20px 20px;
+}
